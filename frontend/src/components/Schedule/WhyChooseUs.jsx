@@ -1,6 +1,6 @@
 import React from "react";
 
-const pip = [
+const FEATURES = [
   {
     id: 1,
     img: "/assets/chose-icon-1.png",
@@ -39,51 +39,53 @@ const pip = [
   },
 ];
 
-function People() {
+function WhyChooseUs() {
   return (
-    <section className="bg-gray-100 dark:bg-[#0c0c0c] py-20 px-6 transition-colors duration-300">
+    <section className="bg-white dark:bg-[#151515] py-20 px-6 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="mb-14 text-center md:text-left">
-          <h2 className="text-black dark:text-white text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
+        <div className="text-center mb-4">
+          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
             Why People <span className="text-orange-500">Choose Us</span>
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-lg mx-auto md:mx-0">
+          <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
             Our sport experts and latest sports equipment are the winning combination.
           </p>
         </div>
 
+        <div className="flex justify-center mb-12">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-px bg-orange-500" />
+            <i className="fa-solid fa-dumbbell text-orange-500 text-xs" />
+            <div className="w-8 h-px bg-orange-500" />
+          </div>
+        </div>
+
         {/* Grid */}
-        <div className="grid items-center justify-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {pip.map((p) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {FEATURES.map((f) => (
             <div
-              key={p.id}
+              key={f.id}
               className="group flex flex-col items-center md:items-start gap-4 border-t border-black/10 dark:border-white/10 pt-6 hover:border-orange-500 transition-colors duration-300"
             >
-              {/* Icon */}
               <img
-                src={p.img}
-                alt={p.title}
-                className="w-12 h-12 object-contain opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                src={f.img}
+                alt={f.title}
+                className="w-12 h-12 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
               />
-
-              {/* Title */}
               <h3 className="text-black dark:text-white text-sm font-black uppercase tracking-widest text-center md:text-left group-hover:text-orange-500 transition-colors duration-300">
-                {p.title}
+                {f.title}
               </h3>
-
-              {/* Description */}
               <p className="text-gray-500 dark:text-gray-500 text-sm leading-relaxed text-center md:text-left group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors duration-300">
-                {p.desc}
+                {f.desc}
               </p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );
 }
 
-export default People;
+export default WhyChooseUs;

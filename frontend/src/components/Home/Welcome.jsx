@@ -2,19 +2,19 @@ import React from "react";
 
 function Welcome() {
   return (
-    <section className="bg-[#171717] py-24">
+    <section className="bg-white dark:bg-[#171717] py-24 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center text-center md:text-start">
         <div>
-          <h2 className="text-5xl font-extrabold uppercase text-white mb-10 ">
+          <h2 className="text-5xl font-extrabold uppercase text-black dark:text-white mb-10 ">
             Welcome to CrossFit
           </h2>
 
-          <p className="text-white text-2xl font-semibold leading-relaxed mb-8 max-w-xl">
+          <p className="text-gray-900 dark:text-white text-2xl font-semibold leading-relaxed mb-8 max-w-xl">
             CrossFit is a cutting-edge functional fitness system that can help
             everyday men.
           </p>
 
-          <p className="text-gray-300 leading-8 text-lg mb-12 max-w-xl">
+          <p className="text-gray-600 dark:text-gray-300 leading-8 text-lg mb-12 max-w-xl">
             Success isn’t really that difficult. There is a significant portion
             of the population here in North America, that actually want and need
             success to be hard! For those of you who are serious about having

@@ -82,7 +82,7 @@ export const PricingSimpleIcon = () => {
           {plans.map((plan) => (
             <div
               key={plan.title}
-              className={`relative bg-white text-center rounded-sm shadow-lg transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl ${
+              className={`relative bg-white dark:bg-[#1a1a1a] text-center rounded-sm shadow-lg transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl ${
                 plan.featured ? "scale-105" : "scale-100"
               }`}
             >
@@ -95,13 +95,13 @@ export const PricingSimpleIcon = () => {
               )}
 
               <div className="px-8 pt-10 pb-8">
-                <h3 className="text-base font-black uppercase tracking-widest text-gray-900 mb-5">
+                <h3 className="text-base font-black uppercase tracking-widest text-gray-900 dark:text-white mb-5 transition-colors">
                   {plan.title}
                 </h3>
 
                 <div className="flex items-start justify-center gap-1 mb-1">
-                  <sup className="text-2xl font-bold text-gray-900 mt-3 leading-none">$</sup>
-                  <span className="text-7xl font-black text-gray-900 leading-none">
+                  <sup className="text-2xl font-bold text-gray-900 dark:text-white mt-3 leading-none transition-colors">$</sup>
+                  <span className="text-7xl font-black text-gray-900 dark:text-white leading-none transition-colors">
                     {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                   </span>
                 </div>
@@ -110,7 +110,7 @@ export const PricingSimpleIcon = () => {
                   {isYearly ? "Yearly" : "Monthly"}
                 </p>
 
-                <hr className="border-gray-100 mb-5" />
+                <hr className="border-gray-100 dark:border-white/5 mb-5 transition-colors" />
 
                 <ul className="space-y-2.5 mb-8">
                   {plan.features.map((f) => (

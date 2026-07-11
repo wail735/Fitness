@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContext";
 
 const NAV_LINKS = [
   "HOME",
@@ -18,18 +19,10 @@ const SOCIAL_LINKS = [
 ];
 
 function NavBar() {
-  const [darkMode, SetDarkMode] = useState(true);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <header className="absolute top-0 left-0 w-full z-50">
+    <header className="fixed top-0 left-0 w-full z-50 shadow-md">
       <nav
         className="relative h-20 w-full px-4 lg:px-8 flex justify-between items-center  border-b border-white/10 shadow-sm bg-white
   text-black
@@ -58,7 +51,7 @@ function NavBar() {
               <li key={item} className="whitespace-nowrap">
                 <Link
                   to={path}
-                  className="relative pb-1 hover:text-orange-400 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-orange-400 after:transition-all hover:after:w-full"
+                  className="relative pb-1 text-black dark:text-white hover:text-orange-400 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-orange-400 after:transition-all hover:after:w-full"
                 >
                   {item}
                 </Link>
@@ -68,7 +61,7 @@ function NavBar() {
         </ul>
 
         <div className="flex items-center gap-4 xl:gap-6">
-          <div className="hidden lg:flex gap-4 xl:gap-5 text-white text-lg">
+          <div className="hidden lg:flex gap-4 xl:gap-5 text-black dark:text-white text-lg">
             {SOCIAL_LINKS.map(({ icon, label, href }) => (
               <a
                 key={label}
@@ -84,15 +77,15 @@ function NavBar() {
           </div>
           <button
             onClick={() => {
-              SetDarkMode(!darkMode);
+              setDarkMode(!darkMode);
             }}
-            className="text-white cursor-pointer text-2xl transition-all duration-300"
+            className="text-black dark:text-white cursor-pointer text-2xl transition-all duration-300 hover:text-orange-400"
           >
             <i className={`fa-solid ${darkMode ? "fa-sun" : "fa-moon"} `}></i>
           </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden flex items-center gap-2 bg-gray-800 text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-700 transition"
+            className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-black dark:text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
           >
             <i
               className={`fa-solid ${isOpen ? "fa-xmark" : "fa-bars"} w-4 text-center`}

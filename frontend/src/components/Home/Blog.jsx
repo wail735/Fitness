@@ -2,14 +2,14 @@ import React from "react";
 
 function Blog() {
   return (
-    <section className="bg-[#111] py-16 px-4">
+    <section className="bg-gray-100 dark:bg-[#111] py-16 px-4 transition-colors duration-300">
 
       {/* Header */}
       <div className="text-center mb-10">
-        <h2 className="text-white text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
+        <h2 className="text-black dark:text-white text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
           From Our Blog
         </h2>
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-600 dark:text-gray-400 text-sm">
           List of all news and events that take place related to us
         </p>
       </div>
