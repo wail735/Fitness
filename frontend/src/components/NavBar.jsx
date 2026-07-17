@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
+import { LayoutContext } from "../context/LayoutContext";
 
 const NAV_LINKS = [
   "HOME",
@@ -20,7 +21,8 @@ const SOCIAL_LINKS = [
 
 function NavBar() {
   const { darkMode, setDarkMode } = useContext(ThemeContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const { data, dispatch } = useContext(LayoutContext);
+  const isOpen = data.navbarHamburger;
   return (
     <header className="fixed top-0 left-0 w-full z-50 shadow-md">
       <nav
@@ -84,7 +86,7 @@ function NavBar() {
             <i className={`fa-solid ${darkMode ? "fa-sun" : "fa-moon"} `}></i>
           </button>
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
             className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-black dark:text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
           >
             <i
@@ -112,7 +114,7 @@ function NavBar() {
               <li key={item}>
                 <Link
                   to={path}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => dispatch({ type: "CLOSE_NAVBAR" })}
                   className="hover:text-orange-400 transition-colors text-lg"
                 >
                   {item}

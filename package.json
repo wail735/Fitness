@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "notistack": "^3.0.2",
+    "react-router-dom": "^7.18.1"
+  }
+}
