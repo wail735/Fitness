@@ -8,7 +8,6 @@ import People from "./People";
 import Blog from "./Blog";
 import Video from "./video";
 import Map from "./Map";
-import Footer from "../Footer";
 const SLIDES_DATA = [
   {
     image: "/assets/hero-1.jpg",
@@ -112,7 +111,6 @@ function Hero() {
       <Blog />
       <Video />
       <Map />
-      <Footer />
     </>
   );
 }

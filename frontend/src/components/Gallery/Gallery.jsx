@@ -2,7 +2,6 @@ import React from "react";
 import HeroBanner from "./HeroBanner";
 import GalleryGrid from "./GalleryGrid";
 import JoinBanner from "./JoinBanner";
-import Footer from "../Footer";
 
 export default function Gallery() {
   return (
@@ -10,7 +9,6 @@ export default function Gallery() {
       <HeroBanner />
       <GalleryGrid />
       <JoinBanner />
-      <Footer />
     </>
   );
 }

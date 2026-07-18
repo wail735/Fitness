@@ -3,7 +3,6 @@ import HeroBanner from "./HeroBanner";
 import BlogContent from "./BlogContent";
 import Sidebar from "./Sidebar";
 import JoinBanner from "./JoinBanner";
-import Footer from "../Footer";
 
 export default function Blog() {
   return (
@@ -19,7 +18,6 @@ export default function Blog() {
       </section>
 
       <JoinBanner />
-      <Footer />
     </>
   );
 }
