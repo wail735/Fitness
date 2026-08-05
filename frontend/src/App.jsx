@@ -1,14 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LayoutProvider } from "./context/LayoutContext";
+import { AuthProvider } from "./context/AuthContext";
+import { FitnessProvider } from "./context/FitnessContext";
 
 // Layouts
 import { PublicLayout } from "./components/layouts/PublicLayout";
 import AdminLayout from "./components/admin/AdminLayout";
+import Footer from "./components/Footer";
 
-// Auth
-import { AdminProtectedRoute } from "./components/auth/AdminProtectedRoute";
-import AdminLogin from "./components/auth/AdminLogin";
+// Auth Components
+import AdminProtectedRoute from "./components/auth/AdminProtectedRoute";
+import AuthPage from "./pages/AuthPage";
 
 // Public Pages
 import Hero from "./components/Home/Hero";
@@ -19,35 +22,74 @@ import Blog from "./components/Blog/Blog";
 import Contact from "./components/Contact/Contact";
 import Page404 from "./components/Page404";
 
-// Admin Pages
+// User Portal Pages & Tools
+import Calculators from "./components/user/Calculators";
+import UserDashboard from "./components/user/UserDashboard";
+import WorkoutTracker from "./components/user/WorkoutTracker";
+import BodyTracker from "./components/user/BodyTracker";
+import NutritionTracker from "./components/user/NutritionTracker";
+
+// Coach Portal Pages
+import CoachDashboard from "./components/coach/CoachDashboard";
+import WorkoutBuilder from "./components/coach/WorkoutBuilder";
+
+// Admin Portal Pages
 import Dashboard from "./components/admin/Dashboard";
+import ScheduleManager from "./components/admin/ScheduleManager";
 
 function App() {
   return (
     <ThemeProvider>
       <LayoutProvider>
-        <BrowserRouter>
-        <Routes>
-          {/* Zone 1: Site Public */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Hero />} />
-            <Route path="/about-us" element={<About />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contacts" element={<Contact />} />
-            <Route path="*" element={<Page404 />} />
-          </Route>
+        <AuthProvider>
+          <FitnessProvider>
+            <BrowserRouter>
+              <div className="flex flex-col min-h-screen">
+                <div className="flex-grow">
+                  <Routes>
+                    {/* Zone 1: Site Public & Outils Membre */}
+                    <Route element={<PublicLayout />}>
+                      <Route path="/" element={<Hero />} />
+                      <Route path="/about-us" element={<About />} />
+                      <Route path="/schedule" element={<Schedule />} />
+                      <Route path="/gallery" element={<Gallery />} />
+                      <Route path="/blog" element={<Blog />} />
+                      <Route path="/contacts" element={<Contact />} />
+                      <Route path="/calculators" element={<Calculators />} />
 
-          {/* Zone 2: Administration */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route element={<AdminProtectedRoute />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-            </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+                      {/* Espace Membre */}
+                      <Route path="/my-dashboard" element={<UserDashboard />} />
+                      <Route path="/my-workouts" element={<WorkoutTracker />} />
+                      <Route path="/my-body" element={<BodyTracker />} />
+                      <Route path="/my-nutrition" element={<NutritionTracker />} />
+
+                      <Route path="*" element={<Page404 />} />
+                    </Route>
+
+                    {/* Zone 2: Espace Professionnel & Connexion */}
+                    <Route path="/login" element={<AuthPage />} />
+                    <Route path="/admin/login" element={<AuthPage />} /> {/* Backward compatibility */}
+
+                    {/* Espace Coach (Protégé) */}
+                    <Route element={<AdminProtectedRoute allowedRoles={["coach", "admin"]} />}>
+                      <Route path="/coach" element={<CoachDashboard />} />
+                      <Route path="/coach/builder" element={<WorkoutBuilder />} />
+                    </Route>
+
+                    {/* Espace Administration (Protégé) */}
+                    <Route element={<AdminProtectedRoute allowedRoles={["admin"]} />}>
+                      <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="schedule" element={<ScheduleManager />} />
+                      </Route>
+                    </Route>
+                  </Routes>
+                </div>
+                <Footer />
+              </div>
+            </BrowserRouter>
+          </FitnessProvider>
+        </AuthProvider>
       </LayoutProvider>
     </ThemeProvider>
   );

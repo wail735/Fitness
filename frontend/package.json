@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.3.1",
     "@untitledui/icons": "^0.0.22",
     "akar-icons": "^1.9.31",
+    "axios": "^1.19.0",
     "framer-motion": "^12.42.0",
     "lucide-react": "^1.21.0",
     "notistack": "^3.0.2",

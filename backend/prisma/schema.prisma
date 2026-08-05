@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String
+  email        String         @unique
+  password     String
+  role         String         @default("user") // user | coach | admin
+  createdAt    DateTime       @default(now())
+
+  bookings     Booking[]
+  workouts     Workout[]
+  bodyMetrics  BodyMetric[]
+  nutritionLogs NutritionLog[]
+}
+
+model Class {
+  id        Int       @id @default(autoincrement())
+  name      String
+  time      String
+  day       String
+  trainer   String
+  capacity  Int
+  category  String    @default("Cardio")
+  createdAt DateTime  @default(now())
+
+  bookings  Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId   Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, classId])
+}
+
+model Workout {
+  id              Int        @id @default(autoincrement())
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
+  date            String
+  name            String
+  durationMinutes Int
+  caloriesBurned  Int
+  createdAt       DateTime   @default(now())
+
+  exercises       Exercise[]
+}
+
+model Exercise {
+  id        Int     @id @default(autoincrement())
+  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  workoutId Int
+  name      String
+  sets      Int
+  reps      Int
+  weightKg  Float
+}
+
+model BodyMetric {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  date        String
+  weightKg    Float
+  bodyFatPct  Float
+  waistCm     Float
+  createdAt   DateTime @default(now())
+}
+
+model NutritionLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  date      String
+  meal      String
+  food      String
+  calories  Int
+  protein   Float
+  carbs     Float
+  fat       Float
+  createdAt DateTime @default(now())
+}
+
+model CoachRoutine {
+  id             Int    @id @default(autoincrement())
+  title          String
+  target         String
+  exercisesCount Int
+  createdAt      DateTime @default(now())
+}

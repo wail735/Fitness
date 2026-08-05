@@ -2,140 +2,137 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import { LayoutContext } from "../context/LayoutContext";
+import { useAuth } from "../context/AuthContext";
+import { User, ShieldCheck, Calculator } from "lucide-react";
 
 const NAV_LINKS = [
-  "HOME",
-  "ABOUT US",
-  "SCHEDULE",
-  "GALLERY",
-  "BLOG",
-  "CONTACTS",
-];
-
-const SOCIAL_LINKS = [
-  { icon: "fa-instagram", label: "Instagram", href: "#" },
-  { icon: "fa-facebook", label: "Facebook", href: "#" },
-  { icon: "fa-youtube", label: "YouTube", href: "#" },
-  { icon: "fa-linkedin", label: "LinkedIn", href: "#" },
+  { label: "HOME", path: "/" },
+  { label: "SCHEDULE", path: "/schedule" },
+  { label: "CALCULATEURS", path: "/calculators" },
+  { label: "ABOUT US", path: "/about-us" },
+  { label: "GALLERY", path: "/gallery" },
+  { label: "BLOG", path: "/blog" },
 ];
 
 function NavBar() {
   const { darkMode, setDarkMode } = useContext(ThemeContext);
   const { data, dispatch } = useContext(LayoutContext);
+  const { user, logout } = useAuth();
   const isOpen = data.navbarHamburger;
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 shadow-md">
-      <nav
-        className="relative h-20 w-full px-4 lg:px-8 flex justify-between items-center  border-b border-white/10 shadow-sm bg-white
-  text-black
-  dark:bg-black
-  dark:text-white transition-all duration-300"
-      >
+      <nav className="relative h-20 w-full px-4 lg:px-8 flex justify-between items-center border-b border-white/10 shadow-sm bg-white text-black dark:bg-slate-950 dark:text-white transition-all duration-300">
         <Link to="/" aria-label="Home" className="group shrink-0">
           <div className="flex gap-2.5 text-2xl items-center">
-            <div className="p-2 rounded-xl bg-orange-100 dark:bg-orange-500/10 transition-colors duration-300 group-hover:bg-orange-500">
-              <i className="fa-solid fa-dumbbell text-orange-500 transition-colors duration-300 group-hover:text-white"></i>
+            <div className="p-2 rounded-xl bg-orange-100 dark:bg-red-500/10 transition-colors duration-300 group-hover:bg-red-500">
+              <i className="fa-solid fa-dumbbell text-red-500 transition-colors duration-300 group-hover:text-white"></i>
             </div>
-            <span className="font-black tracking-tight bg-linear-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+            <span className="font-black tracking-tight bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">
               ACTIVITAR
             </span>
           </div>
         </Link>
 
-        <ul className="hidden lg:flex gap-6 xl:gap-10 dark:text-white text-black font-semibold text-xs xl:text-sm tracking-wide ">
-          {NAV_LINKS.map((item) => {
-            const path =
-              item === "HOME"
-                ? "/"
-                : `/${item.toLowerCase().replace(" ", "-")}`;
-
-            return (
-              <li key={item} className="whitespace-nowrap">
-                <Link
-                  to={path}
-                  className="relative pb-1 text-black dark:text-white hover:text-orange-400 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-orange-400 after:transition-all hover:after:w-full"
-                >
-                  {item}
-                </Link>
-              </li>
-            );
-          })}
+        <ul className="hidden lg:flex gap-5 xl:gap-8 dark:text-white text-black font-semibold text-xs xl:text-sm tracking-wide">
+          {NAV_LINKS.map(({ label, path }) => (
+            <li key={label} className="whitespace-nowrap">
+              <Link
+                to={path}
+                className="relative pb-1 text-black dark:text-slate-200 hover:text-red-400 transition-colors"
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        <div className="flex items-center gap-4 xl:gap-6">
-          <div className="hidden lg:flex gap-4 xl:gap-5 text-black dark:text-white text-lg">
-            {SOCIAL_LINKS.map(({ icon, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-orange-400 hover:scale-110 transition-transform duration-300"
+        <div className="flex items-center gap-3">
+          {/* User Auth state */}
+          {user ? (
+            <div className="flex items-center gap-2">
+              {user.role === "admin" ? (
+                <Link
+                  to="/admin"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/20"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" /> Admin
+                </Link>
+              ) : user.role === "coach" ? (
+                <Link
+                  to="/coach"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-amber-600/20"
+                >
+                  <User className="w-3.5 h-3.5" /> Coach
+                </Link>
+              ) : (
+                <Link
+                  to="/my-dashboard"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/20"
+                >
+                  <User className="w-3.5 h-3.5" /> Espace Membre
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Link
+                to="/login"
+                className="flex items-center justify-center px-4 py-2 bg-transparent border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/10 cursor-pointer"
               >
-                <i className={`fa-brands ${icon}`}></i>
-              </a>
-            ))}
-          </div>
+                Connexion
+              </Link>
+              <Link
+                to="/login"
+                state={{ isSignUp: true }}
+                className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-red-600 to-amber-500 hover:from-red-500 hover:to-amber-400 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/20 cursor-pointer"
+              >
+                S'inscrire
+              </Link>
+            </div>
+          )}
+
           <button
-            onClick={() => {
-              setDarkMode(!darkMode);
-            }}
-            className="text-black dark:text-white cursor-pointer text-2xl transition-all duration-300 hover:text-orange-400"
+            onClick={() => setDarkMode(!darkMode)}
+            className="text-black dark:text-white cursor-pointer text-xl transition-all duration-300 hover:text-red-400 p-1"
           >
-            <i className={`fa-solid ${darkMode ? "fa-sun" : "fa-moon"} `}></i>
+            <i className={`fa-solid ${darkMode ? "fa-sun" : "fa-moon"}`}></i>
           </button>
+
           <button
             onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
-            className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-gray-800 text-black dark:text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+            className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-slate-800 text-black dark:text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition"
           >
-            <i
-              className={`fa-solid ${isOpen ? "fa-xmark" : "fa-bars"} w-4 text-center`}
-            ></i>
+            <i className={`fa-solid ${isOpen ? "fa-xmark" : "fa-bars"} w-4 text-center`}></i>
           </button>
         </div>
       </nav>
 
+      {/* Mobile Drawer */}
       <div
-        className={`lg:hidden absolute top-20 left-0 w-full bg-black/95 backdrop-blur-lg border-b border-white/10 transition-all duration-400 ease-in-out z-40 overflow-y-auto ${
-          isOpen
-            ? "max-h-[calc(100vh-5rem)] opacity-100 py-6"
-            : "max-h-0 opacity-0 py-0"
+        className={`lg:hidden absolute top-20 left-0 w-full bg-slate-950/95 backdrop-blur-lg border-b border-white/10 transition-all duration-300 z-40 overflow-y-auto ${
+          isOpen ? "max-h-96 p-6" : "max-h-0 p-0 overflow-hidden"
         }`}
       >
-        <ul className="flex flex-col items-center gap-6 text-white font-medium tracking-wide">
-          {NAV_LINKS.map((item) => {
-            const path =
-              item === "HOME"
-                ? "/"
-                : `/${item.toLowerCase().replace(" ", "-")}`;
-
-            return (
-              <li key={item}>
-                <Link
-                  to={path}
-                  onClick={() => dispatch({ type: "CLOSE_NAVBAR" })}
-                  className="hover:text-orange-400 transition-colors text-lg"
-                >
-                  {item}
-                </Link>
-              </li>
-            );
-          })}
-          <li className="flex gap-6 mt-4 pt-4 border-t border-white/20 w-1/2 justify-center">
-            {SOCIAL_LINKS.map(({ icon, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xl hover:text-orange-400"
-              >
-                <i className={`fa-brands ${icon}`}></i>
-              </a>
-            ))}
-          </li>
-        </ul>
+        <div className="flex flex-col gap-4">
+          {NAV_LINKS.map(({ label, path }) => (
+            <Link
+              key={label}
+              to={path}
+              onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
+              className="text-white hover:text-red-400 font-semibold text-sm transition-colors"
+            >
+              {label}
+            </Link>
+          ))}
+          <Link
+            to="/login"
+            onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
+            className="text-sm text-red-500 font-bold"
+          >
+            Connexion / Inscription
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import ClassBookingModal from "../user/ClassBookingModal";
 
 const categories = [
-  { id: "all", title: "All Class" },
+  { id: "all", title: "Tous" },
   { id: "crossfit", title: "CrossFit" },
   { id: "lungeball", title: "Lunge Ball" },
   { id: "ppsr", title: "PPSR" },
@@ -14,53 +15,53 @@ const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 const schedule = [
   {
     time: "10.00",
-    mon: { time: "10.00 - 14.00", name: "CROSSFIT LV1",   cat: "crossfit"  },
+    mon: { id: 101, time: "10.00 - 14.00", name: "CROSSFIT LV1", cat: "crossfit", day: "Lundi", trainer: "Alex Rivera", capacity: 15, booked: 8 },
     tue: null,
-    wed: { time: "10.00 - 15.00", name: "CROSSFIT LV1",   cat: "crossfit"  },
+    wed: { id: 102, time: "10.00 - 15.00", name: "CROSSFIT LV1", cat: "crossfit", day: "Mercredi", trainer: "Alex Rivera", capacity: 15, booked: 9 },
     thu: null,
-    fri: { time: "10.00 - 13.00", name: "LUNGE BALL BUR", cat: "lungeball" },
+    fri: { id: 103, time: "10.00 - 13.00", name: "LUNGE BALL BUR", cat: "lungeball", day: "Vendredi", trainer: "Sarah Jenkins", capacity: 12, booked: 5 },
     sat: null,
-    sun: { time: "10.00 - 13.30", name: "LUNGE BALL BUR", cat: "lungeball" },
+    sun: { id: 104, time: "10.00 - 13.30", name: "LUNGE BALL BUR", cat: "lungeball", day: "Dimanche", trainer: "Sarah Jenkins", capacity: 12, booked: 7 },
   },
   {
     time: "14.00",
     mon: null,
-    tue: { time: "14.00 - 17.00", name: "LUNGE BALL BUR", cat: "lungeball" },
+    tue: { id: 105, time: "14.00 - 17.00", name: "LUNGE BALL BUR", cat: "lungeball", day: "Mardi", trainer: "Sarah Jenkins", capacity: 12, booked: 10 },
     wed: null,
-    thu: { time: "14.00 - 17.00", name: "CROSSFIT LV1",   cat: "crossfit"  },
+    thu: { id: 106, time: "14.00 - 17.00", name: "CROSSFIT LV1", cat: "crossfit", day: "Jeudi", trainer: "Alex Rivera", capacity: 15, booked: 12 },
     fri: null,
-    sat: { time: "14.00 - 15.30", name: "WALLS TO KNEES", cat: "walls"     },
+    sat: { id: 107, time: "14.00 - 15.30", name: "WALLS TO KNEES", cat: "walls", day: "Samedi", trainer: "Marc Vasseur", capacity: 10, booked: 6 },
     sun: null,
   },
   {
     time: "16.00",
-    mon: { time: "16.00 - 18.00", name: "LUNGE BALL BUR", cat: "lungeball" },
+    mon: { id: 108, time: "16.00 - 18.00", name: "LUNGE BALL BUR", cat: "lungeball", day: "Lundi", trainer: "Sarah Jenkins", capacity: 12, booked: 4 },
     tue: null,
-    wed: { time: "16.00 - 19.00", name: "CANDY",          cat: "candy"     },
+    wed: { id: 109, time: "16.00 - 19.00", name: "CANDY", cat: "candy", day: "Mercredi", trainer: "David Chen", capacity: 14, booked: 11 },
     thu: null,
-    fri: { time: "16.00 - 19.00", name: "CANDY",          cat: "candy"     },
-    sat: { time: "16.00 - 17.00", name: "PPSR",           cat: "ppsr"      },
-    sun: { time: "16.00 - 20.00", name: "MURPH",          cat: "crossfit"  },
+    fri: { id: 110, time: "16.00 - 19.00", name: "CANDY", cat: "candy", day: "Vendredi", trainer: "David Chen", capacity: 14, booked: 8 },
+    sat: { id: 111, time: "16.00 - 17.00", name: "PPSR", cat: "ppsr", day: "Samedi", trainer: "Marc Vasseur", capacity: 10, booked: 3 },
+    sun: { id: 112, time: "16.00 - 20.00", name: "MURPH", cat: "crossfit", day: "Dimanche", trainer: "Alex Rivera", capacity: 15, booked: 13 },
   },
   {
     time: "18.00",
-    mon: { time: "18.00 - 20.00", name: "WALLS TO KNEES", cat: "walls"    },
-    tue: { time: "18.00 - 20.00", name: "PPSR",           cat: "ppsr"     },
+    mon: { id: 113, time: "18.00 - 20.00", name: "WALLS TO KNEES", cat: "walls", day: "Lundi", trainer: "Marc Vasseur", capacity: 10, booked: 7 },
+    tue: { id: 114, time: "18.00 - 20.00", name: "PPSR", cat: "ppsr", day: "Mardi", trainer: "Marc Vasseur", capacity: 10, booked: 9 },
     wed: null,
-    thu: { time: "18.00 - 22.00", name: "CHELSEA",        cat: "crossfit" },
+    thu: { id: 115, time: "18.00 - 22.00", name: "CHELSEA", cat: "crossfit", day: "Jeudi", trainer: "Alex Rivera", capacity: 15, booked: 15 },
     fri: null,
-    sat: { time: "18.00 - 22.00", name: "ANNIE",          cat: "crossfit" },
+    sat: { id: 116, time: "18.00 - 22.00", name: "ANNIE", cat: "crossfit", day: "Samedi", trainer: "Alex Rivera", capacity: 15, booked: 11 },
     sun: null,
   },
   {
     time: "20.00",
-    mon: { time: "21.00 - 23.00", name: "LUNGE BALL BUR", cat: "lungeball" },
-    tue: { time: "20.00 - 22.00", name: "WALLS TO KNEES", cat: "walls"     },
-    wed: { time: "20.30 - 23.00", name: "WALLS TO KNEES", cat: "walls"     },
+    mon: { id: 117, time: "21.00 - 23.00", name: "LUNGE BALL BUR", cat: "lungeball", day: "Lundi", trainer: "Sarah Jenkins", capacity: 12, booked: 6 },
+    tue: { id: 118, time: "20.00 - 22.00", name: "WALLS TO KNEES", cat: "walls", day: "Mardi", trainer: "Marc Vasseur", capacity: 10, booked: 8 },
+    wed: { id: 119, time: "20.30 - 23.00", name: "WALLS TO KNEES", cat: "walls", day: "Mercredi", trainer: "Marc Vasseur", capacity: 10, booked: 5 },
     thu: null,
-    fri: { time: "22.00 - 23.00", name: "CROSSFIT LV2",   cat: "crossfit"  },
+    fri: { id: 120, time: "22.00 - 23.00", name: "CROSSFIT LV2", cat: "crossfit", day: "Vendredi", trainer: "Alex Rivera", capacity: 15, booked: 14 },
     sat: null,
-    sun: { time: "21.00 - 23.00", name: "CROSSFIT LV2",   cat: "crossfit"  },
+    sun: { id: 121, time: "21.00 - 23.00", name: "CROSSFIT LV2", cat: "crossfit", day: "Dimanche", trainer: "Alex Rivera", capacity: 15, booked: 10 },
   },
 ];
 
@@ -68,6 +69,7 @@ const DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 function Table() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [selectedClass, setSelectedClass] = useState(null);
 
   const isCellVisible = (cell) => {
     if (!cell) return true;
@@ -76,11 +78,8 @@ function Table() {
   };
 
   return (
-    <section
-      className="py-20 bg-white dark:bg-[#151515] text-black dark:text-white transition-colors duration-300"
-    >
+    <section className="py-20 bg-white dark:bg-[#151515] text-black dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
         <div className="text-center mb-10">
           <p className="uppercase tracking-[5px] text-[#e8401c] text-sm font-semibold mb-3">
             Weekly Schedule
@@ -105,9 +104,10 @@ function Table() {
                 borderTop: "none",
                 borderLeft: "none",
                 borderRight: "none",
-                borderBottom: activeCategory === cat.id
-                  ? "2px solid #e8401c"
-                  : "2px solid transparent",
+                borderBottom:
+                  activeCategory === cat.id
+                    ? "2px solid #e8401c"
+                    : "2px solid transparent",
                 color: activeCategory === cat.id ? "#e8401c" : "inherit",
                 paddingBottom: "4px",
                 fontWeight: "700",
@@ -123,14 +123,10 @@ function Table() {
         </div>
 
         <div className="overflow-x-auto">
-          <table
-            className="w-full text-center border-collapse bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
-          >
+          <table className="w-full text-center border-collapse bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300">
             <thead>
               <tr>
-                <th
-                  className="px-6 py-4 bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#2a2a2a] min-w-[80px] transition-colors duration-300"
-                />
+                <th className="px-6 py-4 bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#2a2a2a] min-w-[80px] transition-colors duration-300" />
                 {DAYS.map((day) => (
                   <th
                     key={day}
@@ -148,42 +144,34 @@ function Table() {
                   key={rowIdx}
                   className="border-t border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
                 >
-                  <td
-                    className="font-extrabold text-xl px-6 py-7 text-black dark:text-white bg-gray-50 dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
-                  >
+                  <td className="font-extrabold text-xl px-6 py-7 text-black dark:text-white bg-gray-50 dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300">
                     {row.time}
                   </td>
 
                   {DAY_KEYS.map((key) => {
                     const cell = row[key];
-                    // visible = true si la cellule appartient à la catégorie active (ou si "all")
-                    // Les cellules vides (null) sont toujours "visibles" mais n'affichent rien
                     const visible = isCellVisible(cell);
                     return (
                       <td
                         key={key}
                         className="px-3 py-5 align-middle bg-gray-50 dark:bg-[#1a1a1a] border-l border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
                       >
-                        {/*
-                          Le div reste TOUJOURS dans le DOM (même si vide).
-                          On anime opacity + translateY via transition CSS.
-                          Quand visible=false → opacité 0 + léger décalage vers le bas.
-                          Quand visible=true  → opacité 1 + position normale.
-                        */}
                         <div
                           style={{
                             opacity: cell && visible ? 1 : 0,
-                            transform: cell && visible
-                              ? "translateY(0px)"
-                              : "translateY(6px)",
-                            transition: "opacity 0.35s ease, transform 0.35s ease",
+                            transform:
+                              cell && visible
+                                ? "translateY(0px)"
+                                : "translateY(6px)",
+                            transition:
+                              "opacity 0.35s ease, transform 0.35s ease",
                             pointerEvents: cell && visible ? "auto" : "none",
-                            minHeight: "40px",
+                            minHeight: "50px",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
-                            gap: "4px",
+                            gap: "6px",
                           }}
                         >
                           {cell && (
@@ -202,6 +190,12 @@ function Table() {
                               >
                                 {cell.name}
                               </span>
+                              <button
+                                onClick={() => setSelectedClass(cell)}
+                                className="mt-1 px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] uppercase rounded-lg transition-colors shadow-sm cursor-pointer"
+                              >
+                                Réserver
+                              </button>
                             </>
                           )}
                         </div>
@@ -213,8 +207,12 @@ function Table() {
             </tbody>
           </table>
         </div>
-
       </div>
+
+      <ClassBookingModal
+        selectedClass={selectedClass}
+        onClose={() => setSelectedClass(null)}
+      />
     </section>
   );
 }
