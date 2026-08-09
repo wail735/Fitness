@@ -107,13 +107,13 @@ export default function AuthPage() {
                 Membre
               </button>
               <button 
-                onClick={() => {setActiveTab("coach"); setIsLogin(true);}} 
+                onClick={() => {setActiveTab("coach"); setIsLogin(true); setEmail(""); setPassword("");}} 
                 className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${activeTab === 'coach' ? 'bg-white dark:bg-slate-700 shadow text-amber-600 dark:text-amber-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white'}`}
               >
                 Coach
               </button>
               <button 
-                onClick={() => {setActiveTab("admin"); setIsLogin(true);}} 
+                onClick={() => {setActiveTab("admin"); setIsLogin(true); setEmail(""); setPassword("");}} 
                 className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${activeTab === 'admin' ? 'bg-white dark:bg-slate-700 shadow text-blue-600 dark:text-blue-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white'}`}
               >
                 Admin
