@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   UserCheck, Dumbbell, Users, Plus, Calendar,
   Loader2, TrendingUp, Zap, Star, ChevronRight,
-  Activity, Award, BarChart3, Clock
+  Activity, Award, BarChart3, Clock, LogOut
 } from "lucide-react";
 import api from "../../api/axiosConfig";
 
@@ -118,7 +118,8 @@ function RoutineCard({ routine, index }) {
 
 /* ─── Main Dashboard ──────────────────────────────────────────────────────── */
 export default function CoachDashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [members, setMembers]   = useState([]);
   const [routines, setRoutines] = useState([]);
   const [stats, setStats]       = useState({ totalMembers: 0, totalRoutines: 0, totalBookings: 0 });
@@ -556,9 +557,20 @@ export default function CoachDashboard() {
                 Bienvenue, <strong>{user?.name || "Coach"}</strong> — gérez vos membres et créez des programmes sur-mesure.
               </p>
             </div>
-            <Link to="/coach/builder" className="coach-cta">
-              <Plus size={16} /> Créer un Programme
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/coach/builder" className="coach-cta">
+                <Plus size={16} /> Créer un Programme
+              </Link>
+              <button 
+                onClick={() => { logout(); navigate("/"); }} 
+                className="coach-cta" 
+                style={{ background: "rgba(255,255,255,0.05)", color: "#fff", boxShadow: "none", border: "1px solid rgba(255,255,255,0.1)" }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#ef4444"}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
+              >
+                <LogOut size={16} /> Déconnexion
+              </button>
+            </div>
           </div>
 
           {/* ── Stats ── */}

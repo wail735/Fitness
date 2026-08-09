@@ -14,13 +14,16 @@ import {
   Bell,
   Sun,
   Moon,
-  Plus
+  Plus,
+  LogOut
 } from "lucide-react";
 import { ThemeContext } from "../../context/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 export default function PortalLayout() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { darkMode, setDarkMode } = React.useContext(ThemeContext);
 
   const isActive = (path) => location.pathname === path;
@@ -96,6 +99,15 @@ export default function PortalLayout() {
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
                   <HelpCircle size={18} />
                   <span className="text-sm font-medium">Support</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => { logout(); navigate("/"); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                >
+                  <LogOut size={18} />
+                  <span className="text-sm font-medium">Log out</span>
                 </button>
               </li>
             </ul>
