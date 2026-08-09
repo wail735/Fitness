@@ -41,7 +41,7 @@ const CircularProgress = ({ percent, value, label, subLabel }) => {
 
 export default function UserDashboard() {
   const { user } = useAuth();
-  const { workouts, bodyMetrics, nutritionLogs } = useFitness();
+  const { workouts, bodyMetrics, nutritionLogs, classes } = useFitness();
 
   const latestWeight = bodyMetrics.length > 0 ? bodyMetrics[bodyMetrics.length - 1].weightKg : "--";
   const totalCalsToday = nutritionLogs.reduce((acc, log) => acc + log.calories, 0);
@@ -244,92 +244,31 @@ export default function UserDashboard() {
             </div>
 
             <div className="space-y-1">
-               {/* Activity 1 */}
-               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
-                      🏃
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-200">Fitness for Beginner</h4>
-                      <p className="text-[11px] text-slate-500">Start from 20 June 2024</p>
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock size={12}/> 7:00 AM to 9:00 AM
-                  </div>
-                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
-                    $11.70<span className="text-[10px] text-slate-500">/m</span>
-                  </div>
-                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
-               </div>
-
-               <div className="w-full h-px bg-slate-800/50 my-1"></div>
-
-               {/* Activity 2 */}
-               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
-                      🚴
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-200">Beginner to Advance gym</h4>
-                      <p className="text-[11px] text-slate-500">Start from 01 July 2024</p>
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock size={12}/> 08:00 AM to 9:00 AM
-                  </div>
-                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
-                    $15.70<span className="text-[10px] text-slate-500">/m</span>
-                  </div>
-                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
-               </div>
-
-               <div className="w-full h-px bg-slate-800/50 my-1"></div>
-
-               {/* Activity 3 */}
-               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
-                      🏋️
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-200">Ultimate Body Workout</h4>
-                      <p className="text-[11px] text-slate-500">Start from 24 June 2024</p>
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock size={12}/> 7:30 AM to 9:00 AM
-                  </div>
-                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
-                    $8.70<span className="text-[10px] text-slate-500">/m</span>
-                  </div>
-                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
-               </div>
-               
-               <div className="w-full h-px bg-slate-800/50 my-1"></div>
-
-               {/* Activity 4 */}
-               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-emerald-400">
-                      🧘
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-200">Yoga & Flexibility</h4>
-                      <p className="text-[11px] text-slate-500">Start from 10 July 2024</p>
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock size={12}/> 7:00 AM to 9:00 AM
-                  </div>
-                  <div className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
-                    $11.70<span className="text-[10px] text-emerald-500">/m</span>
-                  </div>
-                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
-               </div>
-
+               {classes && classes.length > 0 ? classes.slice(0, 4).map((c, i) => (
+                 <React.Fragment key={c.id || c._id || i}>
+                   <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-2xl group-hover:bg-[#252a36] flex items-center justify-center ${i % 2 === 0 ? 'bg-[#1a1d24] text-slate-300' : 'bg-emerald-500/10 text-emerald-400'}`}>
+                          {i % 4 === 0 ? '🏃' : i % 4 === 1 ? '🚴' : i % 4 === 2 ? '🏋️' : '🧘'}
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-slate-200">{c.name}</h4>
+                          <p className="text-[11px] text-slate-500">{c.day}</p>
+                        </div>
+                      </div>
+                      <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                        <Clock size={12}/> {c.time}
+                      </div>
+                      <div className={`text-xs font-semibold px-3 py-1.5 rounded-lg ${i % 2 !== 0 ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36]'}`}>
+                        {c.trainer}
+                      </div>
+                      <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+                   </div>
+                   {i < Math.min(classes.length - 1, 3) && <div className="w-full h-px bg-slate-800/50 my-1"></div>}
+                 </React.Fragment>
+               )) : (
+                 <p className="text-slate-400 text-sm">No classes available.</p>
+               )}
             </div>
          </div>
 
