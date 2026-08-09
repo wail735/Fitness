@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Light Theme Override Hack for hardcoded dark themes */
+.light-theme-override {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: white;
+}
+
+/* Re-invert images and specific elements so they look normal */
+.light-theme-override img,
+.light-theme-override video,
+.light-theme-override [style*="background-image"],
+.light-theme-override .recharts-surface {
+  filter: invert(1) hue-rotate(180deg);
+}

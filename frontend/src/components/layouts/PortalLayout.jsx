@@ -26,6 +26,19 @@ export default function PortalLayout() {
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = React.useContext(ThemeContext);
 
+  const [showSearch, setShowSearch] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  React.useEffect(() => {
+    if (!darkMode) {
+      document.documentElement.classList.add("light-theme-override");
+    } else {
+      document.documentElement.classList.remove("light-theme-override");
+    }
+  }, [darkMode]);
+
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -84,19 +97,19 @@ export default function PortalLayout() {
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Settings & Help</h4>
             <ul className="space-y-1">
               <li>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
                   <Settings size={18} />
                   <span className="text-sm font-medium">Settings</span>
                 </button>
               </li>
               <li>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
                   <Paintbrush size={18} />
                   <span className="text-sm font-medium">Appearance</span>
                 </button>
               </li>
               <li>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
                   <HelpCircle size={18} />
                   <span className="text-sm font-medium">Support</span>
                 </button>
@@ -135,7 +148,10 @@ export default function PortalLayout() {
            
            <div className="flex items-center gap-6">
               {/* Search */}
-              <div className="w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors">
+              <div 
+                onClick={() => setShowSearch(true)}
+                className="w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors"
+              >
                 <Search size={16} />
               </div>
               
@@ -145,9 +161,37 @@ export default function PortalLayout() {
               </div>
 
               {/* Notifications */}
-              <div className="relative w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors">
+              <div 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors"
+              >
                 <Bell size={16} />
                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center border-2 border-[#0b0c10]">2</span>
+                
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute top-12 right-0 w-72 bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden z-50 cursor-default" onClick={e => e.stopPropagation()}>
+                    <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
+                      <h4 className="text-sm font-bold text-white">Notifications</h4>
+                      <span className="text-[10px] text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded">2 New</span>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      <div className="p-4 border-b border-slate-800/50 hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                        <p className="text-xs text-white font-medium mb-1">Workout Goal Achieved! 🎉</p>
+                        <p className="text-[10px] text-slate-400">You burned 500 kcal today. Keep it up!</p>
+                        <p className="text-[9px] text-slate-500 mt-2">10 mins ago</p>
+                      </div>
+                      <div className="p-4 hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                        <p className="text-xs text-white font-medium mb-1">New Class Available</p>
+                        <p className="text-[10px] text-slate-400">CrossFit Intense added to schedule on Wednesday.</p>
+                        <p className="text-[9px] text-slate-500 mt-2">2 hours ago</p>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-[#0b0c10] text-center border-t border-slate-800/50">
+                      <button className="text-xs text-emerald-500 font-medium hover:text-emerald-400">Mark all as read</button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Theme Toggle */}
@@ -174,6 +218,82 @@ export default function PortalLayout() {
         </div>
 
       </main>
+
+      {/* Search Modal */}
+      {showSearch && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-24 bg-black/80 backdrop-blur-sm" onClick={() => setShowSearch(false)}>
+          <div className="w-full max-w-xl bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center px-4 py-3 border-b border-slate-800/50">
+              <Search className="w-5 h-5 text-slate-400 mr-3" />
+              <input 
+                type="text" 
+                placeholder="Search workouts, classes, analytics..." 
+                className="flex-1 bg-transparent border-none text-white focus:outline-none focus:ring-0 text-sm"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+              <button onClick={() => setShowSearch(false)} className="text-xs font-semibold text-slate-500 hover:text-white px-2 py-1 bg-[#1a1d24] rounded-lg">ESC</button>
+            </div>
+            {searchQuery && (
+              <div className="p-2">
+                <div className="px-3 py-2 text-xs font-bold text-slate-500 uppercase">Results</div>
+                <div className="px-3 py-3 hover:bg-[#1a1d24] rounded-xl cursor-pointer text-sm text-slate-300 flex items-center gap-3">
+                  <BarChart2 size={16} className="text-emerald-500"/> Go to Analytics for "{searchQuery}"
+                </div>
+                <div className="px-3 py-3 hover:bg-[#1a1d24] rounded-xl cursor-pointer text-sm text-slate-300 flex items-center gap-3">
+                  <CalendarDays size={16} className="text-emerald-500"/> Search Timelines for "{searchQuery}"
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setShowSettings(false)}>
+          <div className="w-full max-w-md bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-2xl space-y-6" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Settings</h2>
+              <button onClick={() => setShowSettings(false)} className="text-slate-400 hover:text-white"><Plus className="w-5 h-5 rotate-45" /></button>
+            </div>
+            <div className="space-y-4">
+               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
+                 <div>
+                   <h4 className="text-sm font-semibold text-white">Profile Visibility</h4>
+                   <p className="text-xs text-slate-400">Make your profile public</p>
+                 </div>
+                 <div className="w-10 h-5 bg-emerald-500 rounded-full relative cursor-pointer">
+                    <div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>
+                 </div>
+               </div>
+               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
+                 <div>
+                   <h4 className="text-sm font-semibold text-white">Email Notifications</h4>
+                   <p className="text-xs text-slate-400">Receive daily summaries</p>
+                 </div>
+                 <div className="w-10 h-5 bg-[#1a1d24] rounded-full relative cursor-pointer border border-slate-800">
+                    <div className="absolute left-1 top-1 w-3 h-3 bg-slate-500 rounded-full"></div>
+                 </div>
+               </div>
+               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
+                 <div>
+                   <h4 className="text-sm font-semibold text-white">Theme Preference</h4>
+                   <p className="text-xs text-slate-400">Toggle dark/light mode</p>
+                 </div>
+                 <button 
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="px-3 py-1.5 bg-[#1a1d24] text-xs font-semibold text-white rounded-lg border border-slate-700 hover:bg-slate-800"
+                 >
+                   {darkMode ? 'Dark' : 'Light'}
+                 </button>
+               </div>
+            </div>
+            <button onClick={() => setShowSettings(false)} className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20">Save Preferences</button>
+          </div>
+        </div>
+      )}
 
       {/* Basic custom scrollbar styles */}
       <style>{`
