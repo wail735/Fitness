@@ -6,6 +6,7 @@ import { FitnessProvider } from "./context/FitnessContext";
 
 // Layouts
 import { PublicLayout } from "./components/layouts/PublicLayout";
+import PortalLayout from "./components/layouts/PortalLayout";
 import AdminLayout from "./components/admin/AdminLayout";
 import Footer from "./components/Footer";
 
@@ -57,13 +58,15 @@ function App() {
                       <Route path="/contacts" element={<Contact />} />
                       <Route path="/calculators" element={<Calculators />} />
 
-                      {/* Espace Membre */}
+                      <Route path="*" element={<Page404 />} />
+                    </Route>
+
+                    {/* Espace Membre (Nouveau Design Dashboard) */}
+                    <Route element={<PortalLayout />}>
                       <Route path="/my-dashboard" element={<UserDashboard />} />
                       <Route path="/my-workouts" element={<WorkoutTracker />} />
                       <Route path="/my-body" element={<BodyTracker />} />
                       <Route path="/my-nutrition" element={<NutritionTracker />} />
-
-                      <Route path="*" element={<Page404 />} />
                     </Route>
 
                     {/* Zone 2: Espace Professionnel & Connexion */}

@@ -1,199 +1,374 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useFitness } from "../../context/FitnessContext";
-import { Link, useNavigate } from "react-router-dom";
-import { User, Calendar, Dumbbell, Scale, Utensils, Calculator, Trash2, ArrowRight, LogOut, Activity } from "lucide-react";
+import { LineChart, Line, ResponsiveContainer } from "recharts";
+import { Clock, MoreHorizontal, ArrowUpRight } from "lucide-react";
 
-export default function UserDashboard() {
-  const { user, logout } = useAuth();
-  const { classes, userBookings, cancelBooking, workouts, bodyMetrics, nutritionLogs } = useFitness();
-  const navigate = useNavigate();
+// Fake data for the heart rate chart
+const heartRateData = [
+  { pv: 70 }, { pv: 85 }, { pv: 80 }, { pv: 95 }, { pv: 85 }, 
+  { pv: 110 }, { pv: 90 }, { pv: 105 }, { pv: 95 }, { pv: 85 }, { pv: 90 }
+];
 
-  const bookedClassList = classes.filter((c) => userBookings.includes(c.id || c._id));
-  const latestWorkout = workouts[0];
-  const latestWeight = bodyMetrics[bodyMetrics.length - 1];
-  const totalCalsToday = nutritionLogs.reduce((acc, log) => acc + log.calories, 0);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+// SVG Circular Progress Component
+const CircularProgress = ({ percent, value, label, subLabel }) => {
+  const radius = 56;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white pt-32 pb-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors duration-300">
-      <div className="max-w-6xl mx-auto space-y-10">
-        
-        {/* Welcome Header (Glassmorphism) */}
-        <div className="relative overflow-hidden bg-white dark:bg-white/5 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-[2rem] p-8 sm:p-10 shadow-xl dark:shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-8 transition-colors duration-300">
-          
-          {/* Background Glow */}
-          <div className="absolute -top-32 -right-32 w-96 h-96 bg-red-600/20 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-amber-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-          <div className="space-y-3 relative z-10">
-            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight transition-colors duration-300">
-              Ravi de vous revoir, <br className="hidden sm:block" />
-              <span className="bg-gradient-to-r from-red-600 via-amber-500 to-red-600 dark:from-red-500 dark:via-amber-400 dark:to-red-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                {user?.name || "Sportif"}
-              </span> !
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-base max-w-lg mt-2 font-medium transition-colors duration-300">
-              Suivez votre progression, vos prochains cours et dépassez vos limites. C'est votre espace dédié à la performance.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row flex-wrap gap-4 relative z-10 w-full md:w-auto">
-            <Link
-              to="/schedule"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white text-sm font-bold px-6 py-3 rounded-2xl shadow-lg shadow-red-600/30 transition-all transform hover:-translate-y-0.5"
-            >
-              <Calendar className="w-4 h-4" /> Réserver
-            </Link>
-            <Link
-              to="/calculators"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white text-sm font-bold px-6 py-3 rounded-2xl border border-slate-200 dark:border-white/10 transition-all transform hover:-translate-y-0.5 backdrop-blur-md"
-            >
-              <Calculator className="w-4 h-4 text-amber-500 dark:text-amber-400" /> Outils
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800/50 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-400 text-slate-600 dark:text-slate-300 text-sm font-bold px-6 py-3 rounded-2xl border border-slate-200 dark:border-white/5 transition-all"
-            >
-              <LogOut className="w-4 h-4" /> Déconnexion
-            </button>
-          </div>
-        </div>
-
-        {/* Quick Metrics Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Workout Card */}
-          <Link to="/my-workouts" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-red-500/50 dark:hover:border-red-500/50 transition-all duration-300 rounded-[2rem] p-6 group backdrop-blur-lg relative overflow-hidden shadow-sm dark:shadow-none">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-100 dark:bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-200 dark:group-hover:bg-red-500/20 transition-all"></div>
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <span className="text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">Dernière Séance</span>
-              <div className="p-2 bg-slate-50 dark:bg-white/10 rounded-xl">
-                <Dumbbell className="w-5 h-5 text-red-500 group-hover:rotate-12 transition-transform" />
-              </div>
-            </div>
-            <div className="text-2xl font-black text-slate-900 dark:text-white truncate relative z-10">{latestWorkout ? latestWorkout.name : "Aucune séance"}</div>
-            <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-2 relative z-10">
-              {latestWorkout ? (
-                <>
-                  <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400"><Activity className="w-3.5 h-3.5"/> {latestWorkout.caloriesBurned} kcal</span>
-                  <span className="text-slate-400 dark:text-slate-600">•</span>
-                  <span>{latestWorkout.durationMinutes} min</span>
-                </>
-              ) : "Enregistrer une séance"} &rarr;
-            </div>
-          </Link>
-
-          {/* Body Metrics Card */}
-          <Link to="/my-body" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all duration-300 rounded-[2rem] p-6 group backdrop-blur-lg relative overflow-hidden shadow-sm dark:shadow-none">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-100 dark:bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-200 dark:group-hover:bg-emerald-500/20 transition-all"></div>
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <span className="text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">Dernier Poids</span>
-              <div className="p-2 bg-slate-50 dark:bg-white/10 rounded-xl">
-                <Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400 group-hover:-rotate-12 transition-transform" />
-              </div>
-            </div>
-            <div className="text-3xl font-black text-slate-900 dark:text-white relative z-10">{latestWeight ? `${latestWeight.weightKg} kg` : "--"}</div>
-            <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2 relative z-10">
-              {latestWeight ? `Masse grasse: ${latestWeight.bodyFatPct}%` : "Mettre à jour vos mesures"} &rarr;
-            </div>
-          </Link>
-
-          {/* Nutrition Card */}
-          <Link to="/my-nutrition" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-amber-500/50 dark:hover:border-amber-500/50 transition-all duration-300 rounded-[2rem] p-6 group backdrop-blur-lg relative overflow-hidden shadow-sm dark:shadow-none">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-100 dark:bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-200 dark:group-hover:bg-amber-500/20 transition-all"></div>
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <span className="text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">Nutrition du Jour</span>
-              <div className="p-2 bg-slate-50 dark:bg-white/10 rounded-xl">
-                <Utensils className="w-5 h-5 text-amber-500 dark:text-amber-400 group-hover:scale-110 transition-transform" />
-              </div>
-            </div>
-            <div className="text-3xl font-black text-slate-900 dark:text-white relative z-10">{totalCalsToday} <span className="text-lg text-slate-500">kcal</span></div>
-            <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2 relative z-10">Voir le journal repas &rarr;</div>
-          </Link>
-        </div>
-
-        {/* Booked Classes Section */}
-        <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] p-8 backdrop-blur-2xl relative overflow-hidden shadow-xl dark:shadow-none transition-colors duration-300">
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-amber-500 to-red-600"></div>
-          
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-3 tracking-tight transition-colors duration-300">
-              <div className="p-2.5 bg-red-100 dark:bg-red-500/20 rounded-xl border border-red-200 dark:border-red-500/30">
-                <Calendar className="w-5 h-5 text-red-600 dark:text-red-500" /> 
-              </div>
-              Vos Cours Programmés
-              <span className="bg-slate-100 dark:bg-white/10 px-3 py-1 rounded-full text-sm font-bold ml-2 text-slate-800 dark:text-white">{bookedClassList.length}</span>
-            </h2>
-            <Link to="/schedule" className="px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl text-xs text-red-600 dark:text-red-400 font-bold tracking-widest uppercase transition-all flex items-center gap-2 border border-slate-200 dark:border-white/5">
-              Voir le planning <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {bookedClassList.length === 0 ? (
-            <div className="text-center py-12 px-4 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/5 rounded-3xl backdrop-blur-sm transition-colors duration-300">
-              <Calendar className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Aucun cours réservé</h3>
-              <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-md mx-auto">Vous n'avez pas encore réservé de cours cette semaine. Explorez notre planning et réservez votre place !</p>
-              <Link to="/schedule" className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-red-600/20">
-                Consulter le Planning
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {bookedClassList.map((c) => (
-                <div key={c.id || c._id} className="group bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 rounded-2xl p-5 flex justify-between items-center transition-all hover:bg-slate-100 dark:hover:bg-black/60 shadow-sm dark:shadow-none">
-                  <div className="flex items-start gap-4">
-                    <div className="hidden sm:flex flex-col items-center justify-center w-14 h-14 bg-red-100 dark:bg-red-500/10 rounded-xl border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 font-black">
-                      <span className="text-xs uppercase">{c.day.substring(0,3)}</span>
-                    </div>
-                    <div>
-                      <span className="sm:hidden inline-block text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider mb-1 bg-red-100 dark:bg-red-500/10 px-2 py-0.5 rounded-md">{c.day}</span>
-                      <h4 className="font-black text-slate-900 dark:text-white text-lg tracking-tight mb-1">{c.name}</h4>
-                      <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5"/> {c.time}</span>
-                        <span className="flex items-center gap-1"><User className="w-3.5 h-3.5"/> {c.trainer}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => cancelBooking(c.id || c._id)}
-                    className="p-3 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/10 rounded-xl transition-all border border-transparent hover:border-red-200 dark:hover:border-red-500/20"
-                    title="Annuler la réservation"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
+    <div className="relative flex items-center justify-center w-36 h-36">
+      <svg className="transform -rotate-90 w-36 h-36">
+        <circle cx="72" cy="72" r={radius} stroke="#1a1d24" strokeWidth="8" fill="transparent" />
+        <circle
+          cx="72" cy="72" r={radius}
+          stroke="#10b981"
+          strokeWidth="8"
+          fill="transparent"
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          className="transition-all duration-1000 ease-out"
+        />
+      </svg>
+      <div className="absolute flex flex-col items-center justify-center text-center">
+        <span className="text-2xl font-bold text-white leading-none">{value}</span>
+        <span className="text-[10px] text-slate-400 mt-1">{subLabel}</span>
       </div>
     </div>
   );
-}
+};
 
-// Simple Clock icon component since we use it but didn't import it in the original
-function Clock(props) {
+export default function UserDashboard() {
+  const { user } = useAuth();
+  const { workouts, bodyMetrics, nutritionLogs } = useFitness();
+
+  const latestWeight = bodyMetrics.length > 0 ? bodyMetrics[bodyMetrics.length - 1].weightKg : "--";
+  const totalCalsToday = nutritionLogs.reduce((acc, log) => acc + log.calories, 0);
+
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
+    <div className="max-w-6xl mx-auto space-y-6">
+      
+      {/* Top Header & Stats */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-8">
+        <div>
+          <p className="text-slate-400 text-sm mb-1">Good morning</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Welcome Back !</h1>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-8 xl:gap-16 bg-[#12141a] p-4 px-8 rounded-2xl border border-slate-800/50">
+           <div className="text-right">
+             <p className="text-slate-400 text-xs mb-1">Weight balance</p>
+             <p className="text-lg font-bold text-white">{latestWeight} <span className="text-xs text-slate-500 font-normal">kg</span></p>
+           </div>
+           <div className="w-px h-8 bg-slate-800 hidden sm:block"></div>
+           <div className="text-right">
+             <p className="text-slate-400 text-xs mb-1">Heart rate</p>
+             <p className="text-lg font-bold text-white">90 <span className="text-xs text-slate-500 font-normal">bpm</span></p>
+           </div>
+           <div className="w-px h-8 bg-slate-800 hidden sm:block"></div>
+           <div className="text-right">
+             <p className="text-slate-400 text-xs mb-1">Hydration level</p>
+             <p className="text-lg font-bold text-white">86 <span className="text-xs text-slate-500 font-normal">%</span></p>
+           </div>
+           <div className="w-px h-8 bg-slate-800 hidden sm:block"></div>
+           <div className="text-right">
+             <p className="text-slate-400 text-xs mb-1">Blood cells</p>
+             <p className="text-lg font-bold text-white">1100 <span className="text-xs text-slate-500 font-normal">ul</span></p>
+           </div>
+        </div>
+      </div>
+
+      {/* Grid: Charts & Goals */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Calories Burn */}
+        <div className="bg-[#12141a] rounded-3xl p-6 border border-slate-800/50 flex flex-col justify-between">
+           <div className="flex items-center justify-between mb-2">
+              <div></div> {/* Spacer */}
+              <button className="text-slate-500 hover:text-slate-300"><MoreHorizontal size={18}/></button>
+           </div>
+           
+           <div className="flex items-center gap-6 mb-6">
+              <CircularProgress percent={87} value="87%" subLabel="1,980ml" />
+              
+              <div className="space-y-4 flex-1">
+                 <div>
+                   <div className="flex items-center justify-between mb-1">
+                     <span className="flex items-center gap-2 text-xs text-slate-400">
+                       <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Calories burn
+                     </span>
+                     <span className="text-xs text-emerald-400 flex items-center gap-1">~ 0.22%</span>
+                   </div>
+                   <p className="text-sm font-bold text-white">{totalCalsToday > 0 ? totalCalsToday : 2450} kcal</p>
+                 </div>
+                 
+                 <div>
+                   <div className="flex items-center justify-between mb-1">
+                     <span className="flex items-center gap-2 text-xs text-slate-400">
+                       <span className="w-2 h-2 rounded-full bg-slate-500"></span> Carbs
+                     </span>
+                     <span className="text-xs text-slate-500 flex items-center gap-1">~ 3.06%</span>
+                   </div>
+                   <p className="text-sm font-bold text-white">23.2%</p>
+                 </div>
+
+                 <div>
+                   <div className="flex items-center justify-between mb-1">
+                     <span className="flex items-center gap-2 text-xs text-slate-400">
+                       <span className="w-2 h-2 rounded-full bg-slate-700"></span> Protein
+                     </span>
+                     <span className="text-xs text-slate-500 flex items-center gap-1">~ 2.22%</span>
+                   </div>
+                   <p className="text-sm font-bold text-white">11.9%</p>
+                 </div>
+              </div>
+           </div>
+
+           <button className="w-full py-3 bg-[#1a1d24] hover:bg-[#252a36] transition-colors rounded-xl text-sm text-slate-300 font-medium">
+             View full details
+           </button>
+        </div>
+
+        {/* Heart Rate */}
+        <div className="bg-gradient-to-b from-[#12141a] to-[#0a1215] rounded-3xl p-6 border border-slate-800/50 relative overflow-hidden flex flex-col justify-between">
+           {/* Glow effect at bottom */}
+           <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full h-40 bg-emerald-500/10 blur-3xl rounded-full pointer-events-none"></div>
+
+           <div className="flex justify-between items-start z-10 relative">
+             <h3 className="text-lg font-medium text-slate-200">Heart rate</h3>
+             <button className="text-slate-500 hover:text-slate-300"><MoreHorizontal size={18}/></button>
+           </div>
+           
+           <div className="h-28 w-full mt-4 z-10 relative">
+             <ResponsiveContainer width="100%" height="100%">
+               <LineChart data={heartRateData}>
+                 <Line type="monotone" dataKey="pv" stroke="#10b981" strokeWidth={2} dot={false} isAnimationActive={false} />
+               </LineChart>
+             </ResponsiveContainer>
+           </div>
+
+           <div className="mt-6 z-10 relative">
+             <p className="text-sm text-slate-300 mb-3">Core strength</p>
+             <div className="flex justify-between">
+               <div>
+                 <p className="text-[10px] text-slate-500 mb-1">Current</p>
+                 <p className="text-xs text-white font-semibold">1.6 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+               </div>
+               <div>
+                 <p className="text-[10px] text-slate-500 mb-1">Average</p>
+                 <p className="text-xs text-white font-semibold">2.2 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+               </div>
+               <div>
+                 <p className="text-[10px] text-slate-500 mb-1">Max</p>
+                 <p className="text-xs text-white font-semibold">4.2 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+               </div>
+             </div>
+           </div>
+        </div>
+
+        {/* Fitness Goal Building */}
+        <div className="flex flex-col justify-between">
+           <div className="mb-4">
+             <h3 className="text-lg font-medium text-slate-200">Fitness Goal Building</h3>
+             <p className="text-lg font-medium text-slate-400">Your Fitness:</p>
+           </div>
+
+           <div className="space-y-3">
+             {/* Goal Item 1 */}
+             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
+                    <span className="text-sm font-bold text-white">10</span>
+                    <span className="text-[9px] text-slate-400">Min</span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200">ABS & Stretch</h4>
+                    <p className="text-[11px] text-slate-500">10 min / day</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-emerald-500/30 flex items-center justify-center">
+                  <span className="text-[10px] text-emerald-400">55%</span>
+                </div>
+             </div>
+
+             {/* Goal Item 2 */}
+             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
+                    <span className="text-sm font-bold text-white">12</span>
+                    <span className="text-[9px] text-slate-400">Sets</span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200">Side planks</h4>
+                    <p className="text-[11px] text-slate-500">12 sets / day</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center">
+                  <span className="text-[10px] text-slate-400">35%</span>
+                </div>
+             </div>
+
+             {/* Goal Item 3 */}
+             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
+                    <span className="text-sm font-bold text-white">10</span>
+                    <span className="text-[9px] text-slate-400">Sets</span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-200">Rope lifting</h4>
+                    <p className="text-[11px] text-slate-500">10 sets / day</p>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-emerald-500/30 flex items-center justify-center">
+                  <span className="text-[10px] text-emerald-400">50%</span>
+                </div>
+             </div>
+           </div>
+        </div>
+
+      </div>
+
+      {/* Grid: Recommended Activity & Trainer */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+         
+         {/* Recommended activity */}
+         <div className="lg:col-span-2 bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
+            <div className="flex justify-between items-center mb-6">
+               <h3 className="text-lg font-medium text-slate-200">Recommended activity</h3>
+               <div className="flex gap-2">
+                 <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white"><div className="w-3 h-0.5 bg-current"></div><div className="w-3 h-0.5 bg-current mt-1"></div></button>
+                 <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white flex-wrap content-center gap-0.5"><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div></button>
+               </div>
+            </div>
+
+            <div className="space-y-1">
+               {/* Activity 1 */}
+               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
+                      🏃
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-200">Fitness for Beginner</h4>
+                      <p className="text-[11px] text-slate-500">Start from 20 June 2024</p>
+                    </div>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                    <Clock size={12}/> 7:00 AM to 9:00 AM
+                  </div>
+                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
+                    $11.70<span className="text-[10px] text-slate-500">/m</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+               </div>
+
+               <div className="w-full h-px bg-slate-800/50 my-1"></div>
+
+               {/* Activity 2 */}
+               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
+                      🚴
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-200">Beginner to Advance gym</h4>
+                      <p className="text-[11px] text-slate-500">Start from 01 July 2024</p>
+                    </div>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                    <Clock size={12}/> 08:00 AM to 9:00 AM
+                  </div>
+                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
+                    $15.70<span className="text-[10px] text-slate-500">/m</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+               </div>
+
+               <div className="w-full h-px bg-slate-800/50 my-1"></div>
+
+               {/* Activity 3 */}
+               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-slate-300">
+                      🏋️
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-200">Ultimate Body Workout</h4>
+                      <p className="text-[11px] text-slate-500">Start from 24 June 2024</p>
+                    </div>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                    <Clock size={12}/> 7:30 AM to 9:00 AM
+                  </div>
+                  <div className="text-xs font-semibold text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36] px-3 py-1.5 rounded-lg">
+                    $8.70<span className="text-[10px] text-slate-500">/m</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+               </div>
+               
+               <div className="w-full h-px bg-slate-800/50 my-1"></div>
+
+               {/* Activity 4 */}
+               <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#1a1d24] group-hover:bg-[#252a36] flex items-center justify-center text-emerald-400">
+                      🧘
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-200">Yoga & Flexibility</h4>
+                      <p className="text-[11px] text-slate-500">Start from 10 July 2024</p>
+                    </div>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                    <Clock size={12}/> 7:00 AM to 9:00 AM
+                  </div>
+                  <div className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+                    $11.70<span className="text-[10px] text-emerald-500">/m</span>
+                  </div>
+                  <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+               </div>
+
+            </div>
+         </div>
+
+         {/* Trainer */}
+         <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
+            <div className="flex justify-between items-center mb-6">
+               <h3 className="text-lg font-medium text-slate-200">Trainer</h3>
+               <button className="w-8 h-8 rounded-full bg-[#1a1d24] hover:bg-[#252a36] flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+                 <ArrowUpRight size={16} />
+               </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+               {/* Trainer 1 */}
+               <div className="relative rounded-2xl overflow-hidden h-48 group cursor-pointer">
+                  <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=500&auto=format&fit=crop" alt="Trainer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-[#12141a]/60 to-transparent"></div>
+                  <div className="absolute bottom-3 left-3">
+                    <h4 className="text-xs font-semibold text-white">John Arnold</h4>
+                    <p className="text-[9px] text-slate-400">Cardio specialist</p>
+                  </div>
+               </div>
+               
+               {/* Trainer 2 */}
+               <div className="relative rounded-2xl overflow-hidden h-48 group cursor-pointer">
+                  <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=500&auto=format&fit=crop" alt="Trainer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale mix-blend-luminosity opacity-80" />
+                  {/* Subtle emerald tint like in the image for the second card */}
+                  <div className="absolute inset-0 bg-emerald-900/30 mix-blend-overlay"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-[#12141a]/60 to-transparent"></div>
+                  <div className="absolute bottom-3 left-3">
+                    <h4 className="text-xs font-semibold text-white">Kathryn Murphy</h4>
+                    <p className="text-[9px] text-slate-400">Weight lifting specialist</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </div>
+
+    </div>
   );
 }
