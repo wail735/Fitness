@@ -42,7 +42,7 @@ export default function Dashboard() {
   const userGrowthData = stats?.userGrowth || [];
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -103,7 +103,7 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart: Reservations per class */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
           <h3 className="text-lg font-bold text-white">Réservations par Cours Collectif</h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -118,7 +118,7 @@ export default function Dashboard() {
         </div>
 
         {/* Chart: User Growth */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
           <h3 className="text-lg font-bold text-white">Évolution des Membres</h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -141,7 +141,7 @@ export default function Dashboard() {
       </div>
 
       {/* Class Details Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
         <h3 className="text-lg font-bold text-white">Liste des Créneaux du Club</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">

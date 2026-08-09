@@ -77,8 +77,9 @@ export default function PortalLayout() {
 
     const results = [];
     const isCoach = user?.role === "coach";
+    const isAdmin = user?.role === "admin";
 
-    if (!isCoach) {
+    if (!isCoach && !isAdmin) {
       // Search workouts (User only)
       workouts.filter(w => w.name?.toLowerCase().includes(q)).forEach(w => {
         results.push({
@@ -106,7 +107,7 @@ export default function PortalLayout() {
       });
     }
 
-    if (isCoach && routines) {
+    if ((isCoach || isAdmin) && routines) {
       // Search routines (Coach only)
       routines.filter(r => r.title?.toLowerCase().includes(q)).forEach(r => {
         results.push({
@@ -130,21 +131,31 @@ export default function PortalLayout() {
         bg: "bg-blue-500/10",
         title: c.name,
         meta: `${c.day || ""} · ${c.time || ""} · ${c.trainer || ""}`,
-        action: () => { navigate(isCoach ? "/coach" : "/my-dashboard"); setShowSearch(false); setSearchQuery(""); },
+        action: () => { navigate(isAdmin ? "/admin" : isCoach ? "/coach" : "/my-dashboard"); setShowSearch(false); setSearchQuery(""); },
       });
     });
 
     // Navigation shortcuts
-    const pages = isCoach ? [
-      { label: "Dashboard", path: "/coach" },
-      { label: "Program Builder", path: "/coach/builder" }
-    ] : [
-      { label: "Dashboard", path: "/my-dashboard" },
-      { label: "Analytics", path: "/my-workouts" },
-      { label: "Goals / Body", path: "/my-body" },
-      { label: "Timelines / Nutrition", path: "/my-nutrition" },
-      { label: "Paramètres", path: "/my-settings" },
-    ];
+    let pages = [];
+    if (isAdmin) {
+      pages = [
+        { label: "Admin Dashboard", path: "/admin" },
+        { label: "Schedule Manager", path: "/admin/schedule" }
+      ];
+    } else if (isCoach) {
+      pages = [
+        { label: "Dashboard", path: "/coach" },
+        { label: "Program Builder", path: "/coach/builder" }
+      ];
+    } else {
+      pages = [
+        { label: "Dashboard", path: "/my-dashboard" },
+        { label: "Analytics", path: "/my-workouts" },
+        { label: "Goals / Body", path: "/my-body" },
+        { label: "Timelines / Nutrition", path: "/my-nutrition" },
+        { label: "Paramètres", path: "/my-settings" },
+      ];
+    }
 
     pages.filter(p => p.label.toLowerCase().includes(q)).forEach(p => {
       results.push({
@@ -186,7 +197,22 @@ export default function PortalLayout() {
           <div>
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Main Menu</h4>
             <ul className="space-y-1">
-              {user?.role === "coach" ? (
+              {user?.role === "admin" ? (
+                <>
+                  <li>
+                    <Link to="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <LayoutDashboard size={18} />
+                      <span className="text-sm font-medium">Vue d'Ensemble</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/schedule" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin/schedule') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <CalendarDays size={18} />
+                      <span className="text-sm font-medium">Gestion Planning</span>
+                    </Link>
+                  </li>
+                </>
+              ) : user?.role === "coach" ? (
                 <>
                   <li>
                     <Link to="/coach" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
@@ -235,7 +261,7 @@ export default function PortalLayout() {
           <div>
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Settings & Help</h4>
             <ul className="space-y-1">
-              {user?.role !== "coach" && (
+              {user?.role !== "coach" && user?.role !== "admin" && (
                 <li>
                   <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
                     <Settings size={18} />
@@ -420,7 +446,10 @@ export default function PortalLayout() {
               {!searchQuery && (
                 <div className="p-3">
                   <div className="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Navigation Rapide</div>
-                  {(user?.role === "coach" ? [
+                  {(user?.role === "admin" ? [
+                    { label: "Vue d'Ensemble", path: "/admin", icon: LayoutDashboard, color: "text-red-500", bg: "bg-red-500/10" },
+                    { label: "Gestion Planning", path: "/admin/schedule", icon: CalendarDays, color: "text-purple-400", bg: "bg-purple-500/10" },
+                  ] : user?.role === "coach" ? [
                     { label: "Dashboard Coach", path: "/coach", icon: LayoutDashboard, color: "text-emerald-400", bg: "bg-emerald-500/10" },
                     { label: "Program Builder", path: "/coach/builder", icon: Dumbbell, color: "text-purple-400", bg: "bg-purple-500/10" },
                   ] : [

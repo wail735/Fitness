@@ -30,7 +30,7 @@ export default function ScheduleManager() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -50,13 +50,13 @@ export default function ScheduleManager() {
       </div>
 
       {/* Class List */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {classes.map((c) => (
-            <div key={c.id} className="bg-slate-950 border border-slate-800/50 rounded-2xl p-5 relative group space-y-3">
+            <div key={c.id} className="bg-[#1a1d24] border border-slate-800/50 rounded-2xl p-5 relative group space-y-3">
               <button
                 onClick={() => removeClass(c.id)}
-                className="absolute top-4 right-4 p-2 text-slate-500 hover:text-red-400 hover:bg-slate-900 rounded-xl transition-colors"
+                className="absolute top-4 right-4 p-2 text-slate-500 hover:text-red-400 hover:bg-[#12141a] rounded-xl transition-colors"
                 title="Supprimer le cours"
               >
                 <Trash2 className="w-4 h-4" />
@@ -82,7 +82,7 @@ export default function ScheduleManager() {
       {/* Add Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#12141a] border border-slate-800/50 rounded-2xl p-6 shadow-2xl">
+          <div className="w-full max-w-md bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-2xl">
             <h3 className="text-xl font-bold text-white mb-4">Nouveau Cours au Planning</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">

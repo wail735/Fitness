@@ -89,9 +89,9 @@ function App() {
 
                     {/* Espace Administration (Protégé) */}
                     <Route element={<AdminProtectedRoute allowedRoles={["admin"]} />}>
-                      <Route path="/admin" element={<AdminLayout />}>
-                        <Route index element={<Dashboard />} />
-                        <Route path="schedule" element={<ScheduleManager />} />
+                      <Route element={<PortalLayout />}>
+                        <Route path="/admin" element={<Dashboard />} />
+                        <Route path="/admin/schedule" element={<ScheduleManager />} />
                       </Route>
                     </Route>
                   </Routes>
