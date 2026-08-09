@@ -16,12 +16,12 @@ import {
   Moon,
   Plus
 } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function PortalLayout() {
   const { user } = useAuth();
   const location = useLocation();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { darkMode, setDarkMode } = React.useContext(ThemeContext);
 
   const isActive = (path) => location.pathname === path;
 
@@ -141,14 +141,14 @@ export default function PortalLayout() {
               {/* Theme Toggle */}
               <div className="flex items-center bg-[#1a1d24] rounded-full p-1 ml-2">
                 <button 
-                  onClick={() => !isDarkMode && toggleTheme()}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${!isDarkMode ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                  onClick={() => darkMode && setDarkMode(false)}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${!darkMode ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                   <Sun size={14} />
                 </button>
                 <button 
-                   onClick={() => isDarkMode && toggleTheme()}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${isDarkMode ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
+                   onClick={() => !darkMode && setDarkMode(true)}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                   <Moon size={14} />
                 </button>
