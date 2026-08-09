@@ -50,10 +50,10 @@ export default function ScheduleManager() {
       </div>
 
       {/* Class List */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+      <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-6 shadow-xl space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {classes.map((c) => (
-            <div key={c.id} className="bg-slate-950 border border-slate-800 rounded-2xl p-5 relative group space-y-3">
+            <div key={c.id} className="bg-slate-950 border border-slate-800/50 rounded-2xl p-5 relative group space-y-3">
               <button
                 onClick={() => removeClass(c.id)}
                 className="absolute top-4 right-4 p-2 text-slate-500 hover:text-red-400 hover:bg-slate-900 rounded-xl transition-colors"
@@ -81,8 +81,8 @@ export default function ScheduleManager() {
 
       {/* Add Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-[#12141a] border border-slate-800/50 rounded-2xl p-6 shadow-2xl">
             <h3 className="text-xl font-bold text-white mb-4">Nouveau Cours au Planning</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,7 +93,7 @@ export default function ScheduleManager() {
                   placeholder="ex: Body Pump"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                  className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                   required
                 />
               </div>
@@ -104,7 +104,7 @@ export default function ScheduleManager() {
                   <select
                     value={day}
                     onChange={(e) => setDay(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                   >
                     <option value="Lundi">Lundi</option>
                     <option value="Mardi">Mardi</option>
@@ -123,7 +123,7 @@ export default function ScheduleManager() {
                     placeholder="18:00 - 19:00"
                     value={time}
                     onChange={(e) => setTime(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -136,7 +136,7 @@ export default function ScheduleManager() {
                     placeholder="Marc Vasseur"
                     value={trainer}
                     onChange={(e) => setTrainer(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                   />
                 </div>
 
@@ -146,7 +146,7 @@ export default function ScheduleManager() {
                     type="number"
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function ScheduleManager() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
+                  className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-2 px-3 text-sm text-white focus:border-red-500 focus:outline-none"
                 >
                   <option value="Cardio">Cardio</option>
                   <option value="Force">Force</option>

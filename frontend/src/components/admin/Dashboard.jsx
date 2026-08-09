@@ -63,7 +63,7 @@ export default function Dashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-bold uppercase">Membres Actifs</span>
             <Users className="w-5 h-5 text-blue-400" />
@@ -72,7 +72,7 @@ export default function Dashboard() {
           <div className="text-[10px] text-emerald-400 mt-1 font-semibold">Inscrits au total</div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-bold uppercase">Réservations Totales</span>
             <Calendar className="w-5 h-5 text-red-500" />
@@ -81,7 +81,7 @@ export default function Dashboard() {
           <div className="text-[10px] text-slate-400 mt-1">Toutes sessions confondues</div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-bold uppercase">Taux d'Occupation</span>
             <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -90,7 +90,7 @@ export default function Dashboard() {
           <div className="text-[10px] text-slate-400 mt-1">En moyenne</div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-bold uppercase">Chiffre d'Affaires Mensuel</span>
             <DollarSign className="w-5 h-5 text-amber-400" />
@@ -110,7 +110,7 @@ export default function Dashboard() {
               <BarChart data={chartData}>
                 <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
                 <YAxis stroke="#64748b" fontSize={11} />
-                <Tooltip contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "12px", color: "#fff" }} cursor={{ fill: "#1e293b" }} />
+                <Tooltip contentStyle={{ backgroundColor: "#12141a", borderColor: "#334155", borderRadius: "12px", color: "#fff" }} cursor={{ fill: "#1e293b" }} />
                 <Bar dataKey="reservations" fill="#ef4444" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -131,8 +131,8 @@ export default function Dashboard() {
                 </defs>
                 <XAxis dataKey="month" stroke="#64748b" fontSize={11} />
                 <YAxis stroke="#64748b" fontSize={11} />
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <Tooltip contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "12px", color: "#fff" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e2130" vertical={false} />
+                <Tooltip contentStyle={{ backgroundColor: "#12141a", borderColor: "#334155", borderRadius: "12px", color: "#fff" }} />
                 <Area type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorUsers)" />
               </AreaChart>
             </ResponsiveContainer>

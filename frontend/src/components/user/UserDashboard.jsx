@@ -4,11 +4,8 @@ import { useFitness } from "../../context/FitnessContext";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { Clock, MoreHorizontal, ArrowUpRight } from "lucide-react";
 
-// Fake data for the heart rate chart
-const heartRateData = [
-  { pv: 70 }, { pv: 85 }, { pv: 80 }, { pv: 95 }, { pv: 85 }, 
-  { pv: 110 }, { pv: 90 }, { pv: 105 }, { pv: 95 }, { pv: 85 }, { pv: 90 }
-];
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
 
 // SVG Circular Progress Component
 const CircularProgress = ({ percent, value, label, subLabel }) => {
@@ -45,6 +42,21 @@ export default function UserDashboard() {
 
   const latestWeight = bodyMetrics.length > 0 ? bodyMetrics[bodyMetrics.length - 1].weightKg : "--";
   const totalCalsToday = nutritionLogs.reduce((acc, log) => acc + log.calories, 0);
+
+  // Dynamic Intensity Data based on Workouts
+  const intensityData = useMemo(() => {
+    if (workouts.length === 0) return Array(10).fill({ pv: 0 });
+    return [...workouts].reverse().slice(0, 10).map(w => ({ pv: w.caloriesBurned }));
+  }, [workouts]);
+
+  const maxCals = workouts.length > 0 ? Math.max(...workouts.map(w => w.caloriesBurned)) : 0;
+  const avgCals = workouts.length > 0 ? Math.round(workouts.reduce((a, b) => a + b.caloriesBurned, 0) / workouts.length) : 0;
+
+  // Dynamic Trainers from classes
+  const uniqueTrainers = useMemo(() => {
+    const trainers = classes.map(c => c.trainer).filter(Boolean);
+    return [...new Set(trainers)].slice(0, 2);
+  }, [classes]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -130,101 +142,70 @@ export default function UserDashboard() {
            </button>
         </div>
 
-        {/* Heart Rate */}
+        {/* Workout Intensity Chart */}
         <div className="bg-gradient-to-b from-[#12141a] to-[#0a1215] rounded-3xl p-6 border border-slate-800/50 relative overflow-hidden flex flex-col justify-between">
            {/* Glow effect at bottom */}
            <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full h-40 bg-emerald-500/10 blur-3xl rounded-full pointer-events-none"></div>
 
            <div className="flex justify-between items-start z-10 relative">
-             <h3 className="text-lg font-medium text-slate-200">Heart rate</h3>
-             <button className="text-slate-500 hover:text-slate-300"><MoreHorizontal size={18}/></button>
+             <h3 className="text-lg font-medium text-slate-200">Workout Intensity</h3>
+             <Link to="/my-workouts" className="text-slate-500 hover:text-slate-300"><MoreHorizontal size={18}/></Link>
            </div>
            
            <div className="h-28 w-full mt-4 z-10 relative">
              <ResponsiveContainer width="100%" height="100%">
-               <LineChart data={heartRateData}>
+               <LineChart data={intensityData}>
                  <Line type="monotone" dataKey="pv" stroke="#10b981" strokeWidth={2} dot={false} isAnimationActive={false} />
                </LineChart>
              </ResponsiveContainer>
            </div>
 
            <div className="mt-6 z-10 relative">
-             <p className="text-sm text-slate-300 mb-3">Core strength</p>
+             <p className="text-sm text-slate-300 mb-3">Calories Burned</p>
              <div className="flex justify-between">
                <div>
-                 <p className="text-[10px] text-slate-500 mb-1">Current</p>
-                 <p className="text-xs text-white font-semibold">1.6 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+                 <p className="text-[10px] text-slate-500 mb-1">Latest</p>
+                 <p className="text-xs text-white font-semibold">{workouts[0]?.caloriesBurned || 0} <span className="text-[10px] font-normal text-slate-500">kcal</span></p>
                </div>
                <div>
                  <p className="text-[10px] text-slate-500 mb-1">Average</p>
-                 <p className="text-xs text-white font-semibold">2.2 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+                 <p className="text-xs text-white font-semibold">{avgCals} <span className="text-[10px] font-normal text-slate-500">kcal</span></p>
                </div>
                <div>
                  <p className="text-[10px] text-slate-500 mb-1">Max</p>
-                 <p className="text-xs text-white font-semibold">4.2 <span className="text-[10px] font-normal text-slate-500">sec/sqt</span></p>
+                 <p className="text-xs text-white font-semibold">{maxCals} <span className="text-[10px] font-normal text-slate-500">kcal</span></p>
                </div>
              </div>
            </div>
         </div>
 
-        {/* Fitness Goal Building */}
+        {/* Recent Workouts */}
         <div className="flex flex-col justify-between">
            <div className="mb-4">
-             <h3 className="text-lg font-medium text-slate-200">Fitness Goal Building</h3>
-             <p className="text-lg font-medium text-slate-400">Your Fitness:</p>
+             <h3 className="text-lg font-medium text-slate-200">Recent Workouts</h3>
+             <p className="text-lg font-medium text-slate-400">Your Activity:</p>
            </div>
 
            <div className="space-y-3">
-             {/* Goal Item 1 */}
-             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
-                    <span className="text-sm font-bold text-white">10</span>
-                    <span className="text-[9px] text-slate-400">Min</span>
+             {workouts.length > 0 ? workouts.slice(0, 3).map((w, i) => (
+               <div key={w._id || w.id || i} className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
+                      <span className="text-sm font-bold text-white">{w.durationMinutes}</span>
+                      <span className="text-[9px] text-slate-400">Min</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-200">{w.name}</h4>
+                      <p className="text-[11px] text-slate-500">{w.date}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-200">ABS & Stretch</h4>
-                    <p className="text-[11px] text-slate-500">10 min / day</p>
+                  <div className={`w-10 h-10 rounded-full border flex items-center justify-center ${i % 2 === 0 ? 'border-emerald-500/30 text-emerald-400' : 'border-slate-700 text-slate-400'}`}>
+                    <span className="text-[10px]">{Math.min(100, Math.round((w.caloriesBurned / 500) * 100))}%</span>
                   </div>
-                </div>
-                <div className="w-10 h-10 rounded-full border border-emerald-500/30 flex items-center justify-center">
-                  <span className="text-[10px] text-emerald-400">55%</span>
-                </div>
-             </div>
-
-             {/* Goal Item 2 */}
-             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
-                    <span className="text-sm font-bold text-white">12</span>
-                    <span className="text-[9px] text-slate-400">Sets</span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-200">Side planks</h4>
-                    <p className="text-[11px] text-slate-500">12 sets / day</p>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center">
-                  <span className="text-[10px] text-slate-400">35%</span>
-                </div>
-             </div>
-
-             {/* Goal Item 3 */}
-             <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#1a1d24] flex flex-col items-center justify-center border border-slate-800">
-                    <span className="text-sm font-bold text-white">10</span>
-                    <span className="text-[9px] text-slate-400">Sets</span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-200">Rope lifting</h4>
-                    <p className="text-[11px] text-slate-500">10 sets / day</p>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full border border-emerald-500/30 flex items-center justify-center">
-                  <span className="text-[10px] text-emerald-400">50%</span>
-                </div>
-             </div>
+               </div>
+             )) : (
+               <p className="text-slate-400 text-sm">No recent workouts recorded.</p>
+             )}
            </div>
         </div>
 
@@ -270,41 +251,30 @@ export default function UserDashboard() {
                  <p className="text-slate-400 text-sm">No classes available.</p>
                )}
             </div>
-         </div>
-
-         {/* Trainer */}
+            {/* Trainer */}
          <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
             <div className="flex justify-between items-center mb-6">
-               <h3 className="text-lg font-medium text-slate-200">Trainer</h3>
+               <h3 className="text-lg font-medium text-slate-200">Trainers</h3>
                <button className="w-8 h-8 rounded-full bg-[#1a1d24] hover:bg-[#252a36] flex items-center justify-center text-slate-400 hover:text-white transition-colors">
-                 <ArrowUpRight size={16} />
+                  <ArrowUpRight size={14}/>
                </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-               {/* Trainer 1 */}
-               <div className="relative rounded-2xl overflow-hidden h-48 group cursor-pointer">
-                  <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=500&auto=format&fit=crop" alt="Trainer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-[#12141a]/60 to-transparent"></div>
-                  <div className="absolute bottom-3 left-3">
-                    <h4 className="text-xs font-semibold text-white">John Arnold</h4>
-                    <p className="text-[9px] text-slate-400">Cardio specialist</p>
-                  </div>
-               </div>
-               
-               {/* Trainer 2 */}
-               <div className="relative rounded-2xl overflow-hidden h-48 group cursor-pointer">
-                  <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=500&auto=format&fit=crop" alt="Trainer" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale mix-blend-luminosity opacity-80" />
-                  {/* Subtle emerald tint like in the image for the second card */}
-                  <div className="absolute inset-0 bg-emerald-900/30 mix-blend-overlay"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-[#12141a]/60 to-transparent"></div>
-                  <div className="absolute bottom-3 left-3">
-                    <h4 className="text-xs font-semibold text-white">Kathryn Murphy</h4>
-                    <p className="text-[9px] text-slate-400">Weight lifting specialist</p>
-                  </div>
-               </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               {uniqueTrainers.length > 0 ? uniqueTrainers.map((trainer, i) => (
+                 <div key={i} className="relative rounded-2xl overflow-hidden h-40 group cursor-pointer border border-slate-800">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${i === 0 ? 'from-slate-800 to-slate-900' : 'from-slate-700 to-slate-900'}`}></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 right-4">
+                       <h4 className="text-white font-bold text-sm">{trainer}</h4>
+                       <p className="text-slate-400 text-[10px]">Expert Coach</p>
+                    </div>
+                 </div>
+               )) : (
+                 <p className="text-slate-400 text-sm">No trainers available.</p>
+               )}
             </div>
-         </div>
+         </div>        </div>
 
       </div>
 

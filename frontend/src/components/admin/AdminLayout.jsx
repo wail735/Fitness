@@ -14,9 +14,9 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#0b0c10] text-white flex flex-col md:flex-row">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-slate-900 border-r border-slate-800 p-6 flex flex-col justify-between space-y-8">
+      <aside className="w-full md:w-64 bg-[#12141a] border-r border-slate-800/50 p-6 flex flex-col justify-between space-y-8">
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-red-600/20 text-red-500 rounded-xl border border-red-500/30">
@@ -54,7 +54,7 @@ export default function AdminLayout() {
           </nav>
         </div>
 
-        <div className="pt-6 border-t border-slate-800 space-y-3">
+        <div className="pt-6 border-t border-slate-800/50 space-y-3">
           <div className="text-xs text-slate-400 px-2">
             Connecté: <strong className="text-white block">{user?.name || "Administrateur"}</strong>
           </div>
