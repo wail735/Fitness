@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useFitness } from "../../context/FitnessContext";
 import {
   LayoutDashboard,
   BarChart2,
@@ -15,20 +16,49 @@ import {
   Sun,
   Moon,
   Plus,
-  LogOut
+  LogOut,
+  Dumbbell,
+  Utensils,
+  Activity,
+  BookOpen
 } from "lucide-react";
 import { ThemeContext } from "../../context/ThemeContext";
-import { useNavigate } from "react-router-dom";
 
 export default function PortalLayout() {
   const { user, logout } = useAuth();
+  const { classes, workouts, nutritionLogs } = useFitness();
   const location = useLocation();
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = React.useContext(ThemeContext);
+  const searchInputRef = useRef(null);
 
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Close search on Escape key
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") {
+        setShowSearch(false);
+        setSearchQuery("");
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  // Open search with Ctrl+K
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setShowSearch(true);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   React.useEffect(() => {
     if (!darkMode) {
@@ -39,6 +69,75 @@ export default function PortalLayout() {
   }, [darkMode]);
 
   const isActive = (path) => location.pathname === path;
+
+  // ── Smart search across real data ───────────────────────────────────────────
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q || q.length < 2) return [];
+
+    const results = [];
+
+    // Search workouts
+    workouts.filter(w => w.name?.toLowerCase().includes(q)).forEach(w => {
+      results.push({
+        type: "Entraînement",
+        icon: Dumbbell,
+        color: "text-emerald-400",
+        bg: "bg-emerald-500/10",
+        title: w.name,
+        meta: `${w.durationMinutes || 0} min · ${w.caloriesBurned || 0} kcal`,
+        action: () => { navigate("/my-workouts"); setShowSearch(false); setSearchQuery(""); },
+      });
+    });
+
+    // Search classes
+    classes.filter(c => c.name?.toLowerCase().includes(q) || c.category?.toLowerCase().includes(q) || c.trainer?.toLowerCase().includes(q)).forEach(c => {
+      results.push({
+        type: "Cours",
+        icon: CalendarDays,
+        color: "text-blue-400",
+        bg: "bg-blue-500/10",
+        title: c.name,
+        meta: `${c.day || ""} · ${c.time || ""} · ${c.trainer || ""}`,
+        action: () => { navigate("/my-dashboard"); setShowSearch(false); setSearchQuery(""); },
+      });
+    });
+
+    // Search nutrition logs
+    nutritionLogs.filter(n => n.food?.toLowerCase().includes(q) || n.meal?.toLowerCase().includes(q)).forEach(n => {
+      results.push({
+        type: "Nutrition",
+        icon: Utensils,
+        color: "text-amber-400",
+        bg: "bg-amber-500/10",
+        title: n.food,
+        meta: `${n.meal || ""} · ${n.calories || 0} kcal`,
+        action: () => { navigate("/my-nutrition"); setShowSearch(false); setSearchQuery(""); },
+      });
+    });
+
+    // Navigation shortcuts
+    const pages = [
+      { label: "Dashboard", path: "/my-dashboard" },
+      { label: "Analytics", path: "/my-workouts" },
+      { label: "Goals / Body", path: "/my-body" },
+      { label: "Timelines / Nutrition", path: "/my-nutrition" },
+      { label: "Paramètres", path: "/my-settings" },
+    ];
+    pages.filter(p => p.label.toLowerCase().includes(q)).forEach(p => {
+      results.push({
+        type: "Navigation",
+        icon: LayoutDashboard,
+        color: "text-purple-400",
+        bg: "bg-purple-500/10",
+        title: p.label,
+        meta: p.path,
+        action: () => { navigate(p.path); setShowSearch(false); setSearchQuery(""); },
+      });
+    });
+
+    return results.slice(0, 8); // max 8 results
+  }, [searchQuery, workouts, classes, nutritionLogs, navigate]);
 
   return (
     <div className="flex h-screen bg-[#0b0c10] text-slate-300 font-sans overflow-hidden">
@@ -137,9 +236,11 @@ export default function PortalLayout() {
               {/* Search */}
               <div 
                 onClick={() => setShowSearch(true)}
-                className="w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d24] rounded-xl text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors border border-slate-800/50 group"
               >
-                <Search size={16} />
+                <Search size={14} />
+                <span className="text-xs text-slate-500 hidden sm:block">Rechercher...</span>
+                <kbd className="hidden sm:flex items-center gap-0.5 text-[9px] font-semibold text-slate-600 px-1.5 py-0.5 bg-[#0b0c10] rounded border border-slate-700 ml-2">Ctrl K</kbd>
               </div>
               
               {/* Messages */}
@@ -208,31 +309,106 @@ export default function PortalLayout() {
 
       {/* Search Modal */}
       {showSearch && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-24 bg-black/80 backdrop-blur-sm" onClick={() => setShowSearch(false)}>
-          <div className="w-full max-w-xl bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center px-4 py-3 border-b border-slate-800/50">
-              <Search className="w-5 h-5 text-slate-400 mr-3" />
-              <input 
-                type="text" 
-                placeholder="Search workouts, classes, analytics..." 
-                className="flex-1 bg-transparent border-none text-white focus:outline-none focus:ring-0 text-sm"
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-16 bg-black/80 backdrop-blur-sm" onClick={() => { setShowSearch(false); setSearchQuery(""); }}>
+          <div className="w-full max-w-2xl bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            
+            {/* Search Input */}
+            <div className="flex items-center px-5 py-4 border-b border-slate-800/50 gap-3">
+              <Search className="w-5 h-5 text-slate-400 shrink-0" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Rechercher entraînements, cours, nutrition, pages..."
+                className="flex-1 bg-transparent border-none text-white placeholder-slate-500 focus:outline-none focus:ring-0 text-sm"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 autoFocus
               />
-              <button onClick={() => setShowSearch(false)} className="text-xs font-semibold text-slate-500 hover:text-white px-2 py-1 bg-[#1a1d24] rounded-lg">ESC</button>
+              <kbd className="text-[10px] font-semibold text-slate-500 px-2 py-1 bg-[#1a1d24] rounded-lg border border-slate-700">ESC</kbd>
             </div>
-            {searchQuery && (
-              <div className="p-2">
-                <div className="px-3 py-2 text-xs font-bold text-slate-500 uppercase">Results</div>
-                <div className="px-3 py-3 hover:bg-[#1a1d24] rounded-xl cursor-pointer text-sm text-slate-300 flex items-center gap-3">
-                  <BarChart2 size={16} className="text-emerald-500"/> Go to Analytics for "{searchQuery}"
+
+            {/* Results */}
+            <div className="max-h-96 overflow-y-auto custom-scrollbar">
+              {searchQuery.length >= 2 && searchResults.length === 0 && (
+                <div className="p-8 text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#1a1d24] flex items-center justify-center mx-auto mb-3">
+                    <Search className="w-5 h-5 text-slate-500" />
+                  </div>
+                  <p className="text-sm font-medium text-slate-400">Aucun résultat pour <span className="text-white">"{searchQuery}"</span></p>
+                  <p className="text-xs text-slate-500 mt-1">Essayez un autre terme de recherche.</p>
                 </div>
-                <div className="px-3 py-3 hover:bg-[#1a1d24] rounded-xl cursor-pointer text-sm text-slate-300 flex items-center gap-3">
-                  <CalendarDays size={16} className="text-emerald-500"/> Search Timelines for "{searchQuery}"
+              )}
+
+              {searchResults.length > 0 && (
+                <div className="p-3 space-y-1">
+                  {/* Group by type */}
+                  {["Entraînement", "Cours", "Nutrition", "Navigation"].map(type => {
+                    const group = searchResults.filter(r => r.type === type);
+                    if (group.length === 0) return null;
+                    return (
+                      <div key={type} className="mb-2">
+                        <div className="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">{type}</div>
+                        {group.map((result, i) => {
+                          const Icon = result.icon;
+                          return (
+                            <button
+                              key={i}
+                              onClick={result.action}
+                              className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[#1a1d24] rounded-xl transition-colors text-left group"
+                            >
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${result.bg} border border-slate-800/50`}>
+                                <Icon size={16} className={result.color} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-white truncate group-hover:text-emerald-400 transition-colors">{result.title}</p>
+                                <p className="text-xs text-slate-500 truncate">{result.meta}</p>
+                              </div>
+                              <Activity size={14} className="text-slate-600 group-hover:text-slate-400 shrink-0" />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
                 </div>
+              )}
+
+              {/* Default state - show quick nav */}
+              {!searchQuery && (
+                <div className="p-3">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Navigation Rapide</div>
+                  {[
+                    { label: "Dashboard", path: "/my-dashboard", icon: LayoutDashboard, color: "text-emerald-400", bg: "bg-emerald-500/10" },
+                    { label: "Analytics", path: "/my-workouts", icon: BarChart2, color: "text-blue-400", bg: "bg-blue-500/10" },
+                    { label: "Goals / Body", path: "/my-body", icon: Target, color: "text-amber-400", bg: "bg-amber-500/10" },
+                    { label: "Timelines / Nutrition", path: "/my-nutrition", icon: CalendarDays, color: "text-purple-400", bg: "bg-purple-500/10" },
+                  ].map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.path}
+                        onClick={() => { navigate(item.path); setShowSearch(false); }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[#1a1d24] rounded-xl transition-colors text-left"
+                      >
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${item.bg} border border-slate-800/50`}>
+                          <Icon size={16} className={item.color} />
+                        </div>
+                        <span className="text-sm font-medium text-slate-300 hover:text-white">{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Footer hint */}
+            <div className="px-5 py-3 border-t border-slate-800/50 bg-[#0b0c10] flex items-center justify-between">
+              <span className="text-[10px] text-slate-500">{searchResults.length > 0 ? `${searchResults.length} résultat${searchResults.length > 1 ? 's' : ''}` : "Tapez pour rechercher"}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#1a1d24] rounded border border-slate-700 text-slate-400">↵</kbd> pour ouvrir</span>
+                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#1a1d24] rounded border border-slate-700 text-slate-400">ESC</kbd> pour fermer</span>
               </div>
-            )}
+            </div>
           </div>
         </div>
       )}
