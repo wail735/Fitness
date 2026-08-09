@@ -164,42 +164,63 @@ export default function PortalLayout() {
           <div>
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Main Menu</h4>
             <ul className="space-y-1">
-              <li>
-                <Link to="/my-dashboard" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-dashboard') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <LayoutDashboard size={18} />
-                  <span className="text-sm font-medium">Dashboard</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/my-workouts" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-workouts') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <BarChart2 size={18} />
-                  <span className="text-sm font-medium">Analytics</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/my-body" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-body') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <Target size={18} />
-                  <span className="text-sm font-medium">Goals</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/my-nutrition" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-nutrition') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <CalendarDays size={18} />
-                  <span className="text-sm font-medium">Timelines</span>
-                </Link>
-              </li>
+              {user?.role === "coach" ? (
+                <>
+                  <li>
+                    <Link to="/coach" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <LayoutDashboard size={18} />
+                      <span className="text-sm font-medium">Dashboard</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/coach/builder" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach/builder') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <Dumbbell size={18} />
+                      <span className="text-sm font-medium">Program Builder</span>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/my-dashboard" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-dashboard') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <LayoutDashboard size={18} />
+                      <span className="text-sm font-medium">Dashboard</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/my-workouts" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-workouts') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <BarChart2 size={18} />
+                      <span className="text-sm font-medium">Analytics</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/my-body" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-body') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <Target size={18} />
+                      <span className="text-sm font-medium">Goals</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/my-nutrition" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-nutrition') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                      <CalendarDays size={18} />
+                      <span className="text-sm font-medium">Timelines</span>
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 
           <div>
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Settings & Help</h4>
             <ul className="space-y-1">
-              <li>
-                <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <Settings size={18} />
-                  <span className="text-sm font-medium">Settings</span>
-                </Link>
-              </li>
+              {user?.role !== "coach" && (
+                <li>
+                  <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Settings size={18} />
+                    <span className="text-sm font-medium">Settings</span>
+                  </Link>
+                </li>
+              )}
               <li>
                 <button 
                   onClick={() => { logout(); navigate("/"); }}

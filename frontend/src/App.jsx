@@ -81,8 +81,10 @@ function App() {
 
                     {/* Espace Coach (Protégé) */}
                     <Route element={<AdminProtectedRoute allowedRoles={["coach", "admin"]} />}>
-                      <Route path="/coach" element={<CoachDashboard />} />
-                      <Route path="/coach/builder" element={<WorkoutBuilder />} />
+                      <Route element={<PortalLayout />}>
+                        <Route path="/coach" element={<CoachDashboard />} />
+                        <Route path="/coach/builder" element={<WorkoutBuilder />} />
+                      </Route>
                     </Route>
 
                     {/* Espace Administration (Protégé) */}
