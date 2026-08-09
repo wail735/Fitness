@@ -211,72 +211,45 @@ export default function UserDashboard() {
 
       </div>
 
-      {/* Grid: Recommended Activity & Trainer */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-         
-         {/* Recommended activity */}
-         <div className="lg:col-span-2 bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
-            <div className="flex justify-between items-center mb-6">
-               <h3 className="text-lg font-medium text-slate-200">Recommended activity</h3>
-               <div className="flex gap-2">
-                 <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white"><div className="w-3 h-0.5 bg-current"></div><div className="w-3 h-0.5 bg-current mt-1"></div></button>
-                 <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white flex-wrap content-center gap-0.5"><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div></button>
-               </div>
+      {/* Recommended Activity - full width */}
+      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 mt-2">
+         <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-medium text-slate-200">Recommended activity</h3>
+            <div className="flex gap-2">
+              <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white"><div className="w-3 h-0.5 bg-current"></div><div className="w-3 h-0.5 bg-current mt-1"></div></button>
+              <button className="w-8 h-8 rounded-lg bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-white flex-wrap content-center gap-0.5"><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div><div className="w-1.5 h-1.5 bg-current"></div></button>
             </div>
+         </div>
 
-            <div className="space-y-1">
-               {classes && classes.length > 0 ? classes.slice(0, 4).map((c, i) => (
-                 <React.Fragment key={c.id || c._id || i}>
-                   <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-2xl group-hover:bg-[#252a36] flex items-center justify-center ${i % 2 === 0 ? 'bg-[#1a1d24] text-slate-300' : 'bg-emerald-500/10 text-emerald-400'}`}>
-                          {i % 4 === 0 ? '🏃' : i % 4 === 1 ? '🚴' : i % 4 === 2 ? '🏋️' : '🧘'}
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-semibold text-slate-200">{c.name}</h4>
-                          <p className="text-[11px] text-slate-500">{c.day}</p>
-                        </div>
-                      </div>
-                      <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-                        <Clock size={12}/> {c.time}
-                      </div>
-                      <div className={`text-xs font-semibold px-3 py-1.5 rounded-lg ${i % 2 !== 0 ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36]'}`}>
-                        {c.trainer}
-                      </div>
-                      <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+         <div className="space-y-1">
+            {classes && classes.length > 0 ? classes.slice(0, 4).map((c, i) => (
+              <React.Fragment key={c.id || c._id || i}>
+                <div className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors group">
+                   <div className="flex items-center gap-4">
+                     <div className={`w-12 h-12 rounded-2xl group-hover:bg-[#252a36] flex items-center justify-center ${i % 2 === 0 ? 'bg-[#1a1d24] text-slate-300' : 'bg-emerald-500/10 text-emerald-400'}`}>
+                       {i % 4 === 0 ? '🏃' : i % 4 === 1 ? '🚴' : i % 4 === 2 ? '🏋️' : '🧘'}
+                     </div>
+                     <div>
+                       <h4 className="text-sm font-semibold text-slate-200">{c.name}</h4>
+                       <p className="text-[11px] text-slate-500">{c.day}</p>
+                     </div>
                    </div>
-                   {i < Math.min(classes.length - 1, 3) && <div className="w-full h-px bg-slate-800/50 my-1"></div>}
-                 </React.Fragment>
-               )) : (
-                 <p className="text-slate-400 text-sm">No classes available.</p>
-               )}
-            </div>
-            {/* Trainer */}
-         <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
-            <div className="flex justify-between items-center mb-6">
-               <h3 className="text-lg font-medium text-slate-200">Trainers</h3>
-               <button className="w-8 h-8 rounded-full bg-[#1a1d24] hover:bg-[#252a36] flex items-center justify-center text-slate-400 hover:text-white transition-colors">
-                  <ArrowUpRight size={14}/>
-               </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-               {uniqueTrainers.length > 0 ? uniqueTrainers.map((trainer, i) => (
-                 <div key={i} className="relative rounded-2xl overflow-hidden h-40 group cursor-pointer border border-slate-800">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${i === 0 ? 'from-slate-800 to-slate-900' : 'from-slate-700 to-slate-900'}`}></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                       <h4 className="text-white font-bold text-sm">{trainer}</h4>
-                       <p className="text-slate-400 text-[10px]">Expert Coach</p>
-                    </div>
-                 </div>
-               )) : (
-                 <p className="text-slate-400 text-sm">No trainers available.</p>
-               )}
-            </div>
-         </div>        </div>
-
+                   <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+                     <Clock size={12}/> {c.time}
+                   </div>
+                   <div className={`text-xs font-semibold px-3 py-1.5 rounded-lg ${i % 2 !== 0 ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-slate-300 bg-[#1a1d24] group-hover:bg-[#252a36]'}`}>
+                     {c.trainer}
+                   </div>
+                   <button className="text-slate-500 hover:text-white"><MoreHorizontal size={16}/></button>
+                </div>
+                {i < Math.min(classes.length - 1, 3) && <div className="w-full h-px bg-slate-800/50 my-1"></div>}
+              </React.Fragment>
+            )) : (
+              <p className="text-slate-400 text-sm">No classes available.</p>
+            )}
+         </div>
       </div>
+
 
     </div>
   );
