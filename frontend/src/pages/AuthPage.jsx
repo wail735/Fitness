@@ -218,14 +218,7 @@ export default function AuthPage() {
               </div>
             )}
 
-            {/* Demo credentials hint for non-members */}
-            {(activeTab === "coach" || activeTab === "admin") && (
-              <div className="mt-8 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 text-xs text-slate-500 dark:text-slate-400">
-                <p className="font-semibold text-slate-700 dark:text-slate-300 mb-1">Comptes de démonstration :</p>
-                <p>Admin : <span className="font-mono text-blue-600 dark:text-blue-400">admin@fitness-club.com / admin1234</span></p>
-                <p>Coach : <span className="font-mono text-amber-600 dark:text-amber-400">coach@fitness-club.com / coach1234</span></p>
-              </div>
-            )}
+
 
           </div>
         </div>
