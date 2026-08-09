@@ -27,7 +27,6 @@ export default function PortalLayout() {
   const { darkMode, setDarkMode } = React.useContext(ThemeContext);
 
   const [showSearch, setShowSearch] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -97,22 +96,22 @@ export default function PortalLayout() {
             <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Settings & Help</h4>
             <ul className="space-y-1">
               <li>
-                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
                   <Settings size={18} />
                   <span className="text-sm font-medium">Settings</span>
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <Link to="/my-appearance" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-appearance') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
                   <Paintbrush size={18} />
                   <span className="text-sm font-medium">Appearance</span>
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]">
+                <Link to="/my-support" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-support') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
                   <HelpCircle size={18} />
                   <span className="text-sm font-medium">Support</span>
-                </button>
+                </Link>
               </li>
               <li>
                 <button 
@@ -246,51 +245,6 @@ export default function PortalLayout() {
                 </div>
               </div>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* Settings Modal */}
-      {showSettings && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setShowSettings(false)}>
-          <div className="w-full max-w-md bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-2xl space-y-6" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Settings</h2>
-              <button onClick={() => setShowSettings(false)} className="text-slate-400 hover:text-white"><Plus className="w-5 h-5 rotate-45" /></button>
-            </div>
-            <div className="space-y-4">
-               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
-                 <div>
-                   <h4 className="text-sm font-semibold text-white">Profile Visibility</h4>
-                   <p className="text-xs text-slate-400">Make your profile public</p>
-                 </div>
-                 <div className="w-10 h-5 bg-emerald-500 rounded-full relative cursor-pointer">
-                    <div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>
-                 </div>
-               </div>
-               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
-                 <div>
-                   <h4 className="text-sm font-semibold text-white">Email Notifications</h4>
-                   <p className="text-xs text-slate-400">Receive daily summaries</p>
-                 </div>
-                 <div className="w-10 h-5 bg-[#1a1d24] rounded-full relative cursor-pointer border border-slate-800">
-                    <div className="absolute left-1 top-1 w-3 h-3 bg-slate-500 rounded-full"></div>
-                 </div>
-               </div>
-               <div className="p-4 bg-[#0b0c10] border border-slate-800/50 rounded-2xl flex items-center justify-between">
-                 <div>
-                   <h4 className="text-sm font-semibold text-white">Theme Preference</h4>
-                   <p className="text-xs text-slate-400">Toggle dark/light mode</p>
-                 </div>
-                 <button 
-                    onClick={() => setDarkMode(!darkMode)}
-                    className="px-3 py-1.5 bg-[#1a1d24] text-xs font-semibold text-white rounded-lg border border-slate-700 hover:bg-slate-800"
-                 >
-                   {darkMode ? 'Dark' : 'Light'}
-                 </button>
-               </div>
-            </div>
-            <button onClick={() => setShowSettings(false)} className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20">Save Preferences</button>
           </div>
         </div>
       )}

@@ -29,6 +29,9 @@ import UserDashboard from "./components/user/UserDashboard";
 import WorkoutTracker from "./components/user/WorkoutTracker";
 import BodyTracker from "./components/user/BodyTracker";
 import NutritionTracker from "./components/user/NutritionTracker";
+import SettingsPage from "./components/user/Settings";
+import AppearancePage from "./components/user/Appearance";
+import SupportPage from "./components/user/Support";
 
 // Coach Portal Pages
 import CoachDashboard from "./components/coach/CoachDashboard";
@@ -67,6 +70,9 @@ function App() {
                       <Route path="/my-workouts" element={<WorkoutTracker />} />
                       <Route path="/my-body" element={<BodyTracker />} />
                       <Route path="/my-nutrition" element={<NutritionTracker />} />
+                      <Route path="/my-settings" element={<SettingsPage />} />
+                      <Route path="/my-appearance" element={<AppearancePage />} />
+                      <Route path="/my-support" element={<SupportPage />} />
                     </Route>
 
                     {/* Zone 2: Espace Professionnel & Connexion */}
