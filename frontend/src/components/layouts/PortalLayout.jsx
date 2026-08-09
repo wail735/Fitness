@@ -26,7 +26,7 @@ import { ThemeContext } from "../../context/ThemeContext";
 
 export default function PortalLayout() {
   const { user, logout } = useAuth();
-  const { classes, workouts, nutritionLogs } = useFitness();
+  const { classes, workouts, nutritionLogs, routines } = useFitness();
   const location = useLocation();
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = React.useContext(ThemeContext);
@@ -76,21 +76,52 @@ export default function PortalLayout() {
     if (!q || q.length < 2) return [];
 
     const results = [];
+    const isCoach = user?.role === "coach";
 
-    // Search workouts
-    workouts.filter(w => w.name?.toLowerCase().includes(q)).forEach(w => {
-      results.push({
-        type: "Entraînement",
-        icon: Dumbbell,
-        color: "text-emerald-400",
-        bg: "bg-emerald-500/10",
-        title: w.name,
-        meta: `${w.durationMinutes || 0} min · ${w.caloriesBurned || 0} kcal`,
-        action: () => { navigate("/my-workouts"); setShowSearch(false); setSearchQuery(""); },
+    if (!isCoach) {
+      // Search workouts (User only)
+      workouts.filter(w => w.name?.toLowerCase().includes(q)).forEach(w => {
+        results.push({
+          type: "Entraînement",
+          icon: Dumbbell,
+          color: "text-emerald-400",
+          bg: "bg-emerald-500/10",
+          title: w.name,
+          meta: `${w.durationMinutes || 0} min · ${w.caloriesBurned || 0} kcal`,
+          action: () => { navigate("/my-workouts"); setShowSearch(false); setSearchQuery(""); },
+        });
       });
-    });
 
-    // Search classes
+      // Search nutrition logs (User only)
+      nutritionLogs.filter(n => n.food?.toLowerCase().includes(q) || n.meal?.toLowerCase().includes(q)).forEach(n => {
+        results.push({
+          type: "Nutrition",
+          icon: Utensils,
+          color: "text-amber-400",
+          bg: "bg-amber-500/10",
+          title: n.food,
+          meta: `${n.meal || ""} · ${n.calories || 0} kcal`,
+          action: () => { navigate("/my-nutrition"); setShowSearch(false); setSearchQuery(""); },
+        });
+      });
+    }
+
+    if (isCoach && routines) {
+      // Search routines (Coach only)
+      routines.filter(r => r.title?.toLowerCase().includes(q)).forEach(r => {
+        results.push({
+          type: "Programme",
+          icon: Dumbbell,
+          color: "text-purple-400",
+          bg: "bg-purple-500/10",
+          title: r.title,
+          meta: `${r.target || ""} · ${r.exercisesCount || 0} exercices`,
+          action: () => { navigate("/coach"); setShowSearch(false); setSearchQuery(""); },
+        });
+      });
+    }
+
+    // Search classes (Both)
     classes.filter(c => c.name?.toLowerCase().includes(q) || c.category?.toLowerCase().includes(q) || c.trainer?.toLowerCase().includes(q)).forEach(c => {
       results.push({
         type: "Cours",
@@ -99,37 +130,28 @@ export default function PortalLayout() {
         bg: "bg-blue-500/10",
         title: c.name,
         meta: `${c.day || ""} · ${c.time || ""} · ${c.trainer || ""}`,
-        action: () => { navigate("/my-dashboard"); setShowSearch(false); setSearchQuery(""); },
-      });
-    });
-
-    // Search nutrition logs
-    nutritionLogs.filter(n => n.food?.toLowerCase().includes(q) || n.meal?.toLowerCase().includes(q)).forEach(n => {
-      results.push({
-        type: "Nutrition",
-        icon: Utensils,
-        color: "text-amber-400",
-        bg: "bg-amber-500/10",
-        title: n.food,
-        meta: `${n.meal || ""} · ${n.calories || 0} kcal`,
-        action: () => { navigate("/my-nutrition"); setShowSearch(false); setSearchQuery(""); },
+        action: () => { navigate(isCoach ? "/coach" : "/my-dashboard"); setShowSearch(false); setSearchQuery(""); },
       });
     });
 
     // Navigation shortcuts
-    const pages = [
+    const pages = isCoach ? [
+      { label: "Dashboard", path: "/coach" },
+      { label: "Program Builder", path: "/coach/builder" }
+    ] : [
       { label: "Dashboard", path: "/my-dashboard" },
       { label: "Analytics", path: "/my-workouts" },
       { label: "Goals / Body", path: "/my-body" },
       { label: "Timelines / Nutrition", path: "/my-nutrition" },
       { label: "Paramètres", path: "/my-settings" },
     ];
+
     pages.filter(p => p.label.toLowerCase().includes(q)).forEach(p => {
       results.push({
         type: "Navigation",
         icon: LayoutDashboard,
-        color: "text-purple-400",
-        bg: "bg-purple-500/10",
+        color: "text-indigo-400",
+        bg: "bg-indigo-500/10",
         title: p.label,
         meta: p.path,
         action: () => { navigate(p.path); setShowSearch(false); setSearchQuery(""); },
@@ -137,7 +159,7 @@ export default function PortalLayout() {
     });
 
     return results.slice(0, 8); // max 8 results
-  }, [searchQuery, workouts, classes, nutritionLogs, navigate]);
+  }, [searchQuery, workouts, classes, nutritionLogs, routines, navigate, user]);
 
   return (
     <div className="flex h-screen bg-[#0b0c10] text-slate-300 font-sans overflow-hidden">
@@ -363,7 +385,7 @@ export default function PortalLayout() {
               {searchResults.length > 0 && (
                 <div className="p-3 space-y-1">
                   {/* Group by type */}
-                  {["Entraînement", "Cours", "Nutrition", "Navigation"].map(type => {
+                  {["Entraînement", "Programme", "Cours", "Nutrition", "Navigation"].map(type => {
                     const group = searchResults.filter(r => r.type === type);
                     if (group.length === 0) return null;
                     return (
@@ -398,12 +420,15 @@ export default function PortalLayout() {
               {!searchQuery && (
                 <div className="p-3">
                   <div className="px-3 py-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Navigation Rapide</div>
-                  {[
+                  {(user?.role === "coach" ? [
+                    { label: "Dashboard Coach", path: "/coach", icon: LayoutDashboard, color: "text-emerald-400", bg: "bg-emerald-500/10" },
+                    { label: "Program Builder", path: "/coach/builder", icon: Dumbbell, color: "text-purple-400", bg: "bg-purple-500/10" },
+                  ] : [
                     { label: "Dashboard", path: "/my-dashboard", icon: LayoutDashboard, color: "text-emerald-400", bg: "bg-emerald-500/10" },
                     { label: "Analytics", path: "/my-workouts", icon: BarChart2, color: "text-blue-400", bg: "bg-blue-500/10" },
                     { label: "Goals / Body", path: "/my-body", icon: Target, color: "text-amber-400", bg: "bg-amber-500/10" },
                     { label: "Timelines / Nutrition", path: "/my-nutrition", icon: CalendarDays, color: "text-purple-400", bg: "bg-purple-500/10" },
-                  ].map((item) => {
+                  ]).map((item) => {
                     const Icon = item.icon;
                     return (
                       <button
