@@ -62,6 +62,7 @@ export default function CoachDashboard() {
   const [routines, setRoutines] = useState([]);
   const [stats, setStats]       = useState({ totalMembers: 0, totalRoutines: 0, totalBookings: 0 });
   const [loading, setLoading]   = useState(true);
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -153,7 +154,6 @@ export default function CoachDashboard() {
                       </div>
                       <div>
                         <h4 className="text-sm font-semibold text-slate-200">{m.name}</h4>
-                        <p className="text-[11px] text-slate-500">{m.email}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -199,7 +199,11 @@ export default function CoachDashboard() {
                 const lvl = levels[r.target] || levels["Intermédiaire"];
 
                 return (
-                  <div key={r._id || r.id} className="bg-gradient-to-r from-[#1a1d24] to-[#12141a] border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-slate-700 transition-colors">
+                  <div 
+                    key={r._id || r.id} 
+                    onClick={() => setSelectedRoutine(r)}
+                    className="bg-gradient-to-r from-[#1a1d24] to-[#12141a] border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-slate-700 transition-colors cursor-pointer"
+                  >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl ${lvl.bg} border ${lvl.border} flex flex-col items-center justify-center shrink-0`}>
                         <Dumbbell size={18} className={lvl.color} />
@@ -225,6 +229,47 @@ export default function CoachDashboard() {
         </div>
 
       </div>
+
+      {/* Routine Detail Modal */}
+      {selectedRoutine && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedRoutine(null)}>
+          <div className="bg-[#12141a] border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col items-center justify-center shrink-0">
+                  <Dumbbell size={18} className="text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white leading-tight">{selectedRoutine.title}</h3>
+                  <p className="text-xs text-slate-400 mt-1">Créé le {new Date(selectedRoutine.createdAt || Date.now()).toLocaleDateString("fr-FR")}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium text-slate-400">Niveau Cible</span>
+                <span className="text-sm font-bold text-emerald-400">{selectedRoutine.target}</span>
+              </div>
+              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium text-slate-400">Nombre d'exercices</span>
+                <span className="text-sm font-bold text-white">{selectedRoutine.exercisesCount} exercices</span>
+              </div>
+              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium text-slate-400">Membres assignés</span>
+                <span className="text-sm font-bold text-white">Tous (Global)</span>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setSelectedRoutine(null)}
+              className="w-full mt-8 bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 rounded-xl transition-colors"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
