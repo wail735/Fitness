@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
 const bodyMetricSchema = new mongoose.Schema({
-  userId:     { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  date:       { type: String, required: true },
-  weightKg:   { type: Number, required: true },
-  bodyFatPct: { type: Number, default: 0 },
-  waistCm:    { type: Number, default: 0 },
+  userId:       { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  date:         { type: String, required: true },
+  weightKg:     { type: Number, required: true },
+  bodyFatPct:   { type: Number, default: 0 },
+  waistCm:      { type: Number, default: 0 },
+  heartRate:    { type: Number, default: 0 },
+  hydrationPct: { type: Number, default: 0 },
+  bloodCellsUl: { type: Number, default: 0 },
 }, { timestamps: true });
 
 const nutritionLogSchema = new mongoose.Schema({

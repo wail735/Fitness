@@ -12,14 +12,20 @@ export default function BodyTracker() {
   const [weight, setWeight] = useState(75);
   const [fatPct, setFatPct] = useState(16);
   const [waist, setWaist] = useState(80);
+  const [heartRate, setHeartRate] = useState(72);
+  const [hydrationPct, setHydrationPct] = useState(60);
+  const [bloodCellsUl, setBloodCellsUl] = useState(1100);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addBodyMetric({
       date: new Date().toISOString().split("T")[0],
-      weightKg: Number(weight),
-      bodyFatPct: Number(fatPct),
-      waistCm: Number(waist),
+      weightKg:     Number(weight),
+      bodyFatPct:   Number(fatPct),
+      waistCm:      Number(waist),
+      heartRate:    Number(heartRate),
+      hydrationPct: Number(hydrationPct),
+      bloodCellsUl: Number(bloodCellsUl),
     });
     setShowModal(false);
   };
@@ -94,6 +100,45 @@ export default function BodyTracker() {
         </div>
       </div>
 
+      {/* Extra health stats */}
+      {latestMetric && (latestMetric.heartRate > 0 || latestMetric.hydrationPct > 0 || latestMetric.bloodCellsUl > 0) && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {latestMetric.heartRate > 0 && (
+            <div className="bg-[#12141a] border border-red-500/20 rounded-2xl p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                <Activity size={20} className="text-red-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 mb-1">Fréquence Cardiaque</p>
+                <p className="text-2xl font-bold text-white leading-none">{latestMetric.heartRate}<span className="text-xs text-slate-500 font-normal ml-1">bpm</span></p>
+              </div>
+            </div>
+          )}
+          {latestMetric.hydrationPct > 0 && (
+            <div className="bg-[#12141a] border border-cyan-500/20 rounded-2xl p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                <Ruler size={20} className="text-cyan-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 mb-1">Hydratation</p>
+                <p className="text-2xl font-bold text-white leading-none">{latestMetric.hydrationPct}<span className="text-xs text-slate-500 font-normal ml-1">%</span></p>
+              </div>
+            </div>
+          )}
+          {latestMetric.bloodCellsUl > 0 && (
+            <div className="bg-[#12141a] border border-purple-500/20 rounded-2xl p-5 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                <Scale size={20} className="text-purple-400" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 mb-1">Cellules Sanguines</p>
+                <p className="text-2xl font-bold text-white leading-none">{latestMetric.bloodCellsUl}<span className="text-xs text-slate-500 font-normal ml-1">µl</span></p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Weight Chart */}
       <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
         <h3 className="text-sm font-semibold text-slate-400 mb-6 flex items-center gap-2">
@@ -159,6 +204,20 @@ export default function BodyTracker() {
                 <div>
                   <label className={labelClass}>Tour de Taille (cm)</label>
                   <input type="number" step="0.5" value={waist} onChange={(e) => setWaist(e.target.value)} className={inputClass} />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className={labelClass}>Rythme Cardiaque (bpm)</label>
+                  <input type="number" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} className={inputClass} placeholder="72" />
+                </div>
+                <div>
+                  <label className={labelClass}>Hydratation (%)</label>
+                  <input type="number" value={hydrationPct} onChange={(e) => setHydrationPct(e.target.value)} className={inputClass} placeholder="60" />
+                </div>
+                <div>
+                  <label className={labelClass}>Cellules Sanguines (µl)</label>
+                  <input type="number" value={bloodCellsUl} onChange={(e) => setBloodCellsUl(e.target.value)} className={inputClass} placeholder="1100" />
                 </div>
               </div>
               <div className="flex gap-2 justify-end pt-2">

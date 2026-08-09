@@ -56,7 +56,7 @@ const getBodyMetrics = async (req, res) => {
 
 // POST /api/users/me/body-metrics
 const createBodyMetric = async (req, res) => {
-  const { date, weightKg, bodyFatPct, waistCm } = req.body;
+  const { date, weightKg, bodyFatPct, waistCm, heartRate, hydrationPct, bloodCellsUl } = req.body;
   if (!date || !weightKg)
     return res.status(400).json({ error: 'Date et poids sont requis.' });
 
@@ -64,9 +64,12 @@ const createBodyMetric = async (req, res) => {
     const metric = await BodyMetric.create({
       userId: req.user.id,
       date,
-      weightKg: Number(weightKg),
-      bodyFatPct: Number(bodyFatPct) || 0,
-      waistCm: Number(waistCm) || 0,
+      weightKg:     Number(weightKg),
+      bodyFatPct:   Number(bodyFatPct)   || 0,
+      waistCm:      Number(waistCm)      || 0,
+      heartRate:    Number(heartRate)    || 0,
+      hydrationPct: Number(hydrationPct) || 0,
+      bloodCellsUl: Number(bloodCellsUl) || 0,
     });
     res.status(201).json(metric);
   } catch (err) {
