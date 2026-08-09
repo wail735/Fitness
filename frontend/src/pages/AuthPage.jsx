@@ -129,6 +129,7 @@ export default function AuthPage() {
                 exit="exit"
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-5"
+                autoComplete="off"
               >
                 
                 {/* For Member Signup: Name Field */}
@@ -162,6 +163,7 @@ export default function AuthPage() {
                       required 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="off"
                       className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
                       placeholder="vous@exemple.com"
                     />
@@ -179,6 +181,7 @@ export default function AuthPage() {
                       required 
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="new-password"
                       className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all" 
                       placeholder="••••••••"
                     />
