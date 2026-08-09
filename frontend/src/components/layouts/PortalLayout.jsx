@@ -102,18 +102,6 @@ export default function PortalLayout() {
                 </Link>
               </li>
               <li>
-                <Link to="/my-appearance" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-appearance') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <Paintbrush size={18} />
-                  <span className="text-sm font-medium">Appearance</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/my-support" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-support') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
-                  <HelpCircle size={18} />
-                  <span className="text-sm font-medium">Support</span>
-                </Link>
-              </li>
-              <li>
                 <button 
                   onClick={() => { logout(); navigate("/"); }}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-red-500 hover:text-red-400 hover:bg-red-500/10"
