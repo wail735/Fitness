@@ -1,5 +1,7 @@
 const Workout  = require('../models/Workout.model');
 const { BodyMetric, NutritionLog } = require('../models/misc.models');
+const User = require('../models/User.model');
+const bcrypt = require('bcryptjs');
 
 // GET /api/users/me/workouts
 const getWorkouts = async (req, res) => {
@@ -105,8 +107,50 @@ const createNutritionLog = async (req, res) => {
   }
 };
 
+// PUT /api/users/me/profile
+const updateProfile = async (req, res) => {
+  const { name, email } = req.body;
+  if (!name || !email)
+    return res.status(400).json({ error: 'Nom et email sont requis.' });
+
+  try {
+    const existing = await User.findOne({ email, _id: { $ne: req.user.id } });
+    if (existing)
+      return res.status(409).json({ error: 'Cet email est déjà utilisé par un autre compte.' });
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { name, email },
+      { new: true, runValidators: true }
+    );
+    res.json({ user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la mise à jour du profil.', detail: err.message });
+  }
+};
+
+// PUT /api/users/me/password
+const updatePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword)
+    return res.status(400).json({ error: 'Mot de passe actuel et nouveau sont requis.' });
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user.comparePassword(currentPassword))
+      return res.status(401).json({ error: 'Mot de passe actuel incorrect.' });
+
+    user.password = newPassword;
+    await user.save();
+    res.json({ message: 'Mot de passe mis à jour avec succès.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors du changement de mot de passe.', detail: err.message });
+  }
+};
+
 module.exports = {
   getWorkouts, createWorkout, deleteWorkout,
   getBodyMetrics, createBodyMetric,
   getNutritionLogs, createNutritionLog,
+  updateProfile, updatePassword,
 };

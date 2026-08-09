@@ -63,6 +63,27 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateProfile = async (name, email) => {
+    try {
+      const { data } = await api.put("/users/me/profile", { name, email });
+      setUser(data.user);
+      return { success: true };
+    } catch (err) {
+      const message = err.response?.data?.error || "Erreur lors de la mise à jour.";
+      return { success: false, error: message };
+    }
+  };
+
+  const updatePassword = async (currentPassword, newPassword) => {
+    try {
+      await api.put("/users/me/password", { currentPassword, newPassword });
+      return { success: true };
+    } catch (err) {
+      const message = err.response?.data?.error || "Erreur lors du changement de mot de passe.";
+      return { success: false, error: message };
+    }
+  };
+
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
@@ -75,6 +96,8 @@ export const AuthProvider = ({ children }) => {
         register,
         loginDirect,
         logout,
+        updateProfile,
+        updatePassword,
         isAuthModalOpen,
         openAuthModal,
         closeAuthModal,

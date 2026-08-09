@@ -4,10 +4,14 @@ const {
   getWorkouts, createWorkout, deleteWorkout,
   getBodyMetrics, createBodyMetric,
   getNutritionLogs, createNutritionLog,
+  updateProfile, updatePassword,
 } = require('../controllers/user.controller');
 
 // All user routes are protected
 router.use(authMiddleware);
+
+router.put('/me/profile',         updateProfile);
+router.put('/me/password',        updatePassword);
 
 router.get('/me/workouts',        getWorkouts);
 router.post('/me/workouts',       createWorkout);
