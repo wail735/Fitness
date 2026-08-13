@@ -4,7 +4,7 @@ import NavBar from "../NavBar";
 
 export const PublicLayout = () => {
   return (
-    <div className="relative bg-white dark:bg-[#151515] text-black dark:text-white transition-colors duration-300 min-h-screen flex flex-col">
+    <div className="relative bg-white dark:bg-[#151515] text-black dark:text-white text-slate-900 transition-colors duration-300 min-h-screen flex flex-col">
       <NavBar />
       <main className="flex-grow">
         <Outlet />

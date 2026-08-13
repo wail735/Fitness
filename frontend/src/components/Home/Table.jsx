@@ -77,7 +77,7 @@ function Table() {
 
   return (
     <section
-      className="py-20 bg-white dark:bg-[#151515] text-black dark:text-white transition-colors duration-300"
+      className="py-20 bg-white dark:bg-[#151515] dark:text-white text-slate-900 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
@@ -149,7 +149,7 @@ function Table() {
                   className="border-t border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
                 >
                   <td
-                    className="font-extrabold text-xl px-6 py-7 text-black dark:text-white bg-gray-50 dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
+                    className="font-extrabold text-xl px-6 py-7 dark:text-white text-slate-900 bg-gray-50 dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-[#2a2a2a] transition-colors duration-300"
                   >
                     {row.time}
                   </td>

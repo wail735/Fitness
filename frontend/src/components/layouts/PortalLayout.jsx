@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import api from "../../api/axiosConfig";
 import { useAuth } from "../../context/AuthContext";
 import { useFitness } from "../../context/FitnessContext";
 import {
@@ -35,6 +36,50 @@ export default function PortalLayout() {
   const [showSearch, setShowSearch] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Notification state
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch notifications
+  useEffect(() => {
+    if (!user) return;
+    const fetchNotifications = async () => {
+      try {
+        const { data } = await api.get('/notifications');
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
+      } catch (err) {
+        console.error('Error fetching notifications:', err);
+      }
+    };
+    fetchNotifications();
+    
+    // Optional: set interval to poll notifications every 60s
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  const markAllAsRead = async () => {
+    try {
+      await api.patch('/notifications/read-all');
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const markOneAsRead = async (id, isRead) => {
+    if (isRead) return;
+    try {
+      await api.patch(`/notifications/${id}/read`);
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Close search on Escape key
   useEffect(() => {
@@ -60,13 +105,7 @@ export default function PortalLayout() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  React.useEffect(() => {
-    if (!darkMode) {
-      document.documentElement.classList.add("light-theme-override");
-    } else {
-      document.documentElement.classList.remove("light-theme-override");
-    }
-  }, [darkMode]);
+
 
   const isActive = (path) => location.pathname === path;
 
@@ -173,21 +212,21 @@ export default function PortalLayout() {
   }, [searchQuery, workouts, classes, nutritionLogs, routines, navigate, user]);
 
   return (
-    <div className="flex h-screen bg-[#0b0c10] text-slate-300 font-sans overflow-hidden">
+    <div className="flex h-screen dark:bg-[#0b0c10] bg-slate-50 dark:text-slate-300 text-slate-700 font-sans overflow-hidden">
       
       {/* Sidebar */}
-      <aside className="w-64 bg-[#12141a] border-r border-slate-800 flex flex-col transition-all duration-300">
+      <aside className="w-64 dark:bg-[#12141a] bg-white border-r dark:border-slate-800 border-slate-200 flex flex-col transition-all duration-300">
         {/* User Profile */}
         <div className="p-6 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
             {/* Fallback avatar */}
-            <span className="text-lg font-bold text-slate-400">
+            <span className="text-lg font-bold dark:text-slate-400 text-slate-600">
               {user?.name?.charAt(0) || "U"}
             </span>
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-slate-100">{user?.name || "Member"}</h3>
-            <p className="text-xs text-slate-500">@{user?.name?.toLowerCase().replace(/\s/g, '') || "user"} <span className="bg-slate-800 text-[10px] px-1.5 py-0.5 rounded ml-1 text-slate-300">Pro</span></p>
+            <h3 className="font-semibold text-sm dark:text-slate-100 text-slate-900">{user?.name || "Member"}</h3>
+            <p className="text-xs text-slate-500">@{user?.name?.toLowerCase().replace(/\s/g, '') || "user"} <span className="bg-slate-800 text-[10px] px-1.5 py-0.5 rounded ml-1 dark:text-slate-300 text-slate-700">Pro</span></p>
           </div>
         </div>
 
@@ -200,13 +239,13 @@ export default function PortalLayout() {
               {user?.role === "admin" ? (
                 <>
                   <li>
-                    <Link to="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/admin" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <LayoutDashboard size={18} />
                       <span className="text-sm font-medium">Vue d'Ensemble</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/admin/schedule" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin/schedule') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/admin/schedule" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/admin/schedule') ? 'bg-red-500/10 text-red-500 shadow-sm' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <CalendarDays size={18} />
                       <span className="text-sm font-medium">Gestion Planning</span>
                     </Link>
@@ -215,13 +254,13 @@ export default function PortalLayout() {
               ) : user?.role === "coach" ? (
                 <>
                   <li>
-                    <Link to="/coach" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/coach" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <LayoutDashboard size={18} />
                       <span className="text-sm font-medium">Dashboard</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/coach/builder" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach/builder') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/coach/builder" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/coach/builder') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <Dumbbell size={18} />
                       <span className="text-sm font-medium">Program Builder</span>
                     </Link>
@@ -230,25 +269,25 @@ export default function PortalLayout() {
               ) : (
                 <>
                   <li>
-                    <Link to="/my-dashboard" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-dashboard') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/my-dashboard" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-dashboard') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <LayoutDashboard size={18} />
                       <span className="text-sm font-medium">Dashboard</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/my-workouts" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-workouts') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/my-workouts" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-workouts') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <BarChart2 size={18} />
                       <span className="text-sm font-medium">Analytics</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/my-body" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-body') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/my-body" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-body') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <Target size={18} />
                       <span className="text-sm font-medium">Goals</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/my-nutrition" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-nutrition') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                    <Link to="/my-nutrition" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-nutrition') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                       <CalendarDays size={18} />
                       <span className="text-sm font-medium">Timelines</span>
                     </Link>
@@ -263,7 +302,7 @@ export default function PortalLayout() {
             <ul className="space-y-1">
               {user?.role !== "coach" && user?.role !== "admin" && (
                 <li>
-                  <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'bg-[#1e212b] text-emerald-400 shadow-sm shadow-emerald-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-[#1a1d24]'}`}>
+                  <Link to="/my-settings" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive('/my-settings') ? 'dark:bg-[#1e212b] bg-slate-100 text-emerald-400 shadow-sm shadow-emerald-500/10' : 'dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#1a1d24] hover:bg-slate-100'}`}>
                     <Settings size={18} />
                     <span className="text-sm font-medium">Settings</span>
                   </Link>
@@ -283,19 +322,22 @@ export default function PortalLayout() {
 
         </nav>
 
-        {/* Bottom Community Card */}
-        <div className="p-4 m-4 bg-[#1a1d24] rounded-2xl text-center border border-slate-800/50">
-          <div className="flex justify-center -space-x-2 mb-3">
-             <div className="w-8 h-8 rounded-full bg-slate-700 border-2 border-[#1a1d24] flex items-center justify-center text-[10px]">A</div>
-             <div className="w-8 h-8 rounded-full bg-slate-600 border-2 border-[#1a1d24] flex items-center justify-center text-[10px]">B</div>
-             <div className="w-8 h-8 rounded-full bg-slate-800 border-2 border-[#1a1d24] flex items-center justify-center text-[10px]"><Plus size={12}/></div>
-          </div>
-          <p className="text-xs text-slate-400 font-medium">Join the community and<br/>find out more</p>
+        {/* Bottom Home Button */}
+        <div className="p-4 mt-auto">
+          <Link 
+            to="/" 
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-slate-800/50 hover:bg-slate-700/50 dark:text-slate-300 text-slate-700 hover:dark:text-white hover:text-slate-900 rounded-xl border dark:border-slate-700 border-slate-300/50 transition-colors group"
+          >
+            <span className="text-sm font-medium">Retour au site public</span>
+            <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </Link>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden bg-gradient-to-br from-[#0f1115] to-[#0a0c0f]">
+      <main className="flex-1 flex flex-col h-full overflow-hidden dark:bg-gradient-to-br dark:from-[#0f1115] dark:to-[#0a0c0f] bg-slate-50">
         
         {/* Topbar */}
         <header className="h-20 px-8 flex items-center justify-between shrink-0">
@@ -305,63 +347,92 @@ export default function PortalLayout() {
               {/* Search */}
               <div 
                 onClick={() => setShowSearch(true)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d24] rounded-xl text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors border border-slate-800/50 group"
+                className="flex items-center gap-2 px-3 py-1.5 dark:bg-[#1a1d24] bg-slate-100 rounded-xl dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#252a36] hover:bg-slate-200 cursor-pointer transition-colors border dark:border-slate-800 border-slate-200/50 group"
               >
                 <Search size={14} />
                 <span className="text-xs text-slate-500 hidden sm:block">Rechercher...</span>
-                <kbd className="hidden sm:flex items-center gap-0.5 text-[9px] font-semibold text-slate-600 px-1.5 py-0.5 bg-[#0b0c10] rounded border border-slate-700 ml-2">Ctrl K</kbd>
+                <kbd className="hidden sm:flex items-center gap-0.5 text-[9px] font-semibold text-slate-600 px-1.5 py-0.5 dark:bg-[#0b0c10] bg-slate-50 rounded border dark:border-slate-700 border-slate-300 ml-2">Ctrl K</kbd>
               </div>
               
               {/* Messages */}
-              <div className="w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors">
+              <div className="w-8 h-8 rounded-full dark:bg-[#1a1d24] bg-slate-100 flex items-center justify-center dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#252a36] hover:bg-slate-200 cursor-pointer transition-colors">
                 <MessageSquare size={16} />
               </div>
 
               {/* Notifications */}
-              <div 
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="relative w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-[#252a36] cursor-pointer transition-colors"
-              >
-                <Bell size={16} />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full text-[9px] font-bold text-white flex items-center justify-center border-2 border-[#0b0c10]">2</span>
+              <div className="relative">
+                <div 
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="w-8 h-8 rounded-full dark:bg-[#1a1d24] bg-slate-100 flex items-center justify-center dark:text-slate-400 text-slate-600 hover:dark:text-slate-200 hover:text-slate-800 hover:dark:bg-[#252a36] hover:bg-slate-200 cursor-pointer transition-colors"
+                >
+                  <Bell size={16} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full text-[9px] font-bold dark:text-white text-slate-900 flex items-center justify-center border-2 border-[#0b0c10]">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </div>
                 
                 {/* Notifications Dropdown */}
                 {showNotifications && (
-                  <div className="absolute top-12 right-0 w-72 bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden z-50 cursor-default" onClick={e => e.stopPropagation()}>
-                    <div className="p-4 border-b border-slate-800/50 flex justify-between items-center">
-                      <h4 className="text-sm font-bold text-white">Notifications</h4>
-                      <span className="text-[10px] text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded">2 New</span>
+                  <div className="absolute top-12 right-0 w-80 dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl shadow-2xl overflow-hidden z-50 cursor-default" onClick={e => e.stopPropagation()}>
+                    <div className="p-4 border-b dark:border-slate-800 border-slate-200/50 flex justify-between items-center dark:bg-[#1a1d24] bg-slate-100/50">
+                      <h4 className="text-sm font-bold dark:text-white text-slate-900 flex items-center gap-2">
+                        <Bell size={14} className="text-emerald-400" /> Notifications
+                      </h4>
+                      {unreadCount > 0 && (
+                        <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">{unreadCount} New</span>
+                      )}
                     </div>
-                    <div className="max-h-64 overflow-y-auto">
-                      <div className="p-4 border-b border-slate-800/50 hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                        <p className="text-xs text-white font-medium mb-1">Workout Goal Achieved! 🎉</p>
-                        <p className="text-[10px] text-slate-400">You burned 500 kcal today. Keep it up!</p>
-                        <p className="text-[9px] text-slate-500 mt-2">10 mins ago</p>
+                    
+                    <div className="max-h-[350px] overflow-y-auto custom-scrollbar dark:bg-[#0f1115] bg-slate-50">
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center text-slate-500 text-xs">
+                          Aucune notification.
+                        </div>
+                      ) : (
+                        notifications.map(notif => (
+                          <div 
+                            key={notif._id} 
+                            onClick={() => markOneAsRead(notif._id, notif.read)}
+                            className={`p-4 border-b dark:border-slate-800 border-slate-200/30 hover:dark:bg-[#1a1d24] hover:bg-slate-100 transition-colors cursor-pointer relative ${notif.read ? 'opacity-60' : 'dark:bg-[#1a1d24] bg-slate-100/30'}`}
+                          >
+                            {!notif.read && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-emerald-500 rounded-r-full"></div>}
+                            <p className={`text-xs font-semibold mb-1 ${notif.read ? 'dark:text-slate-300 text-slate-700' : 'dark:text-white text-slate-900'}`}>{notif.title}</p>
+                            <p className="text-[11px] dark:text-slate-400 text-slate-600 leading-relaxed">{notif.message}</p>
+                            <p className="text-[9px] text-slate-500 mt-2 font-medium">
+                              {new Date(notif.createdAt).toLocaleDateString()} à {new Date(notif.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    
+                    {unreadCount > 0 && (
+                      <div className="p-3 dark:bg-[#0b0c10] bg-slate-50 text-center border-t dark:border-slate-800 border-slate-200/50">
+                        <button 
+                          onClick={markAllAsRead}
+                          className="text-xs text-emerald-500 font-medium hover:text-emerald-400 transition-colors"
+                        >
+                          Tout marquer comme lu
+                        </button>
                       </div>
-                      <div className="p-4 hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                        <p className="text-xs text-white font-medium mb-1">New Class Available</p>
-                        <p className="text-[10px] text-slate-400">CrossFit Intense added to schedule on Wednesday.</p>
-                        <p className="text-[9px] text-slate-500 mt-2">2 hours ago</p>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-[#0b0c10] text-center border-t border-slate-800/50">
-                      <button className="text-xs text-emerald-500 font-medium hover:text-emerald-400">Mark all as read</button>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
 
               {/* Theme Toggle */}
-              <div className="flex items-center bg-[#1a1d24] rounded-full p-1 ml-2">
+              <div className="flex items-center dark:bg-[#1a1d24] bg-slate-100 rounded-full p-1 ml-2">
                 <button 
                   onClick={() => darkMode && setDarkMode(false)}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${!darkMode ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${!darkMode ? 'bg-slate-700 dark:text-white text-slate-900' : 'text-slate-500 hover:dark:text-slate-300 text-slate-700'}`}
                 >
                   <Sun size={14} />
                 </button>
                 <button 
                    onClick={() => !darkMode && setDarkMode(true)}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-slate-700 dark:text-white text-slate-900 shadow-sm' : 'text-slate-500 hover:dark:text-slate-300 text-slate-700'}`}
                 >
                   <Moon size={14} />
                 </button>
@@ -379,31 +450,31 @@ export default function PortalLayout() {
       {/* Search Modal */}
       {showSearch && (
         <div className="fixed inset-0 z-[100] flex items-start justify-center pt-16 bg-black/80 backdrop-blur-sm" onClick={() => { setShowSearch(false); setSearchQuery(""); }}>
-          <div className="w-full max-w-2xl bg-[#12141a] border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-2xl dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
             
             {/* Search Input */}
-            <div className="flex items-center px-5 py-4 border-b border-slate-800/50 gap-3">
-              <Search className="w-5 h-5 text-slate-400 shrink-0" />
+            <div className="flex items-center px-5 py-4 border-b dark:border-slate-800 border-slate-200/50 gap-3">
+              <Search className="w-5 h-5 dark:text-slate-400 text-slate-600 shrink-0" />
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Rechercher entraînements, cours, nutrition, pages..."
-                className="flex-1 bg-transparent border-none text-white placeholder-slate-500 focus:outline-none focus:ring-0 text-sm"
+                className="flex-1 bg-transparent border-none dark:text-white text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-0 text-sm"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 autoFocus
               />
-              <kbd className="text-[10px] font-semibold text-slate-500 px-2 py-1 bg-[#1a1d24] rounded-lg border border-slate-700">ESC</kbd>
+              <kbd className="text-[10px] font-semibold text-slate-500 px-2 py-1 dark:bg-[#1a1d24] bg-slate-100 rounded-lg border dark:border-slate-700 border-slate-300">ESC</kbd>
             </div>
 
             {/* Results */}
             <div className="max-h-96 overflow-y-auto custom-scrollbar">
               {searchQuery.length >= 2 && searchResults.length === 0 && (
                 <div className="p-8 text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#1a1d24] flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 rounded-full dark:bg-[#1a1d24] bg-slate-100 flex items-center justify-center mx-auto mb-3">
                     <Search className="w-5 h-5 text-slate-500" />
                   </div>
-                  <p className="text-sm font-medium text-slate-400">Aucun résultat pour <span className="text-white">"{searchQuery}"</span></p>
+                  <p className="text-sm font-medium dark:text-slate-400 text-slate-600">Aucun résultat pour <span className="dark:text-white text-slate-900">"{searchQuery}"</span></p>
                   <p className="text-xs text-slate-500 mt-1">Essayez un autre terme de recherche.</p>
                 </div>
               )}
@@ -423,16 +494,16 @@ export default function PortalLayout() {
                             <button
                               key={i}
                               onClick={result.action}
-                              className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[#1a1d24] rounded-xl transition-colors text-left group"
+                              className="w-full flex items-center gap-3 px-3 py-2.5 hover:dark:bg-[#1a1d24] hover:bg-slate-100 rounded-xl transition-colors text-left group"
                             >
-                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${result.bg} border border-slate-800/50`}>
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${result.bg} border dark:border-slate-800 border-slate-200/50`}>
                                 <Icon size={16} className={result.color} />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-white truncate group-hover:text-emerald-400 transition-colors">{result.title}</p>
+                                <p className="text-sm font-medium dark:text-white text-slate-900 truncate group-hover:text-emerald-400 transition-colors">{result.title}</p>
                                 <p className="text-xs text-slate-500 truncate">{result.meta}</p>
                               </div>
-                              <Activity size={14} className="text-slate-600 group-hover:text-slate-400 shrink-0" />
+                              <Activity size={14} className="text-slate-600 group-hover:dark:text-slate-400 text-slate-600 shrink-0" />
                             </button>
                           );
                         })}
@@ -463,12 +534,12 @@ export default function PortalLayout() {
                       <button
                         key={item.path}
                         onClick={() => { navigate(item.path); setShowSearch(false); }}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[#1a1d24] rounded-xl transition-colors text-left"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:dark:bg-[#1a1d24] hover:bg-slate-100 rounded-xl transition-colors text-left"
                       >
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${item.bg} border border-slate-800/50`}>
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${item.bg} border dark:border-slate-800 border-slate-200/50`}>
                           <Icon size={16} className={item.color} />
                         </div>
-                        <span className="text-sm font-medium text-slate-300 hover:text-white">{item.label}</span>
+                        <span className="text-sm font-medium dark:text-slate-300 text-slate-700 hover:dark:text-white hover:text-slate-900">{item.label}</span>
                       </button>
                     );
                   })}
@@ -477,11 +548,11 @@ export default function PortalLayout() {
             </div>
 
             {/* Footer hint */}
-            <div className="px-5 py-3 border-t border-slate-800/50 bg-[#0b0c10] flex items-center justify-between">
+            <div className="px-5 py-3 border-t dark:border-slate-800 border-slate-200/50 dark:bg-[#0b0c10] bg-slate-50 flex items-center justify-between">
               <span className="text-[10px] text-slate-500">{searchResults.length > 0 ? `${searchResults.length} résultat${searchResults.length > 1 ? 's' : ''}` : "Tapez pour rechercher"}</span>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#1a1d24] rounded border border-slate-700 text-slate-400">↵</kbd> pour ouvrir</span>
-                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#1a1d24] rounded border border-slate-700 text-slate-400">ESC</kbd> pour fermer</span>
+                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 dark:bg-[#1a1d24] bg-slate-100 rounded border dark:border-slate-700 border-slate-300 dark:text-slate-400 text-slate-600">↵</kbd> pour ouvrir</span>
+                <span className="text-[10px] text-slate-500 flex items-center gap-1"><kbd className="px-1.5 py-0.5 dark:bg-[#1a1d24] bg-slate-100 rounded border dark:border-slate-700 border-slate-300 dark:text-slate-400 text-slate-600">ESC</kbd> pour fermer</span>
               </div>
             </div>
           </div>

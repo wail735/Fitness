@@ -11,7 +11,7 @@ function HeroBanner() {
 
       {/* Content */}
       <div className="relative z-10 text-center">
-        <h1 className="text-white text-5xl font-black uppercase tracking-widest drop-shadow-lg mb-2">
+        <h1 className="dark:text-white text-slate-900 text-5xl font-black uppercase tracking-widest drop-shadow-lg mb-2">
           About <span className="text-orange-500">Us</span>
         </h1>
         <p className="text-gray-300 text-sm tracking-[0.2em] uppercase">

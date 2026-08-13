@@ -27,7 +27,7 @@ export const FitnessProvider = ({ children }) => {
 
   // ── Fetch user-specific data (only when logged in) ─────────────────────────
   const fetchUserData = useCallback(async () => {
-    if (!user) return;
+    if (!user || user.role !== "user") return;
     try {
       const [bookingsRes, workoutsRes, metricsRes, nutritionRes] = await Promise.all([
         api.get("/classes/my-bookings"),

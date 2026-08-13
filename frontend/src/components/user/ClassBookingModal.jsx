@@ -26,10 +26,10 @@ export default function ClassBookingModal({ selectedClass, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative">
+      <div className="w-full max-w-md bg-slate-900 border dark:border-slate-800 border-slate-200 rounded-2xl p-6 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+          className="absolute top-4 right-4 p-2 dark:text-slate-400 text-slate-600 hover:dark:text-white hover:text-slate-900 rounded-lg hover:bg-slate-800 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -38,9 +38,9 @@ export default function ClassBookingModal({ selectedClass, onClose }) {
           {selectedClass.category || "Cours Collectif"}
         </span>
 
-        <h3 className="text-2xl font-bold text-white mb-2">{selectedClass.name}</h3>
+        <h3 className="text-2xl font-bold dark:text-white text-slate-900 mb-2">{selectedClass.name}</h3>
 
-        <div className="space-y-2 text-xs text-slate-300 mb-6 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+        <div className="space-y-2 text-xs dark:text-slate-300 text-slate-700 mb-6 bg-slate-950/60 p-4 rounded-xl border dark:border-slate-800 border-slate-200">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-red-500" /> Jour : <strong>{selectedClass.day}</strong>
           </div>
@@ -64,7 +64,7 @@ export default function ClassBookingModal({ selectedClass, onClose }) {
         ) : (
           <button
             onClick={handleConfirm}
-            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-lg shadow-red-600/20"
+            className="w-full py-3 bg-red-600 hover:bg-red-700 dark:text-white text-slate-900 rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-lg shadow-red-600/20"
           >
             {user ? "Confirmer la Réservation" : "Se Connecter pour Réserver"}
           </button>

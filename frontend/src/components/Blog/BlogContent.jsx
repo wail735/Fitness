@@ -47,7 +47,7 @@ function BlogContent() {
 
       {/* Subheading & more text */}
       <div className="text-gray-400 text-sm leading-7 space-y-6 mt-4">
-        <h2 className="text-black dark:text-white text-2xl font-black uppercase tracking-wide">
+        <h2 className="text-black dark:text-white text-slate-900 text-2xl font-black uppercase tracking-wide">
           Our Year Round Goal is to Change Your Mindset
         </h2>
         <p>
@@ -58,7 +58,7 @@ function BlogContent() {
         </p>
         
         {/* Blockquote */}
-        <blockquote className="border-l-4 border-orange-500 pl-6 py-2 my-8 italic font-semibold text-black dark:text-white text-lg bg-gray-100 dark:bg-[#111] transition-colors duration-300">
+        <blockquote className="border-l-4 border-orange-500 pl-6 py-2 my-8 italic font-semibold text-black dark:text-white text-slate-900 text-lg bg-gray-100 dark:bg-[#111] transition-colors duration-300">
           "Success isn't always about greatness. It's about consistency. Consistent
           hard work leads to success. Greatness will come."
         </blockquote>
@@ -74,7 +74,7 @@ function BlogContent() {
       {/* Tags and Share */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-6 border-t border-b border-black/10 dark:border-white/10 mt-8 gap-4">
         <div className="flex items-center gap-3">
-          <span className="text-black dark:text-white font-bold text-sm uppercase tracking-widest">Tags:</span>
+          <span className="text-black dark:text-white text-slate-900 font-bold text-sm uppercase tracking-widest">Tags:</span>
           <div className="flex gap-2">
             <span className="text-gray-600 dark:text-gray-400 text-xs px-3 py-1 bg-gray-200 dark:bg-[#111] hover:text-orange-500 cursor-pointer transition-colors">Gym</span>
             <span className="text-gray-600 dark:text-gray-400 text-xs px-3 py-1 bg-gray-200 dark:bg-[#111] hover:text-orange-500 cursor-pointer transition-colors">Fitness</span>
@@ -82,7 +82,7 @@ function BlogContent() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-black dark:text-white font-bold text-sm uppercase tracking-widest">Share:</span>
+          <span className="text-black dark:text-white text-slate-900 font-bold text-sm uppercase tracking-widest">Share:</span>
           <div className="flex gap-3 text-gray-400">
             <a href="#" className="hover:text-orange-500 transition-colors"><i className="fa-brands fa-facebook-f"></i></a>
             <a href="#" className="hover:text-orange-500 transition-colors"><i className="fa-brands fa-twitter"></i></a>

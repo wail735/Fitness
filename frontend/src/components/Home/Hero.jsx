@@ -5,6 +5,7 @@ import Programm from "./Programm";
 import Table from "./Table";
 import { PricingSimpleIcon } from "./PlansPricing";
 import People from "./People";
+import CoachCards from "./CoachCards";
 import Blog from "./Blog";
 import Video from "./video";
 import Map from "./Map";
@@ -68,21 +69,21 @@ function Hero() {
             {SLIDES_DATA[currentIndex].title}
           </h1>
 
-          <button className="border-2 border-red-500 hover:bg-red-500 text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold uppercase tracking-widest transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:shadow-[0_0_25px_rgba(220,38,38,0.8)]">
+          <button className="border-2 border-red-500 hover:bg-red-500 text-red-500 hover:text-white px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold uppercase tracking-widest transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:shadow-[0_0_25px_rgba(220,38,38,0.8)]">
             {SLIDES_DATA[currentIndex].btnText}
           </button>
         </div>
 
         <button
           onClick={prevSlide}
-          className="hidden sm:flex absolute top-1/2 left-4 lg:left-8 -translate-y-1/2 w-12 h-12 items-center justify-center text-3xl text-white/50 hover:text-white transition-colors z-20"
+          className="hidden sm:flex absolute top-1/2 left-4 lg:left-8 -translate-y-1/2 w-12 h-12 items-center justify-center text-3xl dark:text-white/50 text-slate-900/50 hover:text-slate-900 hover:dark:text-white transition-colors z-20"
         >
           <i className="fa-solid fa-chevron-left"></i>
         </button>
 
         <button
           onClick={nextSlide}
-          className="hidden sm:flex absolute top-1/2 right-4 lg:right-8 -translate-y-1/2 w-12 h-12 items-center justify-center text-3xl text-white/50 hover:text-white transition-colors z-20"
+          className="hidden sm:flex absolute top-1/2 right-4 lg:right-8 -translate-y-1/2 w-12 h-12 items-center justify-center text-3xl dark:text-white/50 text-slate-900/50 hover:text-slate-900 hover:dark:text-white transition-colors z-20"
         >
           <i className="fa-solid fa-chevron-right"></i>
         </button>
@@ -108,6 +109,7 @@ function Hero() {
       <Table />
       <PricingSimpleIcon />
       <People />
+      <CoachCards />
       <Blog />
       <Video />
       <Map />

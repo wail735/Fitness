@@ -46,7 +46,7 @@ function WhyChooseUs() {
 
         {/* Header */}
         <div className="text-center mb-4">
-          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
+          <h2 className="text-black dark:text-white text-slate-900 text-4xl font-black uppercase tracking-tight mb-3">
             Why People <span className="text-orange-500">Choose Us</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
@@ -74,7 +74,7 @@ function WhyChooseUs() {
                 alt={f.title}
                 className="w-12 h-12 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
               />
-              <h3 className="text-black dark:text-white text-sm font-black uppercase tracking-widest text-center md:text-left group-hover:text-orange-500 transition-colors duration-300">
+              <h3 className="text-black dark:text-white text-slate-900 text-sm font-black uppercase tracking-widest text-center md:text-left group-hover:text-orange-500 transition-colors duration-300">
                 {f.title}
               </h3>
               <p className="text-gray-500 dark:text-gray-500 text-sm leading-relaxed text-center md:text-left group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors duration-300">

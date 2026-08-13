@@ -38,7 +38,7 @@ export default function AuthPage() {
       }
     } else {
       // Login (Member, Coach, or Admin)
-      const res = await login(email, password);
+      const res = await login(email, password, activeTab);
       if (res.success) {
         enqueueSnackbar("Connexion réussie !", { variant: "success" });
         // Redirect based on role (which we don't have immediately here, so we let the navbar handle it or redirect)

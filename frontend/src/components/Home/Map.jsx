@@ -38,26 +38,26 @@ function Map() {
         <div className="absolute top-10 right-4 md:right-10 w-[90%] max-w-[400px] bg-white dark:bg-[#111] p-8 shadow-2xl z-10 mx-auto left-0 md:left-auto transition-colors duration-300">
           <div className="mb-8">
             <div className="flex justify-between mb-2">
-              <span className="text-black dark:text-white font-black uppercase text-sm tracking-widest">
+              <span className="dark:text-white text-slate-900 font-black uppercase text-sm tracking-widest">
                 Weekday:
               </span>
               <span className="text-gray-600 dark:text-gray-400 text-sm">06:30 - 11:00</span>
             </div>
             <div className="flex justify-between mb-2">
-              <span className="text-black dark:text-white font-black uppercase text-sm tracking-widest">
+              <span className="dark:text-white text-slate-900 font-black uppercase text-sm tracking-widest">
                 Saturday:
               </span>
               <span className="text-gray-600 dark:text-gray-400 text-sm">07:00 - 22:00</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-black dark:text-white font-black uppercase text-sm tracking-widest">
+              <span className="dark:text-white text-slate-900 font-black uppercase text-sm tracking-widest">
                 Sunday:
               </span>
               <span className="text-gray-600 dark:text-gray-400 text-sm">09:00 - 18:00</span>
             </div>
           </div>
 
-          <h3 className="text-black dark:text-white font-black uppercase text-lg tracking-widest mb-6">
+          <h3 className="dark:text-white text-slate-900 font-black uppercase text-lg tracking-widest mb-6">
             Contact Us
           </h3>
 
@@ -68,14 +68,14 @@ function Map() {
                 value={form.name}
                 onChange={(e)=>setForm({...form,name:e.target.value})}
                 placeholder="Name"
-                className="w-1/2 p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                className="w-1/2 p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500"
               />
               <input
                 type="tel"
                 value={form.number}
                 onChange={(e)=>setForm({...form,number:e.target.value})}
                 placeholder="Phone"
-                className="w-1/2 p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                className="w-1/2 p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
             <textarea
@@ -83,7 +83,7 @@ function Map() {
               value={form.message}
               onChange={(e)=>setForm({...form,message:e.target.value})}
               rows="4"
-              className="w-full p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors resize-none text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+              className="w-full p-3 bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 text-sm outline-none focus:border-[#e8401c] transition-colors resize-none dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500"
             />
             <button
               type="submit"

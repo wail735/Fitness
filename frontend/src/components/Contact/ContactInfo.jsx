@@ -34,15 +34,15 @@ function ContactInfo() {
           
           {/* Information */}
           <div>
-            <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-6">
+            <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-6">
               Information
             </h3>
             <div className="flex flex-col gap-4 text-sm font-semibold tracking-wide">
-              <p className="flex items-center gap-4 text-black dark:text-white">
+              <p className="flex items-center gap-4 text-black dark:text-white text-slate-900">
                 <i className="fa-solid fa-phone text-orange-500"></i>
                 (12)-100-100-100
               </p>
-              <p className="flex items-center gap-4 text-black dark:text-white">
+              <p className="flex items-center gap-4 text-black dark:text-white text-slate-900">
                 <i className="fa-solid fa-envelope text-orange-500"></i>
                 info.colorlib@gmail.com
               </p>
@@ -51,10 +51,10 @@ function ContactInfo() {
 
           {/* Address */}
           <div>
-            <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-6">
+            <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-6">
               Address
             </h3>
-            <div className="flex items-start gap-4 text-sm font-semibold tracking-wide text-black dark:text-white leading-relaxed">
+            <div className="flex items-start gap-4 text-sm font-semibold tracking-wide text-black dark:text-white text-slate-900 leading-relaxed">
               <i className="fa-solid fa-location-dot text-orange-500 mt-1"></i>
               <p>
                 Iris Watson, Maryland,<br />
@@ -67,7 +67,7 @@ function ContactInfo() {
 
         {/* Right Column: Form */}
         <div className="w-full lg:w-2/3">
-          <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-8">
+          <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-8">
             Get In Touch
           </h3>
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -78,7 +78,7 @@ function ContactInfo() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Name"
-                className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
+                className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
               />
               <input
                 type="email"
@@ -86,7 +86,7 @@ function ContactInfo() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
+                className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
               />
             </div>
             <textarea
@@ -95,11 +95,11 @@ function ContactInfo() {
               onChange={handleChange}
               placeholder="Message"
               rows="6"
-              className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors resize-none"
+              className="w-full bg-gray-100 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/5 px-5 py-4 text-sm text-black dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors resize-none"
             ></textarea>
             <button
               type="submit"
-              className="self-start bg-orange-500 hover:bg-orange-600 text-white font-bold uppercase tracking-widest text-xs px-10 py-4 transition-colors duration-300"
+              className="self-start bg-orange-500 hover:bg-orange-600 dark:text-white text-slate-900 font-bold uppercase tracking-widest text-xs px-10 py-4 transition-colors duration-300"
             >
               Send Message
             </button>

@@ -6,7 +6,7 @@ function Blog() {
 
       {/* Header */}
       <div className="text-center mb-10">
-        <h2 className="text-black dark:text-white text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
+        <h2 className="dark:text-white text-slate-900 text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
           From Our Blog
         </h2>
         <p className="text-gray-600 dark:text-gray-400 text-sm">

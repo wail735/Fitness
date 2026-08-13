@@ -18,7 +18,7 @@ function Testimonial() {
         </div>
 
         {/* Quote */}
-        <blockquote className="text-white text-lg md:text-xl font-light leading-8 italic mb-8">
+        <blockquote className="dark:text-white text-slate-900 text-lg md:text-xl font-light leading-8 italic mb-8">
           "The Activitar Gym has given me a great foundation for the healthiest life
           I've ever had. Infinite thanks for sponsoring Activitar Fitness."
         </blockquote>
@@ -33,7 +33,7 @@ function Testimonial() {
             />
           </div>
           <div>
-            <p className="text-white font-bold text-sm uppercase tracking-widest">
+            <p className="dark:text-white text-slate-900 font-bold text-sm uppercase tracking-widest">
               Sarah Johnson
             </p>
             <p className="text-gray-400 text-xs tracking-wide">

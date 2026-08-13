@@ -22,11 +22,11 @@ function NavBar() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 shadow-md">
-      <nav className="relative h-20 w-full px-4 lg:px-8 flex justify-between items-center border-b border-white/10 shadow-sm bg-white text-black dark:bg-slate-950 dark:text-white transition-all duration-300">
+      <nav className="relative h-20 w-full px-4 lg:px-8 flex justify-between items-center border-b border-white/10 shadow-sm bg-white text-black dark:bg-slate-950 dark:text-white text-slate-900 transition-all duration-300">
         <Link to="/" aria-label="Home" className="group shrink-0">
           <div className="flex gap-2.5 text-2xl items-center">
             <div className="p-2 rounded-xl bg-orange-100 dark:bg-red-500/10 transition-colors duration-300 group-hover:bg-red-500">
-              <i className="fa-solid fa-dumbbell text-red-500 transition-colors duration-300 group-hover:text-white"></i>
+              <i className="fa-solid fa-dumbbell text-red-500 transition-colors duration-300 group-hover:dark:text-white hover:text-slate-900"></i>
             </div>
             <span className="font-black tracking-tight bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">
               ACTIVITAR
@@ -34,12 +34,12 @@ function NavBar() {
           </div>
         </Link>
 
-        <ul className="hidden lg:flex gap-5 xl:gap-8 dark:text-white text-black font-semibold text-xs xl:text-sm tracking-wide">
+        <ul className="hidden lg:flex gap-5 xl:gap-8 dark:text-white text-slate-900 text-black font-semibold text-xs xl:text-sm tracking-wide">
           {NAV_LINKS.map(({ label, path }) => (
             <li key={label} className="whitespace-nowrap">
               <Link
                 to={path}
-                className="relative pb-1 text-black dark:text-slate-200 hover:text-red-400 transition-colors"
+                className="relative pb-1 text-black dark:text-slate-200 text-slate-800 hover:text-red-400 transition-colors"
               >
                 {label}
               </Link>
@@ -54,14 +54,14 @@ function NavBar() {
               {user.role === "admin" ? (
                 <Link
                   to="/admin"
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/20"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 dark:text-white text-slate-900 text-xs font-bold rounded-xl transition-all shadow-md shadow-red-600/20"
                 >
                   <ShieldCheck className="w-3.5 h-3.5" /> Admin
                 </Link>
               ) : user.role === "coach" ? (
                 <Link
                   to="/coach"
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-amber-600/20"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 dark:text-white text-slate-900 text-xs font-bold rounded-xl transition-all shadow-md shadow-amber-600/20"
                 >
                   <User className="w-3.5 h-3.5" /> Coach
                 </Link>
@@ -94,14 +94,14 @@ function NavBar() {
 
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="text-black dark:text-white cursor-pointer text-xl transition-all duration-300 hover:text-red-400 p-1"
+            className="text-black dark:text-white text-slate-900 cursor-pointer text-xl transition-all duration-300 hover:text-red-400 p-1"
           >
             <i className={`fa-solid ${darkMode ? "fa-sun" : "fa-moon"}`}></i>
           </button>
 
           <button
             onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
-            className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-slate-800 text-black dark:text-white text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition"
+            className="lg:hidden flex items-center gap-2 bg-gray-200 dark:bg-slate-800 text-black dark:text-white text-slate-900 text-xl sm:text-sm px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-slate-700 transition"
           >
             <i className={`fa-solid ${isOpen ? "fa-xmark" : "fa-bars"} w-4 text-center`}></i>
           </button>
@@ -120,7 +120,7 @@ function NavBar() {
               key={label}
               to={path}
               onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
-              className="text-white hover:text-red-400 font-semibold text-sm transition-colors"
+              className="dark:text-white text-slate-900 hover:text-red-400 font-semibold text-sm transition-colors"
             >
               {label}
             </Link>

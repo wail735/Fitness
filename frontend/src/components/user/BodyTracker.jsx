@@ -3,8 +3,8 @@ import { useFitness } from "../../context/FitnessContext";
 import { Scale, Plus, X, TrendingDown, Activity, Ruler } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 
-const inputClass = "w-full bg-[#0b0c10] border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white focus:border-emerald-500 focus:outline-none placeholder:text-slate-600 transition-colors";
-const labelClass = "block text-xs font-medium text-slate-400 mb-1.5";
+const inputClass = "w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-xl py-2.5 px-3 text-sm dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none placeholder:text-slate-600 transition-colors";
+const labelClass = "block text-xs font-medium dark:text-slate-400 text-slate-600 mb-1.5";
 
 export default function BodyTracker() {
   const { bodyMetrics, addBodyMetric } = useFitness();
@@ -41,7 +41,7 @@ export default function BodyTracker() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">Suivi Corporel</p>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-2xl font-bold dark:text-white text-slate-900 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Scale className="w-5 h-5 text-emerald-400" />
             </div>
@@ -58,13 +58,13 @@ export default function BodyTracker() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5 flex items-center gap-4">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
             <Scale size={20} className="text-emerald-400" />
           </div>
           <div>
             <p className="text-xs text-slate-500 mb-1">Poids Actuel</p>
-            <p className="text-2xl font-bold text-white leading-none">
+            <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">
               {latestMetric.weightKg}<span className="text-xs text-slate-500 font-normal ml-1">kg</span>
             </p>
             <p className={`text-[11px] mt-1 font-semibold ${Number(weightDiff) <= 0 ? "text-emerald-400" : "text-amber-400"}`}>
@@ -73,26 +73,26 @@ export default function BodyTracker() {
           </div>
         </div>
 
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5 flex items-center gap-4">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
             <Activity size={20} className="text-blue-400" />
           </div>
           <div>
             <p className="text-xs text-slate-500 mb-1">Masse Grasse</p>
-            <p className="text-2xl font-bold text-white leading-none">
+            <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">
               {latestMetric.bodyFatPct}<span className="text-xs text-slate-500 font-normal ml-1">%</span>
             </p>
             <p className="text-[11px] text-slate-500 mt-1">Masse maigre ~ {leanMass} kg</p>
           </div>
         </div>
 
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5 flex items-center gap-4">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
             <Ruler size={20} className="text-purple-400" />
           </div>
           <div>
             <p className="text-xs text-slate-500 mb-1">Tour de Taille</p>
-            <p className="text-2xl font-bold text-white leading-none">
+            <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">
               {latestMetric.waistCm}<span className="text-xs text-slate-500 font-normal ml-1">cm</span>
             </p>
             <p className="text-[11px] text-slate-500 mt-1">Mesure ombilic</p>
@@ -104,35 +104,35 @@ export default function BodyTracker() {
       {latestMetric && (latestMetric.heartRate > 0 || latestMetric.hydrationPct > 0 || latestMetric.bloodCellsUl > 0) && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {latestMetric.heartRate > 0 && (
-            <div className="bg-[#12141a] border border-red-500/20 rounded-2xl p-5 flex items-center gap-4">
+            <div className="dark:bg-[#12141a] bg-white border border-red-500/20 rounded-2xl p-5 flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
                 <Activity size={20} className="text-red-400" />
               </div>
               <div>
                 <p className="text-xs text-slate-500 mb-1">Fréquence Cardiaque</p>
-                <p className="text-2xl font-bold text-white leading-none">{latestMetric.heartRate}<span className="text-xs text-slate-500 font-normal ml-1">bpm</span></p>
+                <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">{latestMetric.heartRate}<span className="text-xs text-slate-500 font-normal ml-1">bpm</span></p>
               </div>
             </div>
           )}
           {latestMetric.hydrationPct > 0 && (
-            <div className="bg-[#12141a] border border-cyan-500/20 rounded-2xl p-5 flex items-center gap-4">
+            <div className="dark:bg-[#12141a] bg-white border border-cyan-500/20 rounded-2xl p-5 flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                 <Ruler size={20} className="text-cyan-400" />
               </div>
               <div>
                 <p className="text-xs text-slate-500 mb-1">Hydratation</p>
-                <p className="text-2xl font-bold text-white leading-none">{latestMetric.hydrationPct}<span className="text-xs text-slate-500 font-normal ml-1">%</span></p>
+                <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">{latestMetric.hydrationPct}<span className="text-xs text-slate-500 font-normal ml-1">%</span></p>
               </div>
             </div>
           )}
           {latestMetric.bloodCellsUl > 0 && (
-            <div className="bg-[#12141a] border border-purple-500/20 rounded-2xl p-5 flex items-center gap-4">
+            <div className="dark:bg-[#12141a] bg-white border border-purple-500/20 rounded-2xl p-5 flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
                 <Scale size={20} className="text-purple-400" />
               </div>
               <div>
                 <p className="text-xs text-slate-500 mb-1">Cellules Sanguines</p>
-                <p className="text-2xl font-bold text-white leading-none">{latestMetric.bloodCellsUl}<span className="text-xs text-slate-500 font-normal ml-1">µl</span></p>
+                <p className="text-2xl font-bold dark:text-white text-slate-900 leading-none">{latestMetric.bloodCellsUl}<span className="text-xs text-slate-500 font-normal ml-1">µl</span></p>
               </div>
             </div>
           )}
@@ -140,8 +140,8 @@ export default function BodyTracker() {
       )}
 
       {/* Weight Chart */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
-        <h3 className="text-sm font-semibold text-slate-400 mb-6 flex items-center gap-2">
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6">
+        <h3 className="text-sm font-semibold dark:text-slate-400 text-slate-600 mb-6 flex items-center gap-2">
           <TrendingDown className="w-4 h-4 text-emerald-400" /> Courbe de Poids (kg)
         </h3>
         <div className="h-52 w-full">
@@ -168,13 +168,13 @@ export default function BodyTracker() {
 
       {/* History Table */}
       {bodyMetrics.length > 0 && (
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
-          <h3 className="text-base font-semibold text-slate-200 mb-5">Historique des Pesées</h3>
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6">
+          <h3 className="text-base font-semibold dark:text-slate-200 text-slate-800 mb-5">Historique des Pesées</h3>
           <div className="space-y-2">
             {[...bodyMetrics].reverse().slice(0, 8).map((m, i) => (
-              <div key={m._id || i} className="flex items-center justify-between p-3 rounded-xl hover:bg-[#0f1115] transition-colors">
+              <div key={m._id || i} className="flex items-center justify-between p-3 rounded-xl hover:dark:bg-[#0f1115] hover:bg-slate-50 transition-colors">
                 <span className="text-xs text-slate-500">{m.date}</span>
-                <span className="text-sm font-semibold text-white">{m.weightKg} kg</span>
+                <span className="text-sm font-semibold dark:text-white text-slate-900">{m.weightKg} kg</span>
                 <span className="text-xs text-blue-400">{m.bodyFatPct}% MG</span>
                 <span className="text-xs text-purple-400">{m.waistCm} cm</span>
               </div>
@@ -186,10 +186,10 @@ export default function BodyTracker() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#12141a] border border-slate-800 rounded-3xl p-6 shadow-2xl">
+          <div className="w-full max-w-md dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200 rounded-3xl p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-lg font-bold text-white">Nouvelle Pesée</h3>
-              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 transition-colors"><X size={14} /></button>
+              <h3 className="text-lg font-bold dark:text-white text-slate-900">Nouvelle Pesée</h3>
+              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center dark:text-slate-400 text-slate-600 transition-colors"><X size={14} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -221,7 +221,7 @@ export default function BodyTracker() {
                 </div>
               </div>
               <div className="flex gap-2 justify-end pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">Annuler</button>
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-xs font-semibold dark:text-slate-400 text-slate-600 hover:dark:text-white hover:text-slate-900 transition-colors">Annuler</button>
                 <button type="submit" className="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-xl transition-colors">Enregistrer</button>
               </div>
             </form>

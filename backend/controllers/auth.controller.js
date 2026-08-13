@@ -34,7 +34,7 @@ const register = async (req, res) => {
 
 // POST /api/auth/login
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
   if (!email || !password)
     return res.status(400).json({ error: 'Email et mot de passe sont requis.' });
 
@@ -42,6 +42,14 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user || !user.comparePassword(password))
       return res.status(401).json({ error: 'Email ou mot de passe invalide.' });
+
+    if (role && user.role !== role) {
+      // Map frontend roles to backend roles if necessary, e.g. member -> user
+      const expectedRole = role === 'member' ? 'user' : role;
+      if (user.role !== expectedRole) {
+        return res.status(403).json({ error: `Accès refusé. Vous n'êtes pas un ${role}.` });
+      }
+    }
 
     const token = signToken(user);
     res.json({

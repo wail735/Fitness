@@ -46,7 +46,7 @@ function People() {
 
         {/* Header */}
         <div className="mb-14 text-center md:text-left">
-          <h2 className="text-black dark:text-white text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
+          <h2 className="dark:text-white text-slate-900 text-4xl md:text-5xl font-black uppercase tracking-tight mb-3">
             Why People <span className="text-orange-500">Choose Us</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-lg mx-auto md:mx-0">
@@ -69,7 +69,7 @@ function People() {
               />
 
               {/* Title */}
-              <h3 className="text-black dark:text-white text-sm font-black uppercase tracking-widest text-center md:text-left group-hover:text-orange-500 transition-colors duration-300">
+              <h3 className="dark:text-white text-slate-900 text-sm font-black uppercase tracking-widest text-center md:text-left group-hover:text-orange-500 transition-colors duration-300">
                 {p.title}
               </h3>
 

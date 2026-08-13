@@ -151,9 +151,59 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const { createNotification } = require('./notification.controller');
+
+// GET /api/users/coaches
+const getCoaches = async (req, res) => {
+  try {
+    const coaches = await User.find({ role: 'coach' }).select('-password');
+    res.json(coaches);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la récupération des coachs.', detail: err.message });
+  }
+};
+
+// POST /api/users/coaches/:id/book
+const bookCoachSession = async (req, res) => {
+  const coachId = req.params.id;
+  const { date, time, userNotes } = req.body;
+  if (!date || !time) {
+    return res.status(400).json({ error: 'Date et heure sont requises.' });
+  }
+
+  try {
+    const coach = await User.findById(coachId);
+    if (!coach || coach.role !== 'coach') {
+      return res.status(404).json({ error: 'Coach introuvable.' });
+    }
+
+    const CoachSession = require('../models/CoachSession.model');
+    const session = await CoachSession.create({
+      userId: req.user.id,
+      coachId,
+      date,
+      time,
+      userNotes: userNotes || ''
+    });
+
+    // Notify the coach
+    await createNotification(
+      coachId,
+      'session_request',
+      'Nouvelle demande de session',
+      `${req.user.name || 'Un membre'} a demandé une session le ${date} à ${time}.`
+    );
+
+    res.status(201).json({ message: 'Demande envoyée au coach avec succès !', session });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la demande de session.', detail: err.message });
+  }
+};
+
 module.exports = {
   getWorkouts, createWorkout, deleteWorkout,
   getBodyMetrics, createBodyMetric,
   getNutritionLogs, createNutritionLog,
   updateProfile, updatePassword,
+  getCoaches, bookCoachSession,
 };

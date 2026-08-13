@@ -43,7 +43,7 @@ function Sidebar() {
       
       {/* Search */}
       <div className="bg-gray-200 dark:bg-[#111] p-8 transition-colors duration-300">
-        <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
+        <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
           <div className="w-1 h-5 bg-orange-500"></div> Search
         </h3>
         <div className="relative">
@@ -52,7 +52,7 @@ function Sidebar() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search..."
-            className="w-full bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
+            className="w-full bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 px-4 py-3 text-sm text-black dark:text-white text-slate-900 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
           />
           <button className="absolute right-0 top-0 h-full px-4 text-gray-400 hover:text-orange-500 transition-colors">
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -62,7 +62,7 @@ function Sidebar() {
 
       {/* Categories */}
       <div className="bg-gray-200 dark:bg-[#111] p-8 transition-colors duration-300">
-        <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
+        <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
           <div className="w-1 h-5 bg-orange-500"></div> Categories
         </h3>
         <ul className="flex flex-col gap-3">
@@ -82,7 +82,7 @@ function Sidebar() {
 
       {/* Recent News */}
       <div className="bg-gray-200 dark:bg-[#111] p-8 transition-colors duration-300">
-        <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
+        <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-lg mb-6 flex items-center gap-2">
           <div className="w-1 h-5 bg-orange-500"></div> Recent News
         </h3>
         <div className="flex flex-col gap-5">
@@ -95,7 +95,7 @@ function Sidebar() {
                   className="w-20 h-20 object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                 />
                 <div className="flex flex-col justify-center">
-                  <h4 className="text-black dark:text-white font-bold text-xs uppercase tracking-wider mb-2 leading-tight group-hover:text-orange-500 transition-colors">
+                  <h4 className="text-black dark:text-white text-slate-900 font-bold text-xs uppercase tracking-wider mb-2 leading-tight group-hover:text-orange-500 transition-colors">
                     {news.title}
                   </h4>
                   <p className="text-gray-500 text-[10px] uppercase tracking-widest">

@@ -70,10 +70,10 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
+        <h1 className="text-3xl font-extrabold dark:text-white text-slate-900 flex items-center gap-3">
           <Settings className="w-8 h-8 text-emerald-500" /> Paramètres du Compte
         </h1>
-        <p className="text-sm text-slate-400 mt-2">Gérez vos informations personnelles et vos préférences de sécurité.</p>
+        <p className="text-sm dark:text-slate-400 text-slate-600 mt-2">Gérez vos informations personnelles et vos préférences de sécurité.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -87,8 +87,8 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full text-left px-4 py-3 rounded-xl font-semibold flex items-center justify-between transition-all ${
                   activeTab === tab.id
-                    ? "bg-[#1e212b] text-emerald-400"
-                    : "text-slate-400 hover:bg-[#1a1d24] hover:text-white"
+                    ? "dark:bg-[#1e212b] bg-slate-100 text-emerald-400"
+                    : "dark:text-slate-400 text-slate-600 hover:dark:bg-[#1a1d24] hover:bg-slate-100 hover:dark:text-white hover:text-slate-900"
                 }`}
               >
                 <span className="flex items-center gap-3"><Icon size={18} /> {tab.label}</span>
@@ -104,26 +104,26 @@ export default function SettingsPage() {
           {/* PROFIL TAB */}
           {activeTab === "profile" && (
             <>
-              <div className="bg-[#12141a] border border-slate-800/50 p-6 rounded-3xl shadow-xl">
-                <h3 className="text-lg font-bold text-white mb-6">Informations Personnelles</h3>
+              <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 p-6 rounded-3xl shadow-xl">
+                <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-6">Informations Personnelles</h3>
                 <form onSubmit={handleProfileSave} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nom Complet</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-2">Nom Complet</label>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                      className="w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200/50 rounded-xl py-3 px-4 dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Adresse Email</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-2">Adresse Email</label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                      className="w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200/50 rounded-xl py-3 px-4 dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none"
                       required
                     />
                   </div>
@@ -143,7 +143,7 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={profileLoading}
-                    className="py-2.5 px-6 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2"
+                    className="py-2.5 px-6 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed dark:text-white text-slate-900 font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2"
                   >
                     {profileLoading ? <Loader size={16} className="animate-spin" /> : null}
                     {profileLoading ? "Enregistrement..." : "Enregistrer les modifications"}
@@ -155,39 +155,39 @@ export default function SettingsPage() {
 
           {/* SECURITY TAB */}
           {activeTab === "security" && (
-            <div className="bg-[#12141a] border border-slate-800/50 p-6 rounded-3xl shadow-xl">
-              <h3 className="text-lg font-bold text-white mb-6">Changer le Mot de Passe</h3>
+            <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 p-6 rounded-3xl shadow-xl">
+              <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-6">Changer le Mot de Passe</h3>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Mot de passe actuel</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-2">Mot de passe actuel</label>
                   <input
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200/50 rounded-xl py-3 px-4 dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nouveau mot de passe</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-2">Nouveau mot de passe</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200/50 rounded-xl py-3 px-4 dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Confirmer le nouveau mot de passe</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-2">Confirmer le nouveau mot de passe</label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[#0b0c10] border border-slate-800/50 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200/50 rounded-xl py-3 px-4 dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none"
                     required
                   />
                 </div>
@@ -206,7 +206,7 @@ export default function SettingsPage() {
                 <button
                   type="submit"
                   disabled={passwordLoading}
-                  className="py-2.5 px-6 bg-red-500 hover:bg-red-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-lg shadow-red-500/20 transition-all flex items-center gap-2"
+                  className="py-2.5 px-6 bg-red-500 hover:bg-red-600 disabled:opacity-60 disabled:cursor-not-allowed dark:text-white text-slate-900 font-bold text-sm rounded-xl shadow-lg shadow-red-500/20 transition-all flex items-center gap-2"
                 >
                   {passwordLoading ? <Loader size={16} className="animate-spin" /> : null}
                   {passwordLoading ? "Changement..." : "Changer le mot de passe"}
@@ -217,21 +217,21 @@ export default function SettingsPage() {
 
           {/* NOTIFICATIONS TAB */}
           {activeTab === "notifications" && (
-            <div className="bg-[#12141a] border border-slate-800/50 p-6 rounded-3xl shadow-xl space-y-4">
-              <h3 className="text-lg font-bold text-white mb-4">Préférences de Notifications</h3>
+            <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 p-6 rounded-3xl shadow-xl space-y-4">
+              <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-4">Préférences de Notifications</h3>
               {[
                 { label: "Résumés hebdomadaires", desc: "Recevez un résumé de vos activités chaque semaine", state: emailNotifs, set: setEmailNotifs },
                 { label: "Rappels d'entraînement", desc: "Notifications 30min avant vos séances planifiées", state: true, set: () => {} },
                 { label: "Nouvelles classes disponibles", desc: "Soyez alerté quand de nouveaux cours sont ajoutés", state: false, set: () => {} },
               ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between p-4 bg-[#0b0c10] rounded-2xl border border-slate-800/50">
+                <div key={i} className="flex items-center justify-between p-4 dark:bg-[#0b0c10] bg-slate-50 rounded-2xl border dark:border-slate-800 border-slate-200/50">
                   <div>
-                    <h4 className="text-sm font-semibold text-white">{item.label}</h4>
-                    <p className="text-xs text-slate-400">{item.desc}</p>
+                    <h4 className="text-sm font-semibold dark:text-white text-slate-900">{item.label}</h4>
+                    <p className="text-xs dark:text-slate-400 text-slate-600">{item.desc}</p>
                   </div>
                   <div
                     onClick={() => item.set(!item.state)}
-                    className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${item.state ? "bg-emerald-500" : "bg-[#1a1d24] border border-slate-700"}`}
+                    className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${item.state ? "bg-emerald-500" : "dark:bg-[#1a1d24] bg-slate-100 border dark:border-slate-700 border-slate-300"}`}
                   >
                     <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${item.state ? "right-1 bg-white" : "left-1 bg-slate-500"}`}></div>
                   </div>
@@ -242,23 +242,23 @@ export default function SettingsPage() {
 
           {/* PRIVACY TAB */}
           {activeTab === "privacy" && (
-            <div className="bg-[#12141a] border border-slate-800/50 p-6 rounded-3xl shadow-xl space-y-4">
-              <h3 className="text-lg font-bold text-white mb-4">Confidentialité du Profil</h3>
-              <div className="flex items-center justify-between p-4 bg-[#0b0c10] rounded-2xl border border-slate-800/50">
+            <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 p-6 rounded-3xl shadow-xl space-y-4">
+              <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-4">Confidentialité du Profil</h3>
+              <div className="flex items-center justify-between p-4 dark:bg-[#0b0c10] bg-slate-50 rounded-2xl border dark:border-slate-800 border-slate-200/50">
                 <div>
-                  <h4 className="text-sm font-semibold text-white">Profil Public</h4>
-                  <p className="text-xs text-slate-400">Permettre aux autres membres de voir votre profil</p>
+                  <h4 className="text-sm font-semibold dark:text-white text-slate-900">Profil Public</h4>
+                  <p className="text-xs dark:text-slate-400 text-slate-600">Permettre aux autres membres de voir votre profil</p>
                 </div>
                 <div
                   onClick={() => setProfilePublic(!profilePublic)}
-                  className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${profilePublic ? "bg-emerald-500" : "bg-[#1a1d24] border border-slate-700"}`}
+                  className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors ${profilePublic ? "bg-emerald-500" : "dark:bg-[#1a1d24] bg-slate-100 border dark:border-slate-700 border-slate-300"}`}
                 >
                   <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${profilePublic ? "right-1 bg-white" : "left-1 bg-slate-500"}`}></div>
                 </div>
               </div>
-              <div className="p-4 bg-[#0b0c10] rounded-2xl border border-red-500/20">
+              <div className="p-4 dark:bg-[#0b0c10] bg-slate-50 rounded-2xl border border-red-500/20">
                 <h4 className="text-sm font-bold text-red-400 mb-1">Zone Dangereuse</h4>
-                <p className="text-xs text-slate-400 mb-3">La suppression de votre compte est définitive et irréversible.</p>
+                <p className="text-xs dark:text-slate-400 text-slate-600 mb-3">La suppression de votre compte est définitive et irréversible.</p>
                 <button className="px-4 py-2 bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 text-xs font-bold rounded-xl transition-colors">
                   Supprimer mon compte
                 </button>

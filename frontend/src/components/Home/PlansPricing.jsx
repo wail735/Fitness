@@ -95,13 +95,13 @@ export const PricingSimpleIcon = () => {
               )}
 
               <div className="px-8 pt-10 pb-8">
-                <h3 className="text-base font-black uppercase tracking-widest text-gray-900 dark:text-white mb-5 transition-colors">
+                <h3 className="text-base font-black uppercase tracking-widest text-gray-900 dark:text-white text-slate-900 mb-5 transition-colors">
                   {plan.title}
                 </h3>
 
                 <div className="flex items-start justify-center gap-1 mb-1">
-                  <sup className="text-2xl font-bold text-gray-900 dark:text-white mt-3 leading-none transition-colors">$</sup>
-                  <span className="text-7xl font-black text-gray-900 dark:text-white leading-none transition-colors">
+                  <sup className="text-2xl font-bold text-gray-900 dark:text-white text-slate-900 mt-3 leading-none transition-colors">$</sup>
+                  <span className="text-7xl font-black text-gray-900 dark:text-white text-slate-900 leading-none transition-colors">
                     {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                   </span>
                 </div>

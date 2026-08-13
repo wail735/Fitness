@@ -30,7 +30,7 @@ function ClassCards() {
 
         {/* Header */}
         <div className="text-center mb-4">
-          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
+          <h2 className="text-black dark:text-white text-slate-900 text-4xl font-black uppercase tracking-tight mb-3">
             Our <span className="text-orange-500">Classes</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm max-w-lg mx-auto leading-relaxed">
@@ -66,13 +66,13 @@ function ClassCards() {
 
               {/* Content */}
               <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                <h3 className="text-white font-black uppercase tracking-wide text-sm mb-2 group-hover:text-orange-400 transition-colors duration-300">
+                <h3 className="dark:text-white text-slate-900 font-black uppercase tracking-wide text-sm mb-2 group-hover:text-orange-400 transition-colors duration-300">
                   {cls.title}
                 </h3>
                 <p className="text-gray-300 text-xs leading-relaxed mb-4 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
                   {cls.desc}
                 </p>
-                <button className="self-start border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white text-[10px] uppercase font-bold tracking-widest px-4 py-2 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
+                <button className="self-start border border-orange-500 text-orange-400 hover:bg-orange-500 hover:dark:text-white hover:text-slate-900 text-[10px] uppercase font-bold tracking-widest px-4 py-2 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
                   Read More
                 </button>
               </div>

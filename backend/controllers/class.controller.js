@@ -53,9 +53,23 @@ const bookClass = async (req, res) => {
     const cls = await Class.findById(classId);
     if (!cls) return res.status(404).json({ error: 'Cours introuvable.' });
 
+    // Check capacity
     const count = await Booking.countDocuments({ classId });
     if (count >= cls.capacity)
       return res.status(409).json({ error: 'Ce cours est complet.' });
+
+    // Check for time conflicts
+    const userBookings = await Booking.find({ userId }).populate('classId');
+    const hasConflict = userBookings.some(b => 
+      b.classId && 
+      b.classId._id.toString() !== classId &&
+      b.classId.day === cls.day && 
+      b.classId.time === cls.time
+    );
+
+    if (hasConflict) {
+      return res.status(409).json({ error: 'Vous avez déjà un cours réservé à ce même horaire.' });
+    }
 
     const booking = await Booking.create({ userId, classId });
     res.status(201).json({ message: 'Réservation confirmée !', bookingId: booking._id });

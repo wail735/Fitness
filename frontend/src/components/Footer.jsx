@@ -17,7 +17,7 @@ function Footer() {
             >
               <path d="M20.5 4v4h-2V6h-2v12h2v-2h2v4h-4v-2H7v2H3v-4h2v-2H3V6h2V4h4v2h8V4h4zM7 8v8h10V8H7z" />
             </svg>
-            <h2 className="text-black dark:text-white text-2xl font-black uppercase tracking-widest">
+            <h2 className="text-black dark:text-white text-slate-900 text-2xl font-black uppercase tracking-widest">
               Activitar
             </h2>
           </div>
@@ -28,7 +28,7 @@ function Footer() {
 
           {/* Socials */}
           <div>
-            <h4 className="text-black dark:text-white text-sm font-bold uppercase tracking-widest mb-4">
+            <h4 className="text-black dark:text-white text-slate-900 text-sm font-bold uppercase tracking-widest mb-4">
               Follow Us
             </h4>
             <div className="flex items-center gap-4">
@@ -50,13 +50,13 @@ function Footer() {
 
         {/* ── COLUMN 2: Our Blog ── */}
         <div className="flex flex-col gap-6">
-          <h3 className="text-black dark:text-white text-base font-bold uppercase tracking-widest">
+          <h3 className="text-black dark:text-white text-slate-900 text-base font-bold uppercase tracking-widest">
             Our Blog
           </h3>
           <ul className="flex flex-col gap-5">
             <li>
               <a href="#" className="hover:text-[#e8401c] transition-colors group">
-                <h5 className="text-sm font-bold text-black dark:text-white uppercase mb-1 group-hover:text-[#e8401c]">
+                <h5 className="text-sm font-bold text-black dark:text-white text-slate-900 uppercase mb-1 group-hover:text-[#e8401c]">
                   Most people who work
                 </h5>
                 <div className="flex items-center gap-2 text-xs text-[#e8401c]">
@@ -69,7 +69,7 @@ function Footer() {
             </li>
             <li>
               <a href="#" className="hover:text-[#e8401c] transition-colors group">
-                <h5 className="text-sm font-bold text-black dark:text-white uppercase mb-1 group-hover:text-[#e8401c]">
+                <h5 className="text-sm font-bold text-black dark:text-white text-slate-900 uppercase mb-1 group-hover:text-[#e8401c]">
                   Freelance design tricks how
                 </h5>
                 <div className="flex items-center gap-2 text-xs text-[#e8401c]">
@@ -82,7 +82,7 @@ function Footer() {
             </li>
             <li>
               <a href="#" className="hover:text-[#e8401c] transition-colors group">
-                <h5 className="text-sm font-bold text-black dark:text-white uppercase mb-1 group-hover:text-[#e8401c]">
+                <h5 className="text-sm font-bold text-black dark:text-white text-slate-900 uppercase mb-1 group-hover:text-[#e8401c]">
                   Have a computer at home have had
                 </h5>
                 <div className="flex items-center gap-2 text-xs text-[#e8401c]">
@@ -98,7 +98,7 @@ function Footer() {
 
         {/* ── COLUMN 3: Program ── */}
         <div className="flex flex-col gap-6">
-          <h3 className="text-black dark:text-white text-base font-bold uppercase tracking-widest">
+          <h3 className="text-black dark:text-white text-slate-900 text-base font-bold uppercase tracking-widest">
             Program
           </h3>
           <ul className="flex flex-col gap-4 text-sm font-semibold">
@@ -112,7 +112,7 @@ function Footer() {
 
         {/* ── COLUMN 4: Get Info ── */}
         <div className="flex flex-col gap-6">
-          <h3 className="text-black dark:text-white text-base font-bold uppercase tracking-widest">
+          <h3 className="text-black dark:text-white text-slate-900 text-base font-bold uppercase tracking-widest">
             Get Info
           </h3>
           <ul className="flex flex-col gap-6">
@@ -121,7 +121,7 @@ function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               <div>
-                <strong className="block text-black dark:text-white mb-1">Phone:</strong>
+                <strong className="block text-black dark:text-white text-slate-900 mb-1">Phone:</strong>
                 <span>+213 55 12 34 56</span>
               </div>
             </li>
@@ -130,7 +130,7 @@ function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               <div>
-                <strong className="block text-black dark:text-white mb-1">Email:</strong>
+                <strong className="block text-black dark:text-white text-slate-900 mb-1">Email:</strong>
                 <a href="mailto:contact@activitar.com" className="hover:text-[#e8401c] transition-colors">contact@activitar.com</a>
               </div>
             </li>
@@ -140,7 +140,7 @@ function Footer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <div>
-                <strong className="block text-black dark:text-white mb-1">Address:</strong>
+                <strong className="block text-black dark:text-white text-slate-900 mb-1">Address:</strong>
                 <span>Blida, Algérie</span>
               </div>
             </li>

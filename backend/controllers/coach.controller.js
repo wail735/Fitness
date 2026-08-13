@@ -93,4 +93,52 @@ const getCoachStats = async (req, res) => {
   }
 };
 
-module.exports = { getRoutines, createRoutine, deleteRoutine, getMembers, getCoachStats };
+const CoachSession = require('../models/CoachSession.model');
+const { createNotification } = require('./notification.controller');
+
+// GET /api/coach/sessions
+const getCoachSessions = async (req, res) => {
+  try {
+    const sessions = await CoachSession.find({ coachId: req.user.id })
+      .populate('userId', 'name email')
+      .populate('assignedRoutineId', 'title')
+      .sort({ createdAt: -1 });
+    res.json(sessions);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la récupération des sessions.', detail: err.message });
+  }
+};
+
+// PATCH /api/coach/sessions/:sessionId
+const updateCoachSession = async (req, res) => {
+  const { status, assignedRoutineId } = req.body;
+  try {
+    const session = await CoachSession.findOneAndUpdate(
+      { _id: req.params.sessionId, coachId: req.user.id },
+      { status, assignedRoutineId },
+      { new: true }
+    ).populate('userId', 'name email').populate('assignedRoutineId', 'title');
+
+    if (!session) return res.status(404).json({ error: 'Session introuvable.' });
+
+    // Notify the user if accepted
+    if (status === 'accepted') {
+      await createNotification(
+        session.userId._id,
+        'session_accepted',
+        'Session Acceptée',
+        `Votre coach a accepté la session du ${session.date} à ${session.time}.`
+      );
+    }
+
+    res.json(session);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la mise à jour de la session.', detail: err.message });
+  }
+};
+
+module.exports = { 
+  getRoutines, createRoutine, deleteRoutine, 
+  getMembers, getCoachStats, 
+  getCoachSessions, updateCoachSession 
+};

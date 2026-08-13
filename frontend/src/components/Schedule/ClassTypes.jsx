@@ -82,7 +82,7 @@ function ClassTypes() {
 
         {/* Header */}
         <div className="text-center mb-4">
-          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
+          <h2 className="text-black dark:text-white text-slate-900 text-4xl font-black uppercase tracking-tight mb-3">
             Our <span className="text-orange-500">Classes</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
@@ -112,7 +112,7 @@ function ClassTypes() {
               </div>
 
               {/* Title */}
-              <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-sm mb-3 group-hover:text-orange-400 transition-colors duration-300">
+              <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-sm mb-3 group-hover:text-orange-400 transition-colors duration-300">
                 {cls.title}
               </h3>
 

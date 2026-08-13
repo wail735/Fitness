@@ -37,18 +37,18 @@ const getGreeting = () => {
 function StatCard({ icon: Icon, label, value, color, bg }) {
   const count = useCounter(value);
   return (
-    <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 flex flex-col justify-between group hover:border-slate-700 transition-colors">
+    <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 flex flex-col justify-between group hover:dark:border-slate-700 border-slate-300 transition-colors">
       <div className="flex justify-between items-start mb-4">
         <div className={`w-12 h-12 rounded-2xl ${bg} flex items-center justify-center`}>
           <Icon size={24} className={color} />
         </div>
-        <button className="w-8 h-8 rounded-full bg-[#1a1d24] flex items-center justify-center text-slate-400 group-hover:text-white transition-colors">
+        <button className="w-8 h-8 rounded-full dark:bg-[#1a1d24] bg-slate-100 flex items-center justify-center dark:text-slate-400 text-slate-600 group-hover:dark:text-white hover:text-slate-900 transition-colors">
           <ArrowUpRight size={14} />
         </button>
       </div>
       <div>
-        <p className="text-sm font-medium text-slate-400 mb-1">{label}</p>
-        <h3 className="text-3xl font-bold text-white">{count}</h3>
+        <p className="text-sm font-medium dark:text-slate-400 text-slate-600 mb-1">{label}</p>
+        <h3 className="text-3xl font-bold dark:text-white text-slate-900">{count}</h3>
       </div>
     </div>
   );
@@ -60,6 +60,7 @@ export default function CoachDashboard() {
   const navigate = useNavigate();
   const [members, setMembers]   = useState([]);
   const [routines, setRoutines] = useState([]);
+  const [sessions, setSessions] = useState([]);
   const [stats, setStats]       = useState({ totalMembers: 0, totalRoutines: 0, totalBookings: 0 });
   const [loading, setLoading]   = useState(true);
   const [selectedRoutine, setSelectedRoutine] = useState(null);
@@ -68,14 +69,16 @@ export default function CoachDashboard() {
     (async () => {
       setLoading(true);
       try {
-        const [mRes, rRes, sRes] = await Promise.all([
+        const [mRes, rRes, sRes, sessRes] = await Promise.all([
           api.get("/coach/members"),
           api.get("/coach/routines"),
           api.get("/coach/stats"),
+          api.get("/coach/sessions")
         ]);
         setMembers(mRes.data);
         setRoutines(rRes.data);
         setStats(sRes.data);
+        setSessions(sessRes.data);
       } catch (e) {
         console.error(e);
       } finally {
@@ -84,12 +87,32 @@ export default function CoachDashboard() {
     })();
   }, []);
 
+  const handleAcceptSession = async (session) => {
+    if (routines.length === 0) {
+      alert("Veuillez d'abord créer un programme pour l'attribuer !");
+      return;
+    }
+    // Simplification : on attribue le premier programme du coach par défaut
+    // (Idéalement, on ouvrirait une modale pour choisir lequel attribuer)
+    const routineId = routines[0]._id || routines[0].id;
+    try {
+      const res = await api.patch(`/coach/sessions/${session._id}`, {
+        status: 'accepted',
+        assignedRoutineId: routineId
+      });
+      setSessions(prev => prev.map(s => s._id === session._id ? res.data : s));
+    } catch (e) {
+      console.error(e);
+      alert("Erreur lors de l'acceptation.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center h-full">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-          <p className="text-slate-400 text-sm">Chargement de l'espace coach...</p>
+          <p className="dark:text-slate-400 text-slate-600 text-sm">Chargement de l'espace coach...</p>
         </div>
       </div>
     );
@@ -101,8 +124,8 @@ export default function CoachDashboard() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
         <div>
-          <p className="text-slate-400 text-sm mb-1">{getGreeting()},</p>
-          <h1 className="text-3xl font-bold text-white tracking-tight">Coach {user?.name?.split(" ")[0] || ""}</h1>
+          <p className="dark:text-slate-400 text-slate-600 text-sm mb-1">{getGreeting()},</p>
+          <h1 className="text-3xl font-bold dark:text-white text-slate-900 tracking-tight">Coach {user?.name?.split(" ")[0] || ""}</h1>
         </div>
         <Link 
           to="/coach/builder"
@@ -122,17 +145,17 @@ export default function CoachDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Members List */}
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 flex flex-col">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-medium text-slate-200">Membres Récents</h3>
-            <span className="text-xs font-semibold px-2.5 py-1 bg-[#1a1d24] text-slate-400 rounded-lg">{members.length} Total</span>
+            <h3 className="text-lg font-medium dark:text-slate-200 text-slate-800">Membres Récents</h3>
+            <span className="text-xs font-semibold px-2.5 py-1 dark:bg-[#1a1d24] bg-slate-100 dark:text-slate-400 text-slate-600 rounded-lg">{members.length} Total</span>
           </div>
 
           <div className="space-y-2 flex-1">
             {members.length === 0 ? (
               <div className="text-center py-10">
                 <Users size={32} className="mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-400 text-sm">Aucun membre n'est inscrit pour l'instant.</p>
+                <p className="dark:text-slate-400 text-slate-600 text-sm">Aucun membre n'est inscrit pour l'instant.</p>
               </div>
             ) : (
               members.slice(0, 5).map((m, i) => {
@@ -147,21 +170,21 @@ export default function CoachDashboard() {
                 const c = colors[i % colors.length];
 
                 return (
-                  <div key={m._id} className="flex items-center justify-between p-3 rounded-2xl hover:bg-[#1a1d24] transition-colors border border-transparent hover:border-slate-800/50">
+                  <div key={m._id} className="flex items-center justify-between p-3 rounded-2xl hover:dark:bg-[#1a1d24] hover:bg-slate-100 transition-colors border border-transparent hover:dark:border-slate-800 hover:border-slate-200">
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-xl ${c.bg} ${c.text} flex items-center justify-center font-bold text-sm shrink-0`}>
                         {initials}
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-slate-200">{m.name}</h4>
+                        <h4 className="text-sm font-semibold dark:text-slate-200 text-slate-800">{m.name}</h4>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="hidden sm:block text-right">
-                        <p className="text-[10px] text-slate-400 mb-0.5"><Activity size={10} className="inline mr-1" />{m.workoutsCount} séances</p>
+                        <p className="text-[10px] dark:text-slate-400 text-slate-600 mb-0.5"><Activity size={10} className="inline mr-1" />{m.workoutsCount} séances</p>
                         <p className="text-[10px] text-slate-500">Inscrit le {new Date(m.createdAt).toLocaleDateString("fr-FR")}</p>
                       </div>
-                      <button className="text-slate-500 hover:text-white"><ChevronRight size={16} /></button>
+                      <button className="text-slate-500 hover:dark:text-white hover:text-slate-900"><ChevronRight size={16} /></button>
                     </div>
                   </div>
                 );
@@ -169,16 +192,16 @@ export default function CoachDashboard() {
             )}
           </div>
           {members.length > 5 && (
-            <button className="w-full mt-4 py-3 bg-[#1a1d24] hover:bg-[#252a36] transition-colors rounded-xl text-sm text-slate-300 font-medium text-center">
+            <button className="w-full mt-4 py-3 dark:bg-[#1a1d24] bg-slate-100 hover:dark:bg-[#252a36] hover:bg-slate-200 transition-colors rounded-xl text-sm dark:text-slate-300 text-slate-700 font-medium text-center">
               Voir tous les membres
             </button>
           )}
         </div>
 
         {/* Routines List */}
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 flex flex-col">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-medium text-slate-200">Programmes</h3>
+            <h3 className="text-lg font-medium dark:text-slate-200 text-slate-800">Programmes</h3>
             <Link to="/coach/builder" className="text-xs text-emerald-400 font-semibold hover:text-emerald-300">+ Ajouter</Link>
           </div>
 
@@ -186,7 +209,7 @@ export default function CoachDashboard() {
             {routines.length === 0 ? (
               <div className="text-center py-10">
                 <Dumbbell size={32} className="mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-400 text-sm mb-3">Aucun programme créé.</p>
+                <p className="dark:text-slate-400 text-slate-600 text-sm mb-3">Aucun programme créé.</p>
                 <Link to="/coach/builder" className="text-xs text-emerald-400 font-semibold underline">Créer mon premier programme</Link>
               </div>
             ) : (
@@ -202,25 +225,25 @@ export default function CoachDashboard() {
                   <div 
                     key={r._id || r.id} 
                     onClick={() => setSelectedRoutine(r)}
-                    className="bg-gradient-to-r from-[#1a1d24] to-[#12141a] border border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-slate-700 transition-colors cursor-pointer"
+                    className="bg-gradient-to-r from-[#1a1d24] to-[#12141a] border dark:border-slate-800 border-slate-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:dark:border-slate-700 border-slate-300 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl ${lvl.bg} border ${lvl.border} flex flex-col items-center justify-center shrink-0`}>
                         <Dumbbell size={18} className={lvl.color} />
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">{r.title}</h4>
+                        <h4 className="text-sm font-semibold dark:text-white text-slate-900 mb-1 group-hover:text-emerald-400 transition-colors">{r.title}</h4>
                         <div className="flex items-center gap-2">
                           <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${lvl.bg} ${lvl.color}`}>
                             {r.target}
                           </span>
-                          <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                          <span className="text-[11px] dark:text-slate-400 text-slate-600 flex items-center gap-1">
                             <Activity size={10} /> {r.exercisesCount} exo.
                           </span>
                         </div>
                       </div>
                     </div>
-                    <button className="text-slate-500 hover:text-white shrink-0 self-end sm:self-auto"><ChevronRight size={18} /></button>
+                    <button className="text-slate-500 hover:dark:text-white hover:text-slate-900 shrink-0 self-end sm:self-auto"><ChevronRight size={18} /></button>
                   </div>
                 );
               })
@@ -230,40 +253,94 @@ export default function CoachDashboard() {
 
       </div>
 
+      {/* Coach Sessions / Demandes de Coaching Privé */}
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 flex flex-col mt-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-medium dark:text-slate-200 text-slate-800">Demandes de Coaching Privé</h3>
+        </div>
+
+        <div className="space-y-3">
+          {sessions.length === 0 ? (
+            <div className="text-center py-10">
+              <Calendar size={32} className="mx-auto text-slate-600 mb-3" />
+              <p className="dark:text-slate-400 text-slate-600 text-sm">Aucune demande pour le moment.</p>
+            </div>
+          ) : (
+            sessions.map(session => (
+              <div key={session._id} className="dark:bg-[#1a1d24] bg-slate-100 border dark:border-slate-800 border-slate-200 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h4 className="font-bold dark:text-white text-slate-900 mb-1">{session.userId?.name}</h4>
+                  <p className="text-sm dark:text-slate-400 text-slate-600 mb-2">
+                    <Calendar size={14} className="inline mr-1 text-emerald-400" /> {session.date} à {session.time}
+                  </p>
+                  {session.userNotes && (
+                    <div className="bg-slate-800/50 p-3 rounded-xl text-xs dark:text-slate-300 text-slate-700 italic border dark:border-slate-700 border-slate-300/50">
+                      "{session.userNotes}"
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                    session.status === 'pending' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
+                    session.status === 'accepted' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' :
+                    'bg-slate-500/10 dark:text-slate-400 text-slate-600 border border-slate-500/20'
+                  }`}>
+                    {session.status}
+                  </span>
+                  
+                  {session.status === 'pending' && (
+                    <button 
+                      onClick={() => handleAcceptSession(session)}
+                      className="bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+                    >
+                      Accepter
+                    </button>
+                  )}
+                  {session.status === 'accepted' && session.assignedRoutineId && (
+                    <span className="text-xs dark:text-slate-400 text-slate-600">Plan : {session.assignedRoutineId.title}</span>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
       {/* Routine Detail Modal */}
       {selectedRoutine && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedRoutine(null)}>
-          <div className="bg-[#12141a] border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col items-center justify-center shrink-0">
                   <Dumbbell size={18} className="text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white leading-tight">{selectedRoutine.title}</h3>
-                  <p className="text-xs text-slate-400 mt-1">Créé le {new Date(selectedRoutine.createdAt || Date.now()).toLocaleDateString("fr-FR")}</p>
+                  <h3 className="text-xl font-bold dark:text-white text-slate-900 leading-tight">{selectedRoutine.title}</h3>
+                  <p className="text-xs dark:text-slate-400 text-slate-600 mt-1">Créé le {new Date(selectedRoutine.createdAt || Date.now()).toLocaleDateString("fr-FR")}</p>
                 </div>
               </div>
             </div>
             
             <div className="space-y-4">
-              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-400">Niveau Cible</span>
+              <div className="dark:bg-[#1a1d24] bg-slate-100 p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium dark:text-slate-400 text-slate-600">Niveau Cible</span>
                 <span className="text-sm font-bold text-emerald-400">{selectedRoutine.target}</span>
               </div>
-              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-400">Nombre d'exercices</span>
-                <span className="text-sm font-bold text-white">{selectedRoutine.exercisesCount} exercices</span>
+              <div className="dark:bg-[#1a1d24] bg-slate-100 p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium dark:text-slate-400 text-slate-600">Nombre d'exercices</span>
+                <span className="text-sm font-bold dark:text-white text-slate-900">{selectedRoutine.exercisesCount} exercices</span>
               </div>
-              <div className="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center">
-                <span className="text-sm font-medium text-slate-400">Membres assignés</span>
-                <span className="text-sm font-bold text-white">Tous (Global)</span>
+              <div className="dark:bg-[#1a1d24] bg-slate-100 p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-sm font-medium dark:text-slate-400 text-slate-600">Membres assignés</span>
+                <span className="text-sm font-bold dark:text-white text-slate-900">Tous (Global)</span>
               </div>
             </div>
 
             <button 
               onClick={() => setSelectedRoutine(null)}
-              className="w-full mt-8 bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 rounded-xl transition-colors"
+              className="w-full mt-8 bg-slate-800 hover:bg-slate-700 dark:text-white text-slate-900 font-medium py-3 rounded-xl transition-colors"
             >
               Fermer
             </button>

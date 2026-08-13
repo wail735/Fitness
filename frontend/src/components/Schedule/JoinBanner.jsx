@@ -33,7 +33,7 @@ function JoinBanner() {
             Réservez votre <span className="bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">séance</span> dès aujourd'hui
           </h3>
           
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Rejoignez nos cours et commencez votre transformation. Nos coachs experts sont prêts à vous accompagner. N'attendez plus !
           </p>
         </div>
@@ -52,7 +52,7 @@ function JoinBanner() {
           
           <Link
             to="/contacts"
-            className="group flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-800 text-white uppercase font-bold tracking-wider text-xs px-8 py-4 rounded-xl border border-slate-700 hover:border-red-500/50 transition-all backdrop-blur-sm relative z-20"
+            className="group flex items-center justify-center gap-2 bg-slate-900/50 hover:bg-slate-800 text-white uppercase font-bold tracking-wider text-xs px-8 py-4 rounded-xl border dark:border-slate-700 border-slate-300 hover:border-red-500/50 transition-all backdrop-blur-sm relative z-20"
           >
             <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-red-400 transition-colors" />
             Nous Contacter

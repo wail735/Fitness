@@ -129,6 +129,10 @@ const updateUserRole = async (req, res) => {
   if (!['user', 'coach', 'admin'].includes(role))
     return res.status(400).json({ error: 'Rôle invalide. Doit être user, coach ou admin.' });
 
+  if (req.params.id === req.user.id) {
+    return res.status(403).json({ error: 'Action interdite : vous ne pouvez pas modifier votre propre rôle.' });
+  }
+
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,

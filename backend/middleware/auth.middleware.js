@@ -30,4 +30,11 @@ const coachOrAdminMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = { authMiddleware, adminMiddleware, coachOrAdminMiddleware };
+const userMiddleware = (req, res, next) => {
+  if (!req.user || req.user.role !== 'user') {
+    return res.status(403).json({ error: 'Forbidden: User access required.' });
+  }
+  next();
+};
+
+module.exports = { authMiddleware, adminMiddleware, coachOrAdminMiddleware, userMiddleware };

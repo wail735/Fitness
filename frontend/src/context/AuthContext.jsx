@@ -20,10 +20,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = async (email, password) => {
+  const login = async (email, password, role) => {
     setAuthLoading(true);
     try {
-      const { data } = await api.post("/auth/login", { email, password });
+      const { data } = await api.post("/auth/login", { email, password, role });
       localStorage.setItem("fitness_token", data.token);
       setUser(data.user);
       setIsAuthModalOpen(false);

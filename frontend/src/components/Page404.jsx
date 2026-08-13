@@ -28,7 +28,7 @@ function Page404() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1200 }}
-      className="relative min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-black text-black dark:text-white px-4 text-center overflow-hidden transition-colors duration-300"
+      className="relative min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-black text-black dark:text-white text-slate-900 px-4 text-center overflow-hidden transition-colors duration-300"
     >
       <div className="absolute inset-0 bg-red-900/10 pointer-events-none"></div>
 
@@ -67,7 +67,7 @@ function Page404() {
         <motion.div style={{ transform: "translateZ(60px)" }}>
           <Link
             to="/"
-            className="inline-block border-2 border-red-500 hover:bg-red-500 text-red-500 dark:text-white hover:text-white px-8 py-3 text-base font-semibold uppercase tracking-widest transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:shadow-[0_0_25px_rgba(220,38,38,0.8)]"
+            className="inline-block border-2 border-red-500 hover:bg-red-500 text-red-500 dark:text-white text-slate-900 hover:dark:text-white hover:text-slate-900 px-8 py-3 text-base font-semibold uppercase tracking-widest transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:shadow-[0_0_25px_rgba(220,38,38,0.8)]"
           >
             Retourner à page d'acceuil
           </Link>

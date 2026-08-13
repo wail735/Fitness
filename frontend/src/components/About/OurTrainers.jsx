@@ -36,7 +36,7 @@ function OurTrainers() {
 
         {/* Header */}
         <div className="text-center mb-4">
-          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
+          <h2 className="text-black dark:text-white text-slate-900 text-4xl font-black uppercase tracking-tight mb-3">
             Our <span className="text-orange-500">Trainers</span>
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
@@ -75,7 +75,7 @@ function OurTrainers() {
                   <a
                     key={icon}
                     href="#"
-                    className="w-8 h-8 flex items-center justify-center border border-white text-white hover:bg-white hover:text-orange-500 transition-all duration-200 text-sm"
+                    className="w-8 h-8 flex items-center justify-center border border-white dark:text-white text-slate-900 hover:bg-white hover:text-orange-500 transition-all duration-200 text-sm"
                   >
                     <i className={`fa-brands ${icon}`}></i>
                   </a>
@@ -84,7 +84,7 @@ function OurTrainers() {
 
               {/* Info */}
               <div className="bg-gray-200 dark:bg-[#1c1c1c] py-3 px-4 border-t border-black/10 dark:border-white/10 group-hover:border-orange-500 transition-colors duration-300">
-                <p className="text-black dark:text-white font-bold text-sm uppercase tracking-wide">
+                <p className="text-black dark:text-white text-slate-900 font-bold text-sm uppercase tracking-wide">
                   {trainer.name}
                 </p>
                 <p className="text-orange-400 text-xs tracking-widest mt-0.5">

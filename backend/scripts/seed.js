@@ -35,7 +35,16 @@ const seedData = async () => {
     const adminExists = await User.findOne({ email: 'admin@fitness-club.com' });
     if (!adminExists) {
       await User.create({ name: 'Administrateur Principal', email: 'admin@fitness-club.com', password: 'admin1234', role: 'admin' });
-      await User.create({ name: 'Coach Alex Rivera', email: 'coach@fitness-club.com', password: 'coach1234', role: 'coach' });
+      await User.create({ 
+        name: 'Coach Alex Rivera', 
+        email: 'coach@fitness-club.com', 
+        password: 'coach1234', 
+        role: 'coach',
+        specialty: 'CrossFit & HIIT',
+        bio: 'Certifié CrossFit Level 3, plus de 8 ans d\'expérience en coaching sportif. Spécialisé dans la transformation physique et la préparation athlétique.',
+        workingDays: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'],
+        workingHours: { start: '08:00', end: '17:00' }
+      });
       console.log('✅ Seeded admin & coach accounts.');
       console.log('   → Admin:  admin@fitness-club.com  / admin1234');
       console.log('   → Coach:  coach@fitness-club.com  / coach1234');

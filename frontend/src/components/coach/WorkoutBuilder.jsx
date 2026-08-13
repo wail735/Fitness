@@ -30,8 +30,8 @@ export default function WorkoutBuilder() {
     }
   };
 
-  const inputClass = "w-full bg-[#0b0c10] border border-slate-800 rounded-xl py-3 px-4 text-sm text-white focus:border-emerald-500 focus:outline-none placeholder:text-slate-600 transition-colors";
-  const labelClass = "block text-xs font-medium text-slate-400 mb-2";
+  const inputClass = "w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-xl py-3 px-4 text-sm dark:text-white text-slate-900 focus:border-emerald-500 focus:outline-none placeholder:text-slate-600 transition-colors";
+  const labelClass = "block text-xs font-medium dark:text-slate-400 text-slate-600 mb-2";
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -41,11 +41,11 @@ export default function WorkoutBuilder() {
         <div>
           <button
             onClick={() => navigate("/coach")}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-white transition-colors mb-2"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:dark:text-white hover:text-slate-900 transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour au Dashboard
           </button>
-          <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+          <h1 className="text-3xl font-bold dark:text-white text-slate-900 tracking-tight flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Dumbbell className="w-5 h-5 text-emerald-400" />
             </div>
@@ -55,7 +55,7 @@ export default function WorkoutBuilder() {
       </div>
 
       {/* Main Form Card */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 sm:p-8">
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div>
@@ -103,11 +103,11 @@ export default function WorkoutBuilder() {
             </div>
           </div>
 
-          <div className="pt-6 border-t border-slate-800/50 flex items-center justify-end gap-3">
+          <div className="pt-6 border-t dark:border-slate-800 border-slate-200/50 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => navigate("/coach")}
-              className="px-6 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+              className="px-6 py-3 text-sm font-medium dark:text-slate-400 text-slate-600 hover:dark:text-white hover:text-slate-900 transition-colors"
             >
               Annuler
             </button>

@@ -21,7 +21,7 @@ const RELATED_NEWS = [
 function RelatedNews() {
   return (
     <div className="mt-16">
-      <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-xl mb-8 flex items-center gap-2">
+      <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-xl mb-8 flex items-center gap-2">
         <div className="w-1 h-6 bg-orange-500"></div> Related News
       </h3>
       
@@ -39,7 +39,7 @@ function RelatedNews() {
             <p className="text-orange-500 text-[10px] font-bold uppercase tracking-widest mb-1">
               {news.date}
             </p>
-            <h4 className="text-black dark:text-white font-bold text-sm uppercase tracking-wider group-hover:text-orange-400 transition-colors">
+            <h4 className="text-black dark:text-white text-slate-900 font-bold text-sm uppercase tracking-wider group-hover:text-orange-400 transition-colors">
               {news.title}
             </h4>
           </div>

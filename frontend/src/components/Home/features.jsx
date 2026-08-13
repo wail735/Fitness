@@ -58,7 +58,7 @@ function Features() {
                 <p className="text-sm md:text-base mb-8 max-w-sm text-gray-200">
                   {card.description}
                 </p>
-                <button className="px-8 py-3 border-2 border-red-500 text-sm font-bold tracking-widest uppercase transition-colors duration-300 hover:bg-red-500">
+                <button className="px-8 py-3 border-2 border-red-500 text-white text-sm font-bold tracking-widest uppercase transition-colors duration-300 hover:bg-red-500">
                   READ MORE
                 </button>
               </div>

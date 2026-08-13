@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useFitness } from "../../context/FitnessContext";
 import { Utensils, Plus, Flame, X, Apple } from "lucide-react";
 
-const inputClass = "w-full bg-[#0b0c10] border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white focus:border-amber-500 focus:outline-none placeholder:text-slate-600 transition-colors";
-const selectClass = "w-full bg-[#0b0c10] border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white focus:border-amber-500 focus:outline-none appearance-none transition-colors";
-const labelClass = "block text-xs font-medium text-slate-400 mb-1.5";
+const inputClass = "w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-xl py-2.5 px-3 text-sm dark:text-white text-slate-900 focus:border-amber-500 focus:outline-none placeholder:text-slate-600 transition-colors";
+const selectClass = "w-full dark:bg-[#0b0c10] bg-slate-50 border dark:border-slate-800 border-slate-200 rounded-xl py-2.5 px-3 text-sm dark:text-white text-slate-900 focus:border-amber-500 focus:outline-none appearance-none transition-colors";
+const labelClass = "block text-xs font-medium dark:text-slate-400 text-slate-600 mb-1.5";
 
 const MEAL_COLORS = {
   "Petit-Déjeuner": { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/20" },
@@ -45,7 +45,7 @@ export default function NutritionTracker() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">Journal Nutritionnel</p>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-2xl font-bold dark:text-white text-slate-900 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
               <Utensils className="w-5 h-5 text-amber-400" />
             </div>
@@ -61,9 +61,9 @@ export default function NutritionTracker() {
       </div>
 
       {/* Daily Summary */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-base font-semibold text-slate-200 flex items-center gap-2">
+          <h3 className="text-base font-semibold dark:text-slate-200 text-slate-800 flex items-center gap-2">
             <Flame className="w-4 h-4 text-amber-400" /> Totaux du Jour
           </h3>
           <span className="text-xl font-bold text-amber-400">{totalCals} <span className="text-xs text-slate-500 font-normal">kcal</span></span>
@@ -78,9 +78,9 @@ export default function NutritionTracker() {
           ].map((m) => (
             <div key={m.label}>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs text-slate-400">{m.label}</span>
-                <span className="text-xs text-slate-300">
-                  <span className="font-bold text-white">{m.value}</span> / {m.goal} {m.unit}
+                <span className="text-xs dark:text-slate-400 text-slate-600">{m.label}</span>
+                <span className="text-xs dark:text-slate-300 text-slate-700">
+                  <span className="font-bold dark:text-white text-slate-900">{m.value}</span> / {m.goal} {m.unit}
                 </span>
               </div>
               <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -95,9 +95,9 @@ export default function NutritionTracker() {
       </div>
 
       {/* Logs */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6">
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6">
         <div className="flex justify-between items-center mb-5">
-          <h3 className="text-base font-semibold text-slate-200">Repas Enregistrés</h3>
+          <h3 className="text-base font-semibold dark:text-slate-200 text-slate-800">Repas Enregistrés</h3>
           <span className="text-xs text-slate-500 bg-slate-800/50 px-3 py-1 rounded-full">{nutritionLogs.length} entrées</span>
         </div>
 
@@ -111,20 +111,20 @@ export default function NutritionTracker() {
             {nutritionLogs.map((log, i) => {
               const c = MEAL_COLORS[log.meal] || MEAL_COLORS["Collation"];
               return (
-                <div key={log._id || log.id || i} className="flex items-center justify-between p-4 rounded-2xl bg-[#0f1115] border border-slate-800/50 hover:border-slate-700/50 transition-colors">
+                <div key={log._id || log.id || i} className="flex items-center justify-between p-4 rounded-2xl dark:bg-[#0f1115] bg-slate-50 border dark:border-slate-800 border-slate-200/50 hover:dark:border-slate-700 border-slate-300/50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-xl ${c.bg} border ${c.border} flex items-center justify-center`}>
                       <Utensils size={14} className={c.text} />
                     </div>
                     <div>
                       <span className={`text-[10px] font-bold uppercase tracking-wider ${c.text}`}>{log.meal}</span>
-                      <p className="text-sm font-semibold text-white">{log.food}</p>
+                      <p className="text-sm font-semibold dark:text-white text-slate-900">{log.food}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-6 text-xs">
                     <div className="text-right hidden sm:block">
                       <p className="text-[10px] text-slate-500">P / G / L</p>
-                      <p className="text-slate-300 font-medium">{log.protein}g / {log.carbs}g / {log.fat}g</p>
+                      <p className="dark:text-slate-300 text-slate-700 font-medium">{log.protein}g / {log.carbs}g / {log.fat}g</p>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-slate-500">Calories</p>
@@ -141,10 +141,10 @@ export default function NutritionTracker() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#12141a] border border-slate-800 rounded-3xl p-6 shadow-2xl">
+          <div className="w-full max-w-md dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200 rounded-3xl p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-lg font-bold text-white">Ajouter un Repas</h3>
-              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 transition-colors"><X size={14} /></button>
+              <h3 className="text-lg font-bold dark:text-white text-slate-900">Ajouter un Repas</h3>
+              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center dark:text-slate-400 text-slate-600 transition-colors"><X size={14} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -179,7 +179,7 @@ export default function NutritionTracker() {
                 </div>
               </div>
               <div className="flex gap-2 justify-end pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">Annuler</button>
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-xs font-semibold dark:text-slate-400 text-slate-600 hover:dark:text-white hover:text-slate-900 transition-colors">Annuler</button>
                 <button type="submit" className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition-colors">Ajouter</button>
               </div>
             </form>

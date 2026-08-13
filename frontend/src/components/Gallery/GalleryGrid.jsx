@@ -37,7 +37,7 @@ function GalleryGrid() {
               onClick={() => setActive(f.id)}
               className={`px-6 py-2 text-xs font-bold uppercase tracking-widest border transition-all duration-300 ${
                 active === f.id
-                  ? "bg-orange-500 border-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)]"
+                  ? "bg-orange-500 border-orange-500 dark:text-white text-slate-900 shadow-[0_0_15px_rgba(249,115,22,0.4)]"
                   : "border-black/15 dark:border-white/15 text-gray-600 dark:text-gray-400 hover:border-orange-500 hover:text-orange-400 bg-transparent"
               }`}
             >
@@ -79,7 +79,7 @@ function GalleryGrid() {
           onClick={() => setLightbox(null)}
         >
           <button
-            className="absolute top-6 right-8 text-white text-3xl hover:text-orange-400 transition-colors"
+            className="absolute top-6 right-8 dark:text-white text-slate-900 text-3xl hover:text-orange-400 transition-colors"
             onClick={() => setLightbox(null)}
           >
             <i className="fa-solid fa-xmark"></i>

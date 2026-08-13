@@ -46,16 +46,16 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
+          <h1 className="text-3xl font-extrabold dark:text-white text-slate-900 flex items-center gap-3">
             <ShieldCheck className="w-8 h-8 text-red-500" /> Administration - Vue d'Ensemble
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm dark:text-slate-400 text-slate-600 mt-1">
             Indicateurs de performance, réservations de cours et fréquentation du club.
           </p>
         </div>
         <Link
           to="/admin/schedule"
-          className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-red-600/20 transition-all"
+          className="flex items-center gap-2 bg-red-600 hover:bg-red-700 dark:text-white text-slate-900 font-bold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-red-600/20 transition-all"
         >
           <Plus className="w-4 h-4" /> Gérer le Planning
         </Link>
@@ -63,35 +63,35 @@ export default function Dashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5">
+          <div className="flex items-center justify-between dark:text-slate-400 text-slate-600 mb-2">
             <span className="text-xs font-bold uppercase">Membres Actifs</span>
             <Users className="w-5 h-5 text-blue-400" />
           </div>
-          <div className="text-3xl font-black text-white">{membersCount}</div>
+          <div className="text-3xl font-black dark:text-white text-slate-900">{membersCount}</div>
           <div className="text-[10px] text-emerald-400 mt-1 font-semibold">Inscrits au total</div>
         </div>
 
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5">
+          <div className="flex items-center justify-between dark:text-slate-400 text-slate-600 mb-2">
             <span className="text-xs font-bold uppercase">Réservations Totales</span>
             <Calendar className="w-5 h-5 text-red-500" />
           </div>
-          <div className="text-3xl font-black text-white">{bookingsCount}</div>
-          <div className="text-[10px] text-slate-400 mt-1">Toutes sessions confondues</div>
+          <div className="text-3xl font-black dark:text-white text-slate-900">{bookingsCount}</div>
+          <div className="text-[10px] dark:text-slate-400 text-slate-600 mt-1">Toutes sessions confondues</div>
         </div>
 
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5">
+          <div className="flex items-center justify-between dark:text-slate-400 text-slate-600 mb-2">
             <span className="text-xs font-bold uppercase">Taux d'Occupation</span>
             <TrendingUp className="w-5 h-5 text-emerald-400" />
           </div>
-          <div className="text-3xl font-black text-white">{occRate} %</div>
-          <div className="text-[10px] text-slate-400 mt-1">En moyenne</div>
+          <div className="text-3xl font-black dark:text-white text-slate-900">{occRate} %</div>
+          <div className="text-[10px] dark:text-slate-400 text-slate-600 mt-1">En moyenne</div>
         </div>
 
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-2xl p-5">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-2xl p-5">
+          <div className="flex items-center justify-between dark:text-slate-400 text-slate-600 mb-2">
             <span className="text-xs font-bold uppercase">Chiffre d'Affaires Mensuel</span>
             <DollarSign className="w-5 h-5 text-amber-400" />
           </div>
@@ -103,8 +103,8 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart: Reservations per class */}
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
-          <h3 className="text-lg font-bold text-white">Réservations par Cours Collectif</h3>
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 shadow-xl space-y-4">
+          <h3 className="text-lg font-bold dark:text-white text-slate-900">Réservations par Cours Collectif</h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
@@ -118,8 +118,8 @@ export default function Dashboard() {
         </div>
 
         {/* Chart: User Growth */}
-        <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
-          <h3 className="text-lg font-bold text-white">Évolution des Membres</h3>
+        <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 shadow-xl space-y-4">
+          <h3 className="text-lg font-bold dark:text-white text-slate-900">Évolution des Membres</h3>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={userGrowthData}>
@@ -141,11 +141,11 @@ export default function Dashboard() {
       </div>
 
       {/* Class Details Table */}
-      <div className="bg-[#12141a] border border-slate-800/50 rounded-3xl p-6 shadow-xl space-y-4">
-        <h3 className="text-lg font-bold text-white">Liste des Créneaux du Club</h3>
+      <div className="dark:bg-[#12141a] bg-white border dark:border-slate-800 border-slate-200/50 rounded-3xl p-6 shadow-xl space-y-4">
+        <h3 className="text-lg font-bold dark:text-white text-slate-900">Liste des Créneaux du Club</h3>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="text-slate-500 uppercase bg-slate-950/60 border-b border-slate-800">
+          <table className="w-full text-left text-xs dark:text-slate-300 text-slate-700">
+            <thead className="text-slate-500 uppercase bg-slate-950/60 border-b dark:border-slate-800 border-slate-200">
               <tr>
                 <th className="py-3 px-4">Cours</th>
                 <th className="py-3 px-4">Jour & Horaires</th>
@@ -155,9 +155,9 @@ export default function Dashboard() {
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               {classes.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-3.5 px-4 font-bold text-white">{c.name}</td>
-                  <td className="py-3.5 px-4 text-slate-400">{c.day} • {c.time}</td>
+                <tr key={c.id} className="hover:dark:bg-slate-800/40 hover:bg-slate-100 transition-colors">
+                  <td className="py-3.5 px-4 font-bold dark:text-white text-slate-900">{c.name}</td>
+                  <td className="py-3.5 px-4 dark:text-slate-400 text-slate-600">{c.day} • {c.time}</td>
                   <td className="py-3.5 px-4">{c.trainer}</td>
                   <td className="py-3.5 px-4">
                     <span className="font-bold text-red-400">{c.booked}</span> / {c.capacity}

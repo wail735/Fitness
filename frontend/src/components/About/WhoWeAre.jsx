@@ -20,7 +20,7 @@ function WhoWeAre() {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-black dark:text-white text-4xl font-black uppercase tracking-tight mb-3">
+          <h2 className="text-black dark:text-white text-slate-900 text-4xl font-black uppercase tracking-tight mb-3">
             Who We <span className="text-orange-500">Are</span> &amp; What We{" "}
             <span className="text-orange-500">Do</span>
           </h2>
@@ -48,7 +48,7 @@ function WhoWeAre() {
                 <div className="w-9 h-9 flex items-center justify-center bg-orange-500/10 border border-orange-500/30 text-orange-500 rounded">
                   <i className={`${item.icon} text-sm`}></i>
                 </div>
-                <h3 className="text-black dark:text-white font-black uppercase tracking-widest text-sm group-hover:text-orange-400 transition-colors duration-300">
+                <h3 className="text-black dark:text-white text-slate-900 font-black uppercase tracking-widest text-sm group-hover:text-orange-400 transition-colors duration-300">
                   {item.title}
                 </h3>
               </div>
